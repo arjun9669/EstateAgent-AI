@@ -68,15 +68,16 @@ A frozen set of 30 questions ([`eval/cases-v1.json`](eval/cases-v1.json)) scores
 each answer on tool choice, correctness, citation support and grounding, with
 `gemma4:cloud`:
 
-| Run | Tool choice | Correctness | Citations | Grounding | All four |
-|---|---:|---:|---:|---:|---:|
-| 1: meaning-only law search | 30/30 | 30/30 | 27/30 | 30/30 | **27/30** |
-| 2: hybrid search + quotation rule | 30/30 | 28/30 | 29/30 | 30/30 | **27/30** |
+| Configuration | Runs | All four dimensions (scorer 1.1) |
+|---|---:|---|
+| Meaning-only law search | 1 | **27/30** |
+| Hybrid law search + quotation rule | 4 | **28, 29, 29, 29 /30** |
 
-Run 2 fixed all three run-1 failures (a law-search miss and two loose quotations;
-law questions now 7/7) but failed three others on completeness and style.
-Every result is recorded and explained, not just the best one:
-[docs/EVALUATION.md](docs/EVALUATION.md).
+Tool choice and grounding are 30/30 in every run. The hybrid search and quotation
+rule fixed all three first-run failures (a law-search miss and two loose
+quotations); one comparison answer now consistently leaves out a "not comparable"
+warning. Every run is recorded, including a scorer bug found and fixed along the
+way: [docs/EVALUATION.md](docs/EVALUATION.md).
 
 ## Try the tools
 

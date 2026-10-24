@@ -123,17 +123,57 @@ not wrong facts or invented citations; tool choice and grounding stay at 30/30.
 At temperature 0 the same model still varies between runs, and one run per change
 cannot separate the prompt's effect on G1 and C3 from run-to-run variation.
 
+### Scorer 1.1 (commit `e3d7bde`)
+
+Scorer 1.0 skipped quotations shorter than 12 characters and restarted its search
+at their closing mark, so in M2 (run 2) the words *between* two short quotes
+("2138.9" AED. This represents a "5.3") were checked as if they were a quote.
+Scorer 1.1 pairs quotation marks in order. Nothing else changed.
+
+Recorded runs keep the scorer they were scored with, and CI reproduces those
+original results. [`eval/rescored-latest.json`](../eval/rescored-latest.json)
+lists every run re-scored with the latest scorer, next to its original score:
+
+| Run | Original score | Scorer 1.1 | Changed |
+|---|---:|---:|---|
+| Run 1 | 27 / 30 (1.0) | 27 / 30 | none |
+| Run 2 | 27 / 30 (1.0) | 28 / 30 | M2 FAIL → PASS |
+
+### Variation: four runs of the same agent code
+
+Runs 3 to 5 repeated the set three times with commit `e3d7bde`, whose agent code
+is identical to run 2's (only evaluation tooling changed). All four are scored
+with scorer 1.1 ([report](../eval/variation-agent-06ba204.json)):
+
+| | Run 2 | Run 3 | Run 4 | Run 5 |
+|---|---:|---:|---:|---:|
+| **All four dimensions** | 28 | 29 | 29 | 29 |
+| Tool choice | 30 | 30 | 30 | 30 |
+| Correctness | 28 | 29 | 29 | 29 |
+| Citations | 30 | 30 | 30 | 30 |
+| Grounding | 30 | 30 | 30 | 30 |
+
+- **28 cases passed in all four runs.**
+- **C3 failed in all four:** the comparison table shows rent vs. sale, but the
+  answer never says the prices are not comparable. It passed in run 1 with the
+  earlier prompt, so this is most likely an effect of the prompt change, not chance.
+- **G1 failed once in four** (run 2, the dropped down payment), so that was run-to-run
+  variation, not a regression.
+- At temperature 0 the wording still changes: only 6 of 30 answers were identical
+  word for word across the four runs. The tool calls were identical in 29 of 30;
+  in G4 the model sometimes passed the default `buyer: "expat"` explicitly, with
+  the same result.
+
+**Current estimate for this configuration: 28 to 29 of 30**, with one consistent
+failure (C3).
+
 ## What to do next
 
-1. **Fix the scorer's quotation pairing** (M2): pair quotation marks in order
-   instead of letting a match start at a closing mark. Release it as a new scorer
-   version and re-score both runs, reported next to the original scores; the
-   recorded v1 summaries stay as they are.
-2. **Measure variation:** run the set several times per configuration and report
-   the spread, not a single score.
-3. **Completeness:** ask the model to include the key figures a tool returns that
-   the question asks for (G1), and the tools' warnings (C3). Check this does not
-   just teach to the test by adding new cases (cases-v2) the prompt was not tuned on.
+1. **C3:** ask the model to pass on warnings a tool returns, such as "not directly
+   comparable". Check the change on new cases (cases-v2) it was not written for, so
+   it does not just teach to this test.
+2. **Repeat runs by default:** report the spread over several runs for every change,
+   as above, rather than a single score.
 
 ## Limits
 
@@ -141,5 +181,4 @@ cannot separate the prompt's effect on G1 and C3 from run-to-run variation.
   real listings or questions phrased very differently.
 - Phrase checks (for example "either party", "rough") can miss a correct answer
   worded another way; each failure above was read by hand.
-- One run per model. At temperature 0 answers are stable but not guaranteed
-  identical between runs.
+- Four runs is a small sample; it shows which cases are stable, not precise rates.

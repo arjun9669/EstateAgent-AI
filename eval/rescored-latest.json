@@ -22,6 +22,45 @@
    ]
   },
   {
+   "run": "2026-10-24-gemma4-cloud-e3d7bde-2.json",
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 29,
+    "citations": 30
+   },
+   "latest": {
+    "passed": 29,
+    "citations": 30
+   },
+   "changed_cases": []
+  },
+  {
+   "run": "2026-10-24-gemma4-cloud-e3d7bde-3.json",
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 29,
+    "citations": 30
+   },
+   "latest": {
+    "passed": 29,
+    "citations": 30
+   },
+   "changed_cases": []
+  },
+  {
+   "run": "2026-10-24-gemma4-cloud-e3d7bde.json",
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 29,
+    "citations": 30
+   },
+   "latest": {
+    "passed": 29,
+    "citations": 30
+   },
+   "changed_cases": []
+  },
+  {
    "run": "2026-10-24-gemma4-cloud.json",
    "original_scorer": "1.0",
    "original": {
