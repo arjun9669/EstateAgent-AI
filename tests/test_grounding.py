@@ -15,6 +15,7 @@ EVIDENCE = ['{"price_aed":2277500,"median_price_per_sqft":2138.9,"change_pct":5.
     "Data as of 2026-09-30.",
     "See L0435 and decree-43-2013#art1.",
     "1. First option\n2. Second option, 3 bedrooms",
+    "0% increase if the rent is close to the average.",  # the law says "no Rent increase"
 ])
 def test_grounded_answers(answer):
     assert check(answer, EVIDENCE).ok

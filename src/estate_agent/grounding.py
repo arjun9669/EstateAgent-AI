@@ -70,6 +70,8 @@ def check(answer: str, evidence: list[str]) -> GroundingReport:
     # Digits inside IDs (L0435, law-26-2007#art14) are checked as citations, not numbers.
     prose = LISTING_ID.sub(" ", PASSAGE_ID.sub(" ", answer))
     for number in numbers_in(prose):
+        if number.raw == 0:
+            continue  # "0%" or "0" restates "no increase", "none" and the like
         if (number.scale == 1 and number.decimals == 0 and not number.percent
                 and number.raw <= ALWAYS_ALLOWED_MAX):
             continue
