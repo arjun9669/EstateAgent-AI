@@ -1,0 +1,8 @@
+# Exact versions for the hosted demo (Hugging Face Spaces). Development installs
+# use pyproject.toml: pip install -e ".[dev]"
+chromadb==1.5.9
+gradio==6.30.0
+langchain-core==1.6.9
+langchain-groq==1.1.3
+langchain-ollama==1.1.0
+langgraph==1.2.14

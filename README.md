@@ -7,9 +7,10 @@ statistics, mortgage maths, official rules), runs them, and answers with sources
 > *"Find 2-bedroom apartments in Dubai Marina under AED 170k a year, compare
 > them with the area's typical prices, and explain how rent increases are regulated."*
 
-🚧 **Status: milestone 3 of 6.** The five tools, semantic search over official
-Dubai tenancy law and the LangGraph agent are built and tested. The chat
-interface and live demo come next. See [PLAN.md](PLAN.md).
+🚧 **Status: milestone 4 of 6.** The tools, semantic search over official Dubai
+tenancy law, the LangGraph agent and a Gradio chat interface are built and
+tested. The public demo on Hugging Face Spaces is [planned](docs/HOSTING.md).
+See [PLAN.md](PLAN.md).
 
 ## Why agentic?
 
@@ -112,7 +113,11 @@ python scripts/ask.py "Find 2-bedroom apartments in Dubai Marina under AED 170k 
 git-ignored. Groq's `llama-3.3-70b-versatile` is stronger than a small local
 model; the free tier has rate limits.
 
-The script prints each tool call, the answer, and a warning if any figure
+**Chat interface:** `python app.py`, then open http://127.0.0.1:7860. Each tool
+call appears as a step you can open to see its arguments and full result,
+followed by the grounding check and the answer.
+
+The command-line script prints each tool call, the answer, and a warning if any figure
 could not be verified. See a [sample run on six questions](docs/SAMPLE_RUN.md)
 with `gemma4:cloud`. Small local models make more planning mistakes; the
 grounding check is there to catch the figures they get wrong.
@@ -122,7 +127,9 @@ The agent tests use a scripted stand-in model, so `pytest` needs no model or key
 ## Project structure
 
 ```
+app.py              Gradio chat app (also the Hugging Face Space entry point)
 src/estate_agent/
+  ui.py             Chat interface: streams each agent step, check and answer
   areas.py          Dubai communities and aliases (JVC, JLT, JBR…)
   data.py           Loads CSVs into in-memory SQLite
   agent.py          LangGraph agent: plan, call tools, answer, check
@@ -137,7 +144,8 @@ scripts/
   load_dld_transactions.py  Your DLD download -> transactions.csv
 data/sample/        Synthetic listings and transactions
 data/rules/         Dubai tenancy legislation, one section per article
-docs/DATA_SOURCES.md
+deploy/space/       README with Hugging Face Space settings
+docs/               DATA_SOURCES.md, HOSTING.md, SAMPLE_RUN.md
 ```
 
 ## Data
@@ -157,7 +165,7 @@ Details, sources and known gaps: [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md).
 1. ✅ Tools, sample data, tests, CI
 2. ✅ Official legislation, embeddings + ChromaDB for `search_rules`, DLD loader
 3. ✅ LangGraph agent on a local Ollama model or Groq's free API, with checks that answers match tool output
-4. Gradio chat showing each agent step, hosted free on Hugging Face Spaces
+4. 🚧 Gradio chat showing each agent step (✅), hosted free on Hugging Face Spaces ([plan](docs/HOSTING.md))
 5. Evaluation set for tool choice, correctness and citations
 6. Demo GIF, architecture diagram, release
 

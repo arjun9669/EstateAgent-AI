@@ -155,8 +155,25 @@ def build_agent(model, toolbox: Toolbox, max_tool_rounds: int = MAX_TOOL_ROUNDS,
     return graph.compile()
 
 
-def ask(graph, question: str) -> AgentResult:
-    state = graph.invoke(
+@dataclass
+class StepEvent:
+    """A tool call that has just run."""
+
+    step: dict
+
+
+@dataclass
+class CheckEvent:
+    """A draft answer that has just been checked; ok=False means a revision follows if allowed."""
+
+    check: dict
+
+
+def stream(graph, question: str):
+    """Yield StepEvent and CheckEvent as the agent works, then the AgentResult."""
+    state = None
+    seen_steps = seen_checks = 0
+    for state in graph.stream(
         {
             "messages": [SystemMessage(SYSTEM_PROMPT), HumanMessage(question)],
             "steps": [],
@@ -167,7 +184,22 @@ def ask(graph, question: str) -> AgentResult:
         },
         # Each tool round is two graph steps; leave room for revisions.
         {"recursion_limit": 4 * (MAX_TOOL_ROUNDS + 2) * (MAX_REVISIONS + 1)},
-    )
+        stream_mode="values",
+    ):
+        for step in state["steps"][seen_steps:]:
+            yield StepEvent(step)
+        for check in state["checks"][seen_checks:]:
+            yield CheckEvent(check)
+        seen_steps, seen_checks = len(state["steps"]), len(state["checks"])
+    yield _result(question, state)
+
+
+def ask(graph, question: str) -> AgentResult:
+    *_, result = stream(graph, question)
+    return result
+
+
+def _result(question: str, state: dict) -> AgentResult:
     return AgentResult(
         question=question,
         answer=state["messages"][-1].content,

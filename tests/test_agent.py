@@ -154,7 +154,8 @@ def test_question_numbers_count_as_evidence(toolbox):
 
 @pytest.fixture
 def clean_env(monkeypatch, tmp_path):
-    for name in ("LLM_PROVIDER", "GROQ_API_KEY", "GROQ_MODEL", "OLLAMA_MODEL", "OLLAMA_BASE_URL"):
+    for name in ("LLM_PROVIDER", "GROQ_API_KEY", "GROQ_MODEL", "OLLAMA_MODEL", "OLLAMA_BASE_URL",
+                 "OLLAMA_API_KEY"):
         monkeypatch.delenv(name, raising=False)
     monkeypatch.setattr(config, "ENV_FILE", tmp_path / ".env")
     return monkeypatch
@@ -206,6 +207,21 @@ def test_cloud_models_need_no_download(clean_env, monkeypatch):
     clean_env.setenv("OLLAMA_MODEL", "qwen3:8b")
     assert "ollama pull qwen3:8b" in config.check_ollama()
     assert config.is_ollama_cloud_model("gemma4:31b-cloud") and not config.is_ollama_cloud_model("qwen3:4b")
+
+
+def test_ollama_hosted_api_sends_the_key_as_a_bearer_token(clean_env):
+    clean_env.setenv("OLLAMA_BASE_URL", "https://ollama.com")
+    clean_env.setenv("OLLAMA_MODEL", "gemma4:31b")
+    assert "OLLAMA_API_KEY is not set" in config.check_ollama()
+    clean_env.setenv("OLLAMA_API_KEY", "test-key-not-real")
+    assert config.check_ollama() is None  # no local server to ask
+    model = config.make_model()
+    assert model.base_url == "https://ollama.com"
+    assert model.client_kwargs == {"headers": {"Authorization": "Bearer test-key-not-real"}}
+
+
+def test_local_ollama_sends_no_auth_header(clean_env):
+    assert config.make_model().client_kwargs == {}
 
 
 def test_env_file_is_read_without_overriding(clean_env, tmp_path):

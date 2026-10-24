@@ -5,6 +5,9 @@ LLM_PROVIDER chooses the chat model:
           (e.g. qwen3:4b, downloaded with `ollama pull`) or an Ollama cloud model
           (e.g. gemma4:cloud), which runs on Ollama's servers after `ollama signin`.
           No API key in this project either way.
+          On a server without the Ollama app (e.g. Hugging Face Spaces), set
+          OLLAMA_BASE_URL=https://ollama.com, OLLAMA_API_KEY and a direct model
+          name such as gemma4:31b.
   groq    Groq's free cloud API (needs GROQ_API_KEY)
 """
 
@@ -60,13 +63,24 @@ def make_model():
 
     from langchain_ollama import ChatOllama
 
+    api_key = os.environ.get("OLLAMA_API_KEY")
     return ChatOllama(
         model=model_name(),
-        base_url=os.environ.get("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL),
+        base_url=ollama_url(),
+        client_kwargs={"headers": {"Authorization": f"Bearer {api_key}"}} if api_key else {},
         temperature=0,
         num_ctx=OLLAMA_CONTEXT_TOKENS,
         reasoning=False,  # skip "thinking" output; the agent loop does the planning
     )
+
+
+def ollama_url() -> str:
+    return os.environ.get("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL).rstrip("/")
+
+
+def uses_ollama_api() -> bool:
+    """True when calling ollama.com directly instead of the local Ollama app."""
+    return ollama_url().startswith("https://ollama.com")
 
 
 def is_ollama_cloud_model(name: str) -> bool:
@@ -82,7 +96,12 @@ def check_ollama() -> str | None:
     """
     import ollama
 
-    client = ollama.Client(host=os.environ.get("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL))
+    if uses_ollama_api():
+        return None if os.environ.get("OLLAMA_API_KEY") else (
+            "OLLAMA_API_KEY is not set. Create one at https://ollama.com/settings/keys "
+            "and add it as a secret, never in the repository."
+        )
+    client = ollama.Client(host=ollama_url())
     try:
         installed = {m.model for m in client.list().models}
     except Exception:
