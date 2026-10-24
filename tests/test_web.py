@@ -117,3 +117,6 @@ def test_hosted_secrets_reach_the_model_settings(monkeypatch):
     assert seen == {"OLLAMA_BASE_URL": "https://ollama.com", "OLLAMA_MODEL": "gemma4:31b",
                     "OLLAMA_API_KEY": "test-key-not-real"}
     assert "stop here" in at.error[0].value
+    report = at.error[0].value
+    assert "Settings found: OLLAMA_BASE_URL, OLLAMA_MODEL, OLLAMA_API_KEY" in report
+    assert "test-key-not-real" not in report  # names only, never values

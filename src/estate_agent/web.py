@@ -15,6 +15,7 @@ from estate_agent.agent import CheckEvent, StepEvent, stream
 # The free Ollama cloud plan serves one request at a time, so questions from all
 # visitors run one after another, and each visitor gets a limited number.
 MAX_QUESTIONS_PER_SESSION = 10
+SETTING_NAMES = ("LLM_PROVIDER", "OLLAMA_BASE_URL", "OLLAMA_MODEL", "OLLAMA_API_KEY", "GROQ_API_KEY")
 
 
 def load_secrets_into_environment() -> None:
@@ -32,6 +33,17 @@ def load_secrets_into_environment() -> None:
     for key, value in secrets.items():
         if isinstance(value, str):
             os.environ.setdefault(key, value)
+
+
+def settings_report() -> str:
+    """Which model settings are present, by name only (values may be secret)."""
+    try:
+        secret_names = sorted(st.secrets.keys())
+    except Exception:
+        secret_names = []
+    found = [name for name in SETTING_NAMES if os.environ.get(name)]
+    return (f"Settings found: {', '.join(found) or 'none'}. "
+            f"Top-level secret names: {', '.join(secret_names) or 'none'}.")
 
 
 def make_agent():
@@ -118,7 +130,7 @@ def answer(question: str) -> dict:
             show_answer(turn)
         except Exception as error:  # model or network problem: show it, keep the page working
             status.empty()
-            turn["error"] = f"The model could not be reached: {error}"
+            turn["error"] = f"The model could not be reached: {error}\n\n{settings_report()}"
             st.error(turn["error"])
     return turn
 
