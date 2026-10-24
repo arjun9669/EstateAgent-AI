@@ -2,7 +2,8 @@ import gradio as gr
 from langchain_core.messages import AIMessage
 
 from estate_agent.agent import build_agent
-from estate_agent.ui import build_app, check_message, make_responder, step_message, summarize_step
+from estate_agent.presentation import summarize_step
+from estate_agent.ui import build_app, check_message, make_responder, step_message
 from test_agent import GOOD_ANSWER, LISTINGS_CALL, RULES_CALL, ScriptedModel, tool_turn, toolbox  # noqa: F401
 
 

@@ -5,7 +5,7 @@ LLM_PROVIDER chooses the chat model:
           (e.g. qwen3:4b, downloaded with `ollama pull`) or an Ollama cloud model
           (e.g. gemma4:cloud), which runs on Ollama's servers after `ollama signin`.
           No API key in this project either way.
-          On a server without the Ollama app (e.g. Hugging Face Spaces), set
+          On a server without the Ollama app (e.g. Streamlit Community Cloud), set
           OLLAMA_BASE_URL=https://ollama.com, OLLAMA_API_KEY and a direct model
           name such as gemma4:31b.
   groq    Groq's free cloud API (needs GROQ_API_KEY)

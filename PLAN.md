@@ -53,11 +53,12 @@ Each tool returns JSON with a `source` field so the agent can cite it.
    in a tool result or the question (one revision, then a visible warning).
    Runs on a local Ollama model (default, no key) or Groq. Tested with a
    scripted model; live quality on each provider still to be measured.
-4. **Interface and hosting** *(in progress)*: ✅ Gradio chat (`app.py`) that streams
-   each tool call as an expandable step, then the grounding check and the answer.
-   Hosting plan in [docs/HOSTING.md](docs/HOSTING.md): free CPU Space, model over
-   Ollama's hosted API with the key as a Space secret, code synced from GitHub by
-   an Action. Waiting on the Hugging Face account, Space and tokens.
+4. **Interface and hosting** *(in progress)*: ✅ chat pages in Streamlit
+   (`streamlit_app.py`, for hosting) and Gradio (`app.py`, local) that stream each
+   tool call as an expandable step, then the grounding check and the answer.
+   Hugging Face Spaces turned out to need PRO for Gradio apps, so the demo goes on
+   Streamlit Community Cloud with the model over Ollama's hosted API
+   ([docs/HOSTING.md](docs/HOSTING.md)). Waiting on the Streamlit app setup.
 5. **Evaluation**: a frozen question set measuring tool choice, answer
    correctness and citation support, run in CI against recorded tool outputs.
 6. **Polish**: README with demo GIF, architecture diagram, release tag.

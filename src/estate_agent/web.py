@@ -1,0 +1,131 @@
+"""Streamlit chat interface, used for the hosted demo on Streamlit Community Cloud.
+
+Shows each tool call as an expandable step while the agent works, then the
+grounding check and the answer. Run locally with `streamlit run streamlit_app.py`.
+"""
+
+import threading
+
+import streamlit as st
+
+from estate_agent import presentation
+from estate_agent.agent import CheckEvent, StepEvent, stream
+
+# The free Ollama cloud plan serves one request at a time, so questions from all
+# visitors run one after another, and each visitor gets a limited number.
+MAX_QUESTIONS_PER_SESSION = 10
+
+
+def make_agent():
+    """Replaced in tests with an agent on a scripted model."""
+    return presentation.default_agent()
+
+
+@st.cache_resource(show_spinner="Loading the agent and its search index…")
+def shared_agent():
+    return make_agent()
+
+
+@st.cache_resource
+def model_lock() -> threading.Lock:
+    return threading.Lock()
+
+
+def show_step(step: dict) -> None:
+    arguments, result = presentation.step_json(step)
+    with st.expander(presentation.step_title(step)):
+        st.markdown("**Arguments**")
+        st.code(arguments, language="json")
+        st.markdown("**Result**")
+        st.code(result, language="json")
+
+
+def show_check(check: dict) -> None:
+    with st.expander(presentation.check_title(check)):
+        if check["ok"]:
+            st.caption("Every number and listing or law ID in the answer appears in a tool result or the question.")
+        else:
+            st.caption("Draft that was checked:")
+            st.markdown(check["draft"])
+
+
+def show_answer(turn: dict) -> None:
+    st.markdown(turn["answer"])
+    if turn.get("warning"):
+        st.warning(turn["warning"])
+
+
+def show_turn(turn: dict) -> None:
+    with st.chat_message("user"):
+        st.markdown(turn["question"])
+    with st.chat_message("assistant"):
+        for item in turn["items"]:
+            (show_step if item["kind"] == "step" else show_check)(item["data"])
+        if turn.get("error"):
+            st.error(turn["error"])
+        else:
+            show_answer(turn)
+
+
+def answer(question: str) -> dict:
+    """Run the agent, drawing each step as it arrives; return the turn for the history."""
+    turn = {"question": question, "items": []}
+    with st.chat_message("user"):
+        st.markdown(question)
+    with st.chat_message("assistant"):
+        status = st.empty()
+        try:
+            status.caption("Loading…")
+            agent = shared_agent()
+            lock = model_lock()
+            if not lock.acquire(blocking=False):
+                status.caption("⏳ Waiting for another visitor's question to finish…")
+                lock.acquire()
+            try:
+                status.caption("🤔 Planning…")
+                for event in stream(agent, question):
+                    if isinstance(event, StepEvent):
+                        turn["items"].append({"kind": "step", "data": event.step})
+                        show_step(event.step)
+                    elif isinstance(event, CheckEvent):
+                        turn["items"].append({"kind": "check", "data": event.check})
+                        show_check(event.check)
+                    else:
+                        turn["answer"], turn["warning"] = event.answer, event.warning
+                    status.caption("🤔 Working…")
+            finally:
+                lock.release()
+            status.empty()
+            show_answer(turn)
+        except Exception as error:  # model or network problem: show it, keep the page working
+            status.empty()
+            turn["error"] = f"The model could not be reached: {error}"
+            st.error(turn["error"])
+    return turn
+
+
+def main() -> None:
+    st.set_page_config(page_title=presentation.TITLE, page_icon="🏙️")
+    st.markdown(presentation.INTRO)
+    history = st.session_state.setdefault("history", [])
+    for turn in history:
+        show_turn(turn)
+
+    question = None
+    if not history:
+        st.caption("Try one:")
+        for number, example in enumerate(presentation.EXAMPLES):
+            if st.button(example, key=f"example-{number}", width="stretch"):
+                question = example
+
+    remaining = MAX_QUESTIONS_PER_SESSION - len(history)
+    typed = st.chat_input(
+        "Ask about listings, prices, mortgages or tenancy rules" if remaining > 0
+        else "Question limit for this session reached",
+        disabled=remaining <= 0,
+    )
+    question = question or typed
+    if question and remaining > 0:
+        history.append(answer(question.strip()))
+        if len(history) == 1:
+            st.rerun()  # hide the example buttons now that the chat has started
