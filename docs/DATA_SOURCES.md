@@ -1,9 +1,15 @@
 # Data sources
 
 Every tool answer carries a `source` field naming one of the datasets below.
-Status reflects milestone 1: only the synthetic sample data is in the repository.
 
-## 1. Listings — synthetic (in repository)
+| Data | In repository? | Used by |
+|---|---|---|
+| Synthetic listings | Yes | `search_listings`, `compare_properties` |
+| Synthetic sales transactions | Yes (default) | `area_price_stats` |
+| DLD sales transactions | **No** — you download it; a loader converts it | `area_price_stats` |
+| Official tenancy legislation | Yes, as plain article text | `search_rules` |
+
+## 1. Listings — synthetic
 
 | | |
 |---|---|
@@ -18,51 +24,76 @@ are **not market data**.
 
 ## 2. Sales transactions
 
-| | |
-|---|---|
-| Sample file | `data/sample/transactions.csv` (synthetic, same generator) |
-| Planned source | Dubai Land Department (DLD) transactions on [Dubai Pulse](https://www.dubaipulse.gov.ae/data/dld-transactions/dld_transactions-open) |
-| Status | **Synthetic until milestone 2** |
+**Default:** `data/sample/transactions.csv`, synthetic, from the same generator.
 
-The DLD dataset covers recorded sales, mortgages and other transfer types. It
-is published as a CSV, and download requests on Dubai Pulse may need approval.
-Before using it:
+**Real data:** Dubai Land Department transactions on
+[Dubai Pulse](https://www.dubaipulse.gov.ae/data/dld-transactions/dld_transactions-open)
+(`Transactions.csv`, about 1 GB). Downloading it requires accepting Dubai
+Pulse's terms, and its licence is listed as "not specified", so neither the
+file nor anything derived from it is committed, and the public demo uses the
+synthetic data.
 
-- [ ] Read and record the dataset's terms of use and attribution requirements.
-- [ ] Download it into `data/raw/` (git-ignored). Commit only a small derived
-      summary if the terms allow redistribution.
-- [ ] Map its columns onto the schema in `src/estate_agent/data.py`.
+To use it locally:
 
-## 3. Tenancy and buying rules (for `search_rules`)
+1. Read the terms on the dataset page, then download `Transactions.csv` into
+   `data/raw/dld/` (git-ignored).
+2. Run `python scripts/load_dld_transactions.py`. It keeps residential sales
+   (flats, villas, townhouses), converts m² to sq ft, and prints how many rows
+   were skipped and why.
+3. Load it with `Toolbox.load(transactions_file=Path("data/raw/dld/transactions.csv"), transactions_source=dld.SOURCE)`.
+   `area_price_stats` then reports the DLD source in its answers.
 
-Planned official documents, to be downloaded in milestone 2 into `data/rules/`:
+**Known gaps in the loader (not yet tested on the real file):**
 
-| Document | Covers | Official source |
+- The expected column names (`REQUIRED_COLUMNS` in `src/estate_agent/dld.py`)
+  follow the published export layout. The loader stops with a clear message if
+  they differ.
+- DLD uses official area names that often differ from marketing names (Dubai
+  Marina is registered as "Marsa Dubai"). Only three mappings are included, and
+  they are **unverified**. The conversion report lists the most common unmatched
+  names so verified ones can be added to `DLD_AREA_NAMES`.
+
+## 3. Tenancy legislation (for `search_rules`)
+
+| File | Document | Official source (retrieved 24 Oct 2026) |
 |---|---|---|
-| Law No. 26 of 2007, as amended by Law No. 33 of 2008 | Landlord–tenant relationship, notice periods, eviction | Dubai Legislation Portal (dlp.dubai.gov.ae) |
-| Decree No. 43 of 2013 | Maximum rent increase on renewal, tied to the RERA Rental Index | [Dubai Legislation Portal](https://dlp.dubai.gov.ae/Legislation%20Reference/2013/Decree%20No.%20(43)%20of%202013%20Determining%20Rent%20Increase%20for%20Real%20Property.html); English version on [dubailand.gov.ae](https://dubailand.gov.ae/media/z2dn3gtr/rental-increase-decree-43-in-dubai.pdf) |
-| UAE Central Bank mortgage regulations | Loan-to-value caps, debt burden | [CBUAE Rulebook](https://rulebook.centralbank.ae/node/2856) |
+| `data/rules/law-26-2007.md` | Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants, consolidated with Law No. 33 of 2008 | Dubai Legislation Portal: [Law 26/2007](https://dlp.dubai.gov.ae/Legislation%20Reference/2007/Law%20No.%20(26)%20of%202007%20Regarding%20regulation%20between%20the%20lessor%20and%20the%20lessee.html), [Law 33/2008](https://dlp.dubai.gov.ae/Legislation%20Reference/2009/Law%20No.%20(33)%20of%202008%20Amending%20Law%20No.%20(26)%20of%202007.html) |
+| `data/rules/decree-43-2013.md` | Decree No. 43 of 2013 Determining Rent Increase for Real Property | [Dubai Legislation Portal](https://dlp.dubai.gov.ae/Legislation%20Reference/2013/Decree%20No.%20(43)%20of%202013%20Determining%20Rent%20Increase%20for%20Real%20Property.html) |
 
-The Arabic text on the Legislation Portal is authoritative; English versions
-are translations. Each chunk returned by `search_rules` keeps its document
-name so answers can cite it. Secondary summaries (portals, blogs) are not used
-as sources because several contain errors.
+`scripts/fetch_rules.py` downloads the official English pages, keeps only the
+article text, and writes one `## Article (N)` section per article. Law No. 33
+of 2008 supersedes eleven articles of Law No. 26 of 2007 (2, 3, 4, 9, 13, 14,
+15, 25, 26, 29 and 36); the script swaps in the new text, labels each one
+"Text as superseded by Law No. 33 of 2008", and checks the swapped articles
+match the list Law 33 itself gives. A test re-runs the conversion whenever the
+raw pages are present and fails if the committed text would change.
+
+- The Arabic text on the Legislation Portal prevails; these are the portal's
+  official English versions.
+- UAE Federal Decree-Law No. 38 of 2021 (Article 3(2)) excludes laws and other
+  official documents, including translations, from copyright protection, so the
+  article text is committed with its source links.
+- Later legislation is **not** consolidated. For example, Decree No. 26 of 2013
+  moved rental disputes to the Rental Disputes Settlement Centre, while Law 26
+  still refers to the "Tribunal".
+- UAE Central Bank mortgage rules are not included: the rulebook site blocks
+  automated downloads, and `mortgage_calculator` already encodes the limits.
+- Secondary summaries (property portals, blogs) are not used; several contain errors.
 
 ## 4. Mortgage rules (hard-coded in `mortgage_calculator`)
 
-| Rule | Value used | Source |
-|---|---|---|
-| Max loan-to-value, expatriate, first home ≤ AED 5M | 80% | CBUAE Rulebook |
-| Max loan-to-value, expatriate, first home > AED 5M | 70% | CBUAE Rulebook |
-| Max loan-to-value, UAE national, first home ≤ AED 5M / > AED 5M | 85% / 75% | CBUAE Rulebook |
-| Max loan-to-value, second or later home, expatriate / national | 60% / 65% | CBUAE Rulebook |
-| Max loan-to-value, off-plan | 50% | CBUAE Rulebook |
-| Max term | 25 years | CBUAE Rulebook |
-| Max debt burden ratio | 50% of monthly income | CBUAE Rulebook |
-| DLD transfer fee | 4% of price | Dubai Land Department |
-| Mortgage registration fee | 0.25% of loan | Dubai Land Department |
-| Agency commission | 2% + 5% VAT | Common market practice, not a law |
+| Rule | Value used | Source | Checked |
+|---|---|---|---|
+| Max loan-to-value, expatriate, first home ≤ AED 5M | 80% | [CBUAE Rulebook](https://rulebook.centralbank.ae/node/2856) | Oct 2026 |
+| Max loan-to-value, expatriate, first home > AED 5M | 70% | CBUAE Rulebook | Oct 2026 |
+| Max loan-to-value, UAE national, first home ≤ AED 5M / > AED 5M | 85% / 75% | CBUAE Rulebook | Oct 2026 |
+| Max loan-to-value, second or later home, expatriate / national | 60% / 65% | CBUAE Rulebook | Oct 2026 |
+| Max loan-to-value, off-plan | 50% | CBUAE Rulebook | Oct 2026 |
+| Max term | 25 years | CBUAE mortgage regulations | Not yet |
+| Max debt burden ratio | 50% of monthly income | CBUAE regulations | Not yet |
+| DLD transfer fee | 4% of price | Dubai Land Department | Not yet |
+| Mortgage registration fee | 0.25% of loan | Dubai Land Department | Not yet |
+| Agency commission | 2% + 5% VAT | Common market practice, not a law | — |
 
-These values were checked against the CBUAE Rulebook in October 2026. Lenders
-may apply stricter limits. Re-check before relying on them; they live in one
-place (`src/estate_agent/tools/mortgage.py`) so they are easy to update.
+Lenders may apply stricter limits. Re-check before relying on these; they live
+in one place (`src/estate_agent/tools/mortgage.py`) so they are easy to update.

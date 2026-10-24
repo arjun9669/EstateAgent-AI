@@ -4,8 +4,10 @@ import inspect
 import sqlite3
 from pathlib import Path
 
+from chromadb.api.types import EmbeddingFunction
+
 from estate_agent.areas import area_names
-from estate_agent.data import SAMPLE_DIR, connect
+from estate_agent.data import SAMPLE_DIR, SAMPLE_SOURCE, connect
 from estate_agent.tools.base import ToolError
 from estate_agent.tools.listings import PROPERTY_TYPES, SORTS, compare_properties, search_listings
 from estate_agent.tools.market import area_price_stats
@@ -84,7 +86,10 @@ TOOL_SPECS = [
     },
     {
         "name": "search_rules",
-        "description": "Search official Dubai tenancy and UAE mortgage documents. Cite passage_id.",
+        "description": (
+            "Semantic search over official Dubai tenancy legislation (Law 26 of 2007 as amended, "
+            "Decree 43 of 2013 on rent increases). Cite passage_id and section."
+        ),
         "parameters": {
             "type": "object",
             "properties": {
@@ -112,8 +117,18 @@ class Toolbox:
         }
 
     @classmethod
-    def load(cls, data_dir: Path = SAMPLE_DIR, rules_dir: Path = RULES_DIR) -> "Toolbox":
-        return cls(connect(data_dir), RulesIndex.from_directory(rules_dir))
+    def load(
+        cls,
+        data_dir: Path = SAMPLE_DIR,
+        rules_dir: Path = RULES_DIR,
+        embedding_function: EmbeddingFunction | None = None,
+        transactions_file: Path | None = None,
+        transactions_source: str = SAMPLE_SOURCE,
+    ) -> "Toolbox":
+        return cls(
+            connect(data_dir, transactions_file, transactions_source),
+            RulesIndex.from_directory(rules_dir, embedding_function),
+        )
 
     def run(self, name: str, arguments: dict) -> dict:
         """Run a tool call. Errors come back as data so the agent can correct itself."""

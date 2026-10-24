@@ -1,6 +1,10 @@
 import csv
+import hashlib
+import re
 
+import numpy as np
 import pytest
+from chromadb.api.types import Documents, EmbeddingFunction, Embeddings
 
 from estate_agent.data import connect
 
@@ -57,3 +61,40 @@ def data_dir(tmp_path):
 @pytest.fixture
 def conn(data_dir):
     return connect(data_dir)
+
+
+class HashingEmbedding(EmbeddingFunction[Documents]):
+    """Offline stand-in for the real model: hashed bag of words, so tests need no download."""
+
+    DIMENSIONS = 256
+
+    def __init__(self):
+        pass
+
+    def __call__(self, input: Documents) -> Embeddings:
+        vectors = []
+        for text in input:
+            vector = np.zeros(self.DIMENSIONS, dtype=np.float32)
+            for word in re.findall(r"[a-z0-9]+", text.lower()):
+                vector[int(hashlib.md5(word.encode()).hexdigest(), 16) % self.DIMENSIONS] += 1
+            vectors.append(vector)
+        return vectors
+
+    @staticmethod
+    def name() -> str:
+        return "hashing-test"
+
+    def get_config(self) -> dict:
+        return {}
+
+    @staticmethod
+    def build_from_config(config: dict) -> "HashingEmbedding":
+        return HashingEmbedding()
+
+    def default_space(self):
+        return "cosine"
+
+
+@pytest.fixture(scope="session")
+def embedding():
+    return HashingEmbedding()

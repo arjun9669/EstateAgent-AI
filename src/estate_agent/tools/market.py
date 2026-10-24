@@ -5,7 +5,7 @@ from calendar import monthrange
 from datetime import date
 from statistics import median
 
-from estate_agent.data import SAMPLE_SOURCE
+from estate_agent.data import source_label
 from estate_agent.tools.base import ToolError, pct_change, require_area, require_choice
 from estate_agent.tools.listings import PROPERTY_TYPES
 
@@ -61,7 +61,7 @@ def area_price_stats(
     previous = _window(conn, where, params, _months_before(as_of, 2 * months), start)
 
     result = {
-        "source": SAMPLE_SOURCE,
+        "source": source_label(conn, "transactions"),
         "filters": filters,
         "data_as_of": latest,
         "current_period": current,

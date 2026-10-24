@@ -21,8 +21,8 @@ Everything must stay free to build, run and host.
    ┌───────────────┼──────────────┬───────────────┬──────────────────┐
    ▼               ▼              ▼               ▼                  ▼
 search_listings  compare_     area_price_    mortgage_          search_rules
-(SQLite)         properties   stats          calculator         (retrieval over
-                 (SQLite)     (SQLite)       (pure maths)       official documents)
+(SQLite)         properties   stats          calculator         (embeddings in
+                 (SQLite)     (SQLite)       (pure maths)       ChromaDB over laws)
 ```
 
 The tools are deterministic Python. Only the agent uses a language model, so
@@ -42,12 +42,13 @@ Each tool returns JSON with a `source` field so the agent can cite it.
 
 ## Milestones
 
-1. **Foundation** *(current)*: repository, data sources, sample data, the five
-   tools with unit tests and CI. No language model yet.
-2. **Real data**: download Dubai Land Department open transaction data and the
-   official tenancy documents after checking their terms; add loaders. Replace
-   keyword retrieval in `search_rules` with embeddings and ChromaDB.
-3. **Agent**: LangGraph loop with tool calling on Groq (Gemini free tier as
+1. ✅ **Foundation**: repository, data sources, sample data, the five tools with
+   unit tests and CI. No language model yet.
+2. ✅ **Real data**: official tenancy legislation converted to citable articles;
+   `search_rules` on MiniLM embeddings in ChromaDB; loader for the Dubai Land
+   Department transactions export (not redistributed: licence unspecified).
+   Open: verify the loader and DLD area-name mapping on the real file.
+3. **Agent** *(next)*: LangGraph loop with tool calling on Groq (Gemini free tier as
    backup), a step limit, and an answer check that every figure and rule is
    backed by a tool result.
 4. **Interface and hosting**: Gradio chat that shows each agent step, deployed
