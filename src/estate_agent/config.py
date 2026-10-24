@@ -1,7 +1,10 @@
 """Settings from the environment, with an optional .env file in the project root.
 
 LLM_PROVIDER chooses the chat model:
-  ollama  a free local model through Ollama (no key; the default)
+  ollama  a model served by the Ollama app (the default). Either a local model
+          (e.g. qwen3:4b, downloaded with `ollama pull`) or an Ollama cloud model
+          (e.g. gemma4:cloud), which runs on Ollama's servers after `ollama signin`.
+          No API key in this project either way.
   groq    Groq's free cloud API (needs GROQ_API_KEY)
 """
 
@@ -66,8 +69,17 @@ def make_model():
     )
 
 
+def is_ollama_cloud_model(name: str) -> bool:
+    """Cloud models are named like gemma4:cloud or gemma4:31b-cloud."""
+    return name.endswith((":cloud", "-cloud"))
+
+
 def check_ollama() -> str | None:
-    """None if Ollama is running and has the model; otherwise what to do about it."""
+    """None if Ollama is running and has the model; otherwise what to do about it.
+
+    Cloud models need no download, so only the server is checked for them; a
+    missing sign-in shows up as an error on the first request.
+    """
     import ollama
 
     client = ollama.Client(host=os.environ.get("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL))
@@ -76,6 +88,8 @@ def check_ollama() -> str | None:
     except Exception:
         return "Ollama is not running. Install it from https://ollama.com and open the Ollama app."
     wanted = model_name()
+    if is_ollama_cloud_model(wanted):
+        return None
     if wanted not in installed and f"{wanted}:latest" not in installed:
         return f"Model {wanted!r} is not downloaded. Run: ollama pull {wanted}"
     return None

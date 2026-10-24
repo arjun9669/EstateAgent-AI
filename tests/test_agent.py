@@ -186,6 +186,26 @@ def test_check_ollama_explains_what_is_missing(clean_env):
     assert "not running" in config.check_ollama()
 
 
+def test_cloud_models_need_no_download(clean_env, monkeypatch):
+    import ollama
+
+    class FakeClient:
+        def __init__(self, host):
+            pass
+
+        def list(self):
+            return ollama.ListResponse(models=[ollama.ListResponse.Model(model="qwen3:4b")])
+
+    monkeypatch.setattr(ollama, "Client", FakeClient)
+    clean_env.setenv("OLLAMA_MODEL", "gemma4:cloud")
+    assert config.check_ollama() is None
+    clean_env.setenv("OLLAMA_MODEL", "qwen3:4b")
+    assert config.check_ollama() is None
+    clean_env.setenv("OLLAMA_MODEL", "qwen3:8b")
+    assert "ollama pull qwen3:8b" in config.check_ollama()
+    assert config.is_ollama_cloud_model("gemma4:31b-cloud") and not config.is_ollama_cloud_model("qwen3:4b")
+
+
 def test_env_file_is_read_without_overriding(clean_env, tmp_path):
     env = tmp_path / ".env"
     env.write_text("# comment\nOLLAMA_MODEL='some-model'\nLLM_PROVIDER=groq\n")

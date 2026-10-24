@@ -90,13 +90,18 @@ agent can cite them, and returns nothing when no article is similar enough
 
 ## Ask the agent
 
-**Locally, free, no API key (default):**
+**With Ollama, free, no API key in the project (default).** Install
+[Ollama](https://ollama.com/download) and open it, then pick one:
 
-1. Install [Ollama](https://ollama.com/download) and open it.
-2. Download a model that supports tool calling: `ollama pull qwen3:4b` (about 2.5 GB;
-   comfortable on an 8 GB Mac). With 16 GB or more, `qwen3:8b` plans better
-   (set `OLLAMA_MODEL=qwen3:8b` in `.env`).
-3. Ask:
+- **Ollama cloud model (fast on any computer):** run `ollama signin` once and set
+  `OLLAMA_MODEL=gemma4:cloud` in `.env`. It runs on Ollama's servers with tool
+  calling and no download; the free plan includes a monthly starter amount of
+  usage and one request at a time.
+- **Local model (offline, fully private):** `ollama pull qwen3:4b` (about 2.5 GB).
+  Small enough for an 8 GB Mac, but slower and a weaker planner; with 16 GB or
+  more, `qwen3:8b` does better.
+
+Then ask:
 
 ```bash
 python scripts/ask.py "Find 2-bedroom apartments in Dubai Marina under AED 170k a year and explain how rent increases are regulated"
