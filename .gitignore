@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+build/
+dist/
+
+# Secrets
+.env
+.env.*
+
+# Downloaded raw data (see docs/DATA_SOURCES.md)
+data/raw/
+
+# Vector store and model caches
+chroma/
+.cache/
+
+.DS_Store

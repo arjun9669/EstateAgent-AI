@@ -1,0 +1,601 @@
+listing_id,title,area,property_type,purpose,bedrooms,bathrooms,size_sqft,price_aed,furnished,listed_date
+L0001,2-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,rent,2,3,1195,121000,1,2026-09-22
+L0002,1-bedroom apartment in Al Barsha,Al Barsha,apartment,sale,1,1,810,1165000,0,2026-08-14
+L0003,5-bedroom villa in Arabian Ranches,Arabian Ranches,villa,rent,5,6,6920,591000,1,2026-08-17
+L0004,Studio apartment in Business Bay,Business Bay,apartment,sale,0,1,390,860000,1,2026-08-09
+L0005,Studio apartment in Dubai Sports City,Dubai Sports City,apartment,sale,0,1,405,390000,1,2026-09-10
+L0006,4-bedroom villa in Dubai Hills Estate,Dubai Hills Estate,villa,rent,4,5,3490,391000,0,2026-07-15
+L0007,2-bedroom apartment in Al Barsha,Al Barsha,apartment,sale,2,3,1115,1385000,0,2026-07-02
+L0008,1-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,sale,1,1,740,2870000,1,2026-07-08
+L0009,2-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,2,3,1440,139000,0,2026-09-23
+L0010,2-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,2,3,1090,2530000,0,2026-08-22
+L0011,3-bedroom villa in Al Barsha,Al Barsha,villa,sale,3,4,2760,3995000,0,2026-09-25
+L0012,4-bedroom villa in Al Barsha,Al Barsha,villa,rent,4,5,3850,315000,0,2026-08-27
+L0013,4-bedroom villa in Arabian Ranches,Arabian Ranches,villa,rent,4,5,4055,395000,0,2026-08-05
+L0014,4-bedroom villa in Al Barsha,Al Barsha,villa,sale,4,5,3650,4320000,0,2026-09-04
+L0015,3-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,3,4,1540,111000,0,2026-10-11
+L0016,3-bedroom villa in Al Barsha,Al Barsha,villa,sale,3,4,3165,3500000,1,2026-08-03
+L0017,2-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,rent,2,3,1280,180000,1,2026-08-21
+L0018,4-bedroom villa in Mirdif,Mirdif,villa,rent,4,5,4735,302000,1,2026-08-15
+L0019,Studio apartment in Dubai Marina,Dubai Marina,apartment,sale,0,1,510,1075000,0,2026-07-20
+L0020,3-bedroom villa in Dubai Hills Estate,Dubai Hills Estate,villa,rent,3,4,3450,385000,0,2026-09-05
+L0021,3-bedroom villa in Arabian Ranches,Arabian Ranches,villa,sale,3,4,2805,3980000,0,2026-09-23
+L0022,2-bedroom apartment in Business Bay,Business Bay,apartment,rent,2,3,1130,157000,1,2026-08-06
+L0023,4-bedroom apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,sale,4,5,2495,4495000,0,2026-10-12
+L0024,2-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,rent,2,3,1360,110000,0,2026-07-26
+L0025,4-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,sale,4,5,2250,8340000,0,2026-09-05
+L0026,4-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,sale,4,5,3095,8280000,0,2026-09-08
+L0027,3-bedroom townhouse in Dubai Hills Estate,Dubai Hills Estate,townhouse,sale,3,4,2015,3665000,0,2026-08-10
+L0028,3-bedroom townhouse in Dubai Hills Estate,Dubai Hills Estate,townhouse,sale,3,4,2065,4020000,0,2026-08-24
+L0029,2-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,2,3,1390,244000,1,2026-09-20
+L0030,3-bedroom apartment in International City,International City,apartment,sale,3,4,1885,1415000,1,2026-10-11
+L0031,1-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,1,1,795,1635000,1,2026-07-13
+L0032,2-bedroom apartment in Deira,Deira,apartment,rent,2,3,1325,73000,0,2026-10-08
+L0033,3-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,3,4,1780,118000,0,2026-08-29
+L0034,2-bedroom apartment in International City,International City,apartment,sale,2,3,1195,850000,0,2026-07-26
+L0035,2-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,2,3,1290,209000,0,2026-07-18
+L0036,2-bedroom apartment in Business Bay,Business Bay,apartment,rent,2,3,1430,197000,1,2026-07-27
+L0037,3-bedroom villa in Mirdif,Mirdif,villa,sale,3,4,2600,2935000,0,2026-10-09
+L0038,3-bedroom apartment in Business Bay,Business Bay,apartment,rent,3,4,2070,302000,0,2026-08-01
+L0039,3-bedroom apartment in Deira,Deira,apartment,sale,3,4,1925,1670000,0,2026-07-22
+L0040,3-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,rent,3,4,1980,166000,0,2026-09-01
+L0041,2-bedroom apartment in International City,International City,apartment,sale,2,3,1375,1005000,0,2026-08-31
+L0042,3-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,3,4,1485,2915000,0,2026-07-13
+L0043,2-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,2,3,1105,146000,0,2026-08-28
+L0044,1-bedroom apartment in International City,International City,apartment,rent,1,1,665,41000,0,2026-07-22
+L0045,2-bedroom apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,rent,2,3,1260,131000,1,2026-08-26
+L0046,Studio apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,0,1,475,445000,0,2026-07-02
+L0047,Studio apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,0,1,510,66000,0,2026-09-22
+L0048,3-bedroom villa in Al Barsha,Al Barsha,villa,sale,3,4,2955,3480000,0,2026-07-05
+L0049,1-bedroom apartment in International City,International City,apartment,sale,1,1,755,530000,1,2026-07-28
+L0050,2-bedroom apartment in Deira,Deira,apartment,rent,2,3,1345,78000,0,2026-08-01
+L0051,5-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,rent,5,6,5960,1023000,1,2026-10-12
+L0052,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,2,3,1180,1110000,0,2026-09-11
+L0053,1-bedroom apartment in Dubai Marina,Dubai Marina,apartment,rent,1,1,765,105000,0,2026-08-23
+L0054,2-bedroom apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,sale,2,3,1225,2925000,0,2026-08-12
+L0055,2-bedroom apartment in Al Barsha,Al Barsha,apartment,sale,2,3,1090,1440000,0,2026-08-14
+L0056,Studio apartment in Dubai Marina,Dubai Marina,apartment,rent,0,1,525,68000,0,2026-07-09
+L0057,Studio apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,rent,0,1,420,52000,1,2026-07-15
+L0058,3-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,sale,3,4,2160,3965000,1,2026-08-23
+L0059,2-bedroom apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,sale,2,3,1175,2340000,1,2026-09-17
+L0060,3-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,sale,3,4,1495,3985000,1,2026-08-09
+L0061,1-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,1,1,830,2095000,1,2026-08-15
+L0062,3-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,sale,3,4,1985,3640000,0,2026-09-09
+L0063,2-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,2,3,1150,935000,0,2026-08-15
+L0064,3-bedroom apartment in Deira,Deira,apartment,rent,3,4,2010,124000,1,2026-07-08
+L0065,1-bedroom apartment in Deira,Deira,apartment,sale,1,1,930,825000,0,2026-08-12
+L0066,3-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,sale,3,4,2365,2705000,0,2026-09-04
+L0067,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,2,3,1190,84000,0,2026-10-10
+L0068,2-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,2,3,1085,975000,1,2026-09-18
+L0069,2-bedroom apartment in Deira,Deira,apartment,rent,2,3,1160,57000,1,2026-09-02
+L0070,2-bedroom apartment in Mirdif,Mirdif,apartment,rent,2,3,1255,72000,0,2026-08-02
+L0071,4-bedroom villa in Al Barsha,Al Barsha,villa,rent,4,5,4030,326000,1,2026-08-18
+L0072,3-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,sale,3,4,2550,3390000,0,2026-08-07
+L0073,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,2,3,1165,107000,0,2026-09-06
+L0074,Studio apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,0,1,395,28000,1,2026-09-14
+L0075,1-bedroom apartment in Mirdif,Mirdif,apartment,sale,1,1,850,835000,0,2026-07-05
+L0076,3-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,rent,3,4,3580,686000,0,2026-10-03
+L0077,1-bedroom apartment in Business Bay,Business Bay,apartment,rent,1,1,850,100000,0,2026-10-06
+L0078,2-bedroom apartment in Deira,Deira,apartment,rent,2,3,1205,79000,1,2026-08-09
+L0079,Studio apartment in Dubai Marina,Dubai Marina,apartment,sale,0,1,455,865000,1,2026-08-25
+L0080,1-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,1,1,655,94000,0,2026-09-15
+L0081,5-bedroom villa in Arabian Ranches,Arabian Ranches,villa,sale,5,6,6565,9970000,0,2026-08-23
+L0082,4-bedroom villa in Mirdif,Mirdif,villa,rent,4,5,4465,325000,0,2026-09-30
+L0083,4-bedroom villa in Al Barsha,Al Barsha,villa,sale,4,5,4265,4990000,1,2026-08-01
+L0084,Studio apartment in Dubai Marina,Dubai Marina,apartment,sale,0,1,485,1195000,1,2026-10-14
+L0085,4-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,rent,4,5,4505,707000,1,2026-08-04
+L0086,4-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,rent,4,5,2920,302000,0,2026-08-27
+L0087,Studio apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,0,1,450,605000,1,2026-07-31
+L0088,4-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,4,5,3115,2835000,0,2026-09-20
+L0089,Studio apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,0,1,480,31000,0,2026-10-12
+L0090,5-bedroom villa in Mirdif,Mirdif,villa,rent,5,6,5630,363000,0,2026-08-08
+L0091,2-bedroom apartment in International City,International City,apartment,rent,2,3,1140,73000,0,2026-09-23
+L0092,3-bedroom apartment in Deira,Deira,apartment,sale,3,4,1660,1665000,0,2026-09-30
+L0093,2-bedroom apartment in International City,International City,apartment,rent,2,3,1345,71000,0,2026-10-02
+L0094,2-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,sale,2,3,1160,3705000,1,2026-09-28
+L0095,2-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,sale,2,3,1050,3370000,0,2026-10-06
+L0096,2-bedroom apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,sale,2,3,1085,2060000,1,2026-07-11
+L0097,Studio apartment in International City,International City,apartment,rent,0,1,500,31000,0,2026-09-24
+L0098,3-bedroom apartment in Al Barsha,Al Barsha,apartment,rent,3,4,1840,169000,0,2026-07-18
+L0099,4-bedroom apartment in Business Bay,Business Bay,apartment,sale,4,5,2705,5455000,1,2026-08-27
+L0100,4-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,sale,4,5,4425,15170000,0,2026-07-31
+L0101,2-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,sale,2,3,1065,2290000,1,2026-09-26
+L0102,3-bedroom villa in Dubai Hills Estate,Dubai Hills Estate,villa,rent,3,4,3450,443000,1,2026-08-23
+L0103,4-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,4,5,2460,3430000,0,2026-09-11
+L0104,3-bedroom apartment in Deira,Deira,apartment,sale,3,4,2005,1730000,1,2026-09-26
+L0105,5-bedroom villa in Arabian Ranches,Arabian Ranches,villa,sale,5,6,6125,9620000,0,2026-10-08
+L0106,2-bedroom apartment in Mirdif,Mirdif,apartment,rent,2,3,1420,96000,1,2026-09-12
+L0107,4-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,rent,4,5,3095,275000,1,2026-07-16
+L0108,1-bedroom apartment in Al Barsha,Al Barsha,apartment,rent,1,1,650,64000,1,2026-10-01
+L0109,2-bedroom apartment in International City,International City,apartment,rent,2,3,1355,90000,0,2026-08-02
+L0110,1-bedroom apartment in Mirdif,Mirdif,apartment,rent,1,1,935,53000,1,2026-07-10
+L0111,3-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,rent,3,4,2345,153000,0,2026-09-06
+L0112,1-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,1,1,770,71000,1,2026-09-06
+L0113,4-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,4,5,3040,229000,1,2026-07-19
+L0114,Studio apartment in Dubai Marina,Dubai Marina,apartment,sale,0,1,390,980000,0,2026-08-06
+L0115,Studio apartment in Dubai Marina,Dubai Marina,apartment,rent,0,1,405,47000,0,2026-09-23
+L0116,1-bedroom apartment in Business Bay,Business Bay,apartment,sale,1,1,920,1745000,0,2026-09-29
+L0117,2-bedroom apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,sale,2,3,1085,2390000,0,2026-10-01
+L0118,2-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,sale,2,3,1145,1465000,0,2026-08-29
+L0119,Studio apartment in Business Bay,Business Bay,apartment,sale,0,1,550,1195000,0,2026-07-29
+L0120,Studio apartment in Palm Jumeirah,Palm Jumeirah,apartment,sale,0,1,380,1350000,0,2026-08-15
+L0121,Studio apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,0,1,385,28000,1,2026-07-04
+L0122,3-bedroom townhouse in Dubai Hills Estate,Dubai Hills Estate,townhouse,rent,3,4,2440,247000,0,2026-10-02
+L0123,3-bedroom villa in Al Barsha,Al Barsha,villa,rent,3,4,2700,228000,0,2026-07-23
+L0124,3-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,rent,3,4,1995,146000,1,2026-08-24
+L0125,3-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,sale,3,4,2090,7090000,1,2026-08-26
+L0126,1-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,1,1,715,1010000,0,2026-10-02
+L0127,2-bedroom apartment in International City,International City,apartment,rent,2,3,1430,91000,0,2026-08-28
+L0128,3-bedroom apartment in Mirdif,Mirdif,apartment,rent,3,4,1725,116000,1,2026-08-13
+L0129,3-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,3,4,2100,171000,1,2026-07-15
+L0130,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,1,1,675,53000,0,2026-08-22
+L0131,2-bedroom apartment in Business Bay,Business Bay,apartment,rent,2,3,1165,179000,1,2026-09-13
+L0132,1-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,1,1,700,69000,1,2026-08-11
+L0133,2-bedroom apartment in Business Bay,Business Bay,apartment,rent,2,3,1115,129000,1,2026-09-08
+L0134,3-bedroom villa in Mirdif,Mirdif,villa,sale,3,4,3120,3495000,0,2026-07-20
+L0135,1-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,rent,1,1,740,75000,0,2026-09-03
+L0136,4-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,rent,4,5,4575,779000,0,2026-07-02
+L0137,1-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,1,1,785,1470000,1,2026-08-30
+L0138,5-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,rent,5,6,4950,708000,0,2026-07-18
+L0139,1-bedroom apartment in International City,International City,apartment,sale,1,1,680,525000,0,2026-08-29
+L0140,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,1,1,890,74000,0,2026-07-01
+L0141,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,2,3,1275,1090000,0,2026-07-12
+L0142,1-bedroom apartment in International City,International City,apartment,sale,1,1,845,665000,0,2026-09-17
+L0143,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,1,1,680,56000,0,2026-09-28
+L0144,1-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,sale,1,1,665,1565000,0,2026-07-03
+L0145,1-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,1,1,925,2235000,0,2026-08-30
+L0146,Studio apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,0,1,405,44000,0,2026-09-12
+L0147,1-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,sale,1,1,805,840000,0,2026-07-25
+L0148,2-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,2,3,1385,216000,1,2026-08-17
+L0149,Studio apartment in International City,International City,apartment,rent,0,1,425,25000,0,2026-08-25
+L0150,3-bedroom villa in Arabian Ranches,Arabian Ranches,villa,sale,3,4,3050,4620000,0,2026-10-12
+L0151,2-bedroom apartment in Business Bay,Business Bay,apartment,rent,2,3,1290,159000,0,2026-08-30
+L0152,4-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,rent,4,5,2885,491000,0,2026-09-02
+L0153,3-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,sale,3,4,3380,13265000,1,2026-10-10
+L0154,3-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,3,4,1540,212000,1,2026-07-08
+L0155,5-bedroom villa in Mirdif,Mirdif,villa,rent,5,6,5925,398000,0,2026-07-21
+L0156,1-bedroom apartment in Al Barsha,Al Barsha,apartment,rent,1,1,775,70000,1,2026-09-01
+L0157,2-bedroom apartment in Business Bay,Business Bay,apartment,sale,2,3,1405,3170000,0,2026-08-11
+L0158,1-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,1,1,885,1485000,0,2026-09-02
+L0159,2-bedroom apartment in Mirdif,Mirdif,apartment,rent,2,3,1015,57000,1,2026-10-11
+L0160,1-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,1,1,720,123000,0,2026-09-02
+L0161,4-bedroom villa in Arabian Ranches,Arabian Ranches,villa,rent,4,5,4620,382000,1,2026-09-29
+L0162,3-bedroom villa in Mirdif,Mirdif,villa,sale,3,4,2785,2940000,0,2026-07-27
+L0163,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,2,3,1190,72000,0,2026-09-30
+L0164,3-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,3,4,1695,116000,0,2026-09-04
+L0165,3-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,rent,3,4,2185,147000,1,2026-07-13
+L0166,5-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,rent,5,6,4815,974000,0,2026-07-17
+L0167,2-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,2,3,1170,2440000,0,2026-08-15
+L0168,Studio apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,0,1,495,45000,0,2026-09-26
+L0169,3-bedroom apartment in Dubai Marina,Dubai Marina,apartment,rent,3,4,1575,220000,1,2026-07-05
+L0170,1-bedroom apartment in Business Bay,Business Bay,apartment,sale,1,1,935,2075000,0,2026-08-12
+L0171,3-bedroom apartment in Mirdif,Mirdif,apartment,rent,3,4,1895,127000,0,2026-10-01
+L0172,1-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,1,1,690,116000,1,2026-07-15
+L0173,5-bedroom villa in Mirdif,Mirdif,villa,rent,5,6,6500,398000,1,2026-09-04
+L0174,Studio apartment in Al Barsha,Al Barsha,apartment,sale,0,1,510,575000,1,2026-07-25
+L0175,Studio apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,0,1,390,505000,1,2026-08-28
+L0176,3-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,sale,3,4,2445,4005000,0,2026-09-29
+L0177,1-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,1,1,900,79000,1,2026-07-26
+L0178,3-bedroom apartment in Mirdif,Mirdif,apartment,rent,3,4,1945,138000,1,2026-07-15
+L0179,Studio apartment in Downtown Dubai,Downtown Dubai,apartment,rent,0,1,475,96000,0,2026-07-04
+L0180,2-bedroom apartment in Mirdif,Mirdif,apartment,rent,2,3,1405,89000,1,2026-08-04
+L0181,4-bedroom villa in Mirdif,Mirdif,villa,rent,4,5,4310,289000,0,2026-07-29
+L0182,3-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,3,4,1760,254000,0,2026-09-08
+L0183,2-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,rent,2,3,1325,275000,0,2026-07-09
+L0184,3-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,3,4,1870,226000,0,2026-07-30
+L0185,1-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,1,1,905,975000,0,2026-10-02
+L0186,Studio apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,0,1,425,61000,1,2026-10-12
+L0187,4-bedroom villa in Mirdif,Mirdif,villa,rent,4,5,4265,263000,0,2026-09-10
+L0188,1-bedroom apartment in International City,International City,apartment,rent,1,1,650,43000,0,2026-09-03
+L0189,4-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,sale,4,5,4345,13860000,0,2026-07-16
+L0190,2-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,2,3,1330,183000,0,2026-09-06
+L0191,2-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,2,3,1160,1065000,0,2026-09-25
+L0192,2-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,sale,2,3,1170,3260000,0,2026-10-09
+L0193,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,2,3,1075,80000,0,2026-10-14
+L0194,4-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,sale,4,5,3080,4490000,0,2026-08-23
+L0195,1-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,1,1,780,1790000,1,2026-08-05
+L0196,3-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,sale,3,4,2285,2385000,0,2026-07-29
+L0197,2-bedroom apartment in Deira,Deira,apartment,rent,2,3,1300,71000,0,2026-08-31
+L0198,2-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,2,3,1235,152000,1,2026-08-23
+L0199,1-bedroom apartment in Mirdif,Mirdif,apartment,sale,1,1,800,920000,0,2026-07-24
+L0200,1-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,1,1,755,55000,1,2026-10-01
+L0201,4-bedroom apartment in Dubai Marina,Dubai Marina,apartment,rent,4,5,3185,474000,0,2026-10-05
+L0202,3-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,sale,3,4,2510,3060000,0,2026-09-19
+L0203,Studio apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,sale,0,1,490,1180000,0,2026-08-28
+L0204,5-bedroom villa in Arabian Ranches,Arabian Ranches,villa,rent,5,6,5670,438000,0,2026-07-26
+L0205,4-bedroom villa in Dubai Hills Estate,Dubai Hills Estate,villa,sale,4,5,3860,7655000,0,2026-09-12
+L0206,Studio apartment in Downtown Dubai,Downtown Dubai,apartment,sale,0,1,500,1510000,0,2026-09-22
+L0207,Studio apartment in Deira,Deira,apartment,sale,0,1,410,315000,1,2026-07-07
+L0208,2-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,2,3,1250,135000,0,2026-10-03
+L0209,1-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,sale,1,1,800,965000,0,2026-07-27
+L0210,2-bedroom apartment in International City,International City,apartment,rent,2,3,1195,63000,1,2026-09-08
+L0211,4-bedroom villa in Arabian Ranches,Arabian Ranches,villa,rent,4,5,4175,366000,0,2026-08-23
+L0212,3-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,3,4,1935,3695000,1,2026-08-28
+L0213,2-bedroom apartment in International City,International City,apartment,rent,2,3,1080,61000,1,2026-10-15
+L0214,4-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,4,5,2685,202000,0,2026-08-07
+L0215,1-bedroom apartment in International City,International City,apartment,rent,1,1,690,37000,0,2026-10-03
+L0216,5-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,rent,5,6,6915,1230000,0,2026-08-17
+L0217,3-bedroom villa in Al Barsha,Al Barsha,villa,sale,3,4,3545,4755000,1,2026-08-17
+L0218,Studio apartment in Downtown Dubai,Downtown Dubai,apartment,rent,0,1,445,74000,1,2026-07-29
+L0219,2-bedroom apartment in International City,International City,apartment,rent,2,3,1445,80000,1,2026-10-05
+L0220,2-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,sale,2,3,1155,1405000,0,2026-10-09
+L0221,Studio apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,0,1,480,30000,0,2026-09-16
+L0222,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,1,1,915,82000,0,2026-07-04
+L0223,5-bedroom villa in Arabian Ranches,Arabian Ranches,villa,sale,5,6,5310,8295000,0,2026-07-02
+L0224,1-bedroom apartment in International City,International City,apartment,sale,1,1,820,555000,0,2026-09-24
+L0225,2-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,2,3,1260,1325000,0,2026-09-09
+L0226,3-bedroom villa in Dubai Hills Estate,Dubai Hills Estate,villa,rent,3,4,2610,278000,0,2026-09-05
+L0227,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,2,3,1380,1500000,0,2026-10-14
+L0228,2-bedroom townhouse in Dubai Hills Estate,Dubai Hills Estate,townhouse,rent,2,3,1525,176000,0,2026-07-13
+L0229,2-bedroom townhouse in Dubai Hills Estate,Dubai Hills Estate,townhouse,rent,2,3,1445,155000,1,2026-07-29
+L0230,Studio apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,0,1,380,39000,0,2026-07-10
+L0231,Studio apartment in Mirdif,Mirdif,apartment,rent,0,1,380,28000,0,2026-08-03
+L0232,1-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,1,1,705,98000,1,2026-10-04
+L0233,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,2,3,1400,84000,1,2026-09-11
+L0234,2-bedroom apartment in International City,International City,apartment,rent,2,3,1400,81000,1,2026-07-28
+L0235,2-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,sale,2,3,1230,3925000,0,2026-09-13
+L0236,1-bedroom apartment in Deira,Deira,apartment,rent,1,1,675,40000,1,2026-07-20
+L0237,1-bedroom apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,sale,1,1,835,1650000,0,2026-09-29
+L0238,2-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,sale,2,3,1210,3190000,0,2026-07-15
+L0239,4-bedroom villa in Dubai Hills Estate,Dubai Hills Estate,villa,rent,4,5,4860,624000,0,2026-07-21
+L0240,2-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,2,3,1190,188000,1,2026-09-02
+L0241,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,2,3,1300,96000,0,2026-07-08
+L0242,2-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,2,3,1325,109000,0,2026-08-27
+L0243,1-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,sale,1,1,950,2655000,0,2026-09-17
+L0244,1-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,1,1,945,129000,1,2026-08-04
+L0245,3-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,sale,3,4,1675,4170000,1,2026-07-15
+L0246,Studio apartment in Deira,Deira,apartment,sale,0,1,525,500000,1,2026-08-24
+L0247,1-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,1,1,790,138000,0,2026-08-17
+L0248,3-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,sale,3,4,2040,2620000,0,2026-09-28
+L0249,Studio apartment in International City,International City,apartment,rent,0,1,410,26000,0,2026-07-23
+L0250,Studio apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,0,1,535,53000,0,2026-07-05
+L0251,3-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,3,4,1505,1265000,0,2026-09-22
+L0252,4-bedroom villa in Mirdif,Mirdif,villa,rent,4,5,4300,283000,0,2026-08-31
+L0253,4-bedroom villa in Arabian Ranches,Arabian Ranches,villa,rent,4,5,3780,295000,0,2026-09-05
+L0254,1-bedroom apartment in International City,International City,apartment,sale,1,1,720,535000,0,2026-07-29
+L0255,3-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,3,4,2060,187000,0,2026-10-15
+L0256,2-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,sale,2,3,1340,4735000,0,2026-08-11
+L0257,3-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,3,4,2080,1840000,0,2026-08-15
+L0258,1-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,1,1,845,1220000,1,2026-10-13
+L0259,Studio apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,0,1,460,50000,1,2026-07-24
+L0260,2-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,sale,2,3,1025,1190000,0,2026-09-19
+L0261,2-bedroom apartment in International City,International City,apartment,rent,2,3,1350,87000,1,2026-09-21
+L0262,2-bedroom apartment in Business Bay,Business Bay,apartment,rent,2,3,1245,152000,0,2026-10-11
+L0263,2-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,rent,2,3,1730,181000,0,2026-07-21
+L0264,Studio apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,sale,0,1,470,1000000,0,2026-08-01
+L0265,2-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,rent,2,3,1750,142000,1,2026-10-05
+L0266,4-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,rent,4,5,3290,239000,0,2026-07-15
+L0267,1-bedroom apartment in Mirdif,Mirdif,apartment,rent,1,1,830,48000,1,2026-07-27
+L0268,Studio apartment in Deira,Deira,apartment,sale,0,1,460,475000,0,2026-10-10
+L0269,3-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,sale,3,4,1705,3635000,1,2026-08-07
+L0270,5-bedroom villa in Mirdif,Mirdif,villa,sale,5,6,4670,5225000,0,2026-07-21
+L0271,1-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,1,1,665,118000,0,2026-07-02
+L0272,2-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,2,3,1425,1315000,0,2026-07-18
+L0273,3-bedroom apartment in International City,International City,apartment,rent,3,4,1970,127000,1,2026-08-30
+L0274,3-bedroom apartment in Business Bay,Business Bay,apartment,rent,3,4,1560,198000,0,2026-10-13
+L0275,2-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,2,3,1355,1975000,1,2026-09-25
+L0276,3-bedroom apartment in Dubai Marina,Dubai Marina,apartment,rent,3,4,1675,232000,1,2026-10-01
+L0277,1-bedroom apartment in International City,International City,apartment,sale,1,1,830,645000,0,2026-07-31
+L0278,5-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,sale,5,6,4740,17675000,0,2026-07-24
+L0279,5-bedroom villa in Al Barsha,Al Barsha,villa,sale,5,6,5710,7425000,0,2026-09-15
+L0280,Studio apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,0,1,400,24000,1,2026-08-11
+L0281,2-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,sale,2,3,1525,2775000,0,2026-10-09
+L0282,4-bedroom villa in Al Barsha,Al Barsha,villa,rent,4,5,3950,360000,1,2026-09-18
+L0283,1-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,1,1,825,695000,0,2026-08-20
+L0284,2-bedroom apartment in Deira,Deira,apartment,rent,2,3,1010,75000,1,2026-10-04
+L0285,2-bedroom apartment in Deira,Deira,apartment,rent,2,3,1335,88000,1,2026-07-21
+L0286,3-bedroom apartment in Business Bay,Business Bay,apartment,rent,3,4,1830,232000,0,2026-08-25
+L0287,4-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,sale,4,5,2790,10070000,1,2026-08-13
+L0288,5-bedroom villa in Mirdif,Mirdif,villa,rent,5,6,6465,446000,1,2026-08-20
+L0289,2-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,sale,2,3,1440,3735000,1,2026-09-01
+L0290,4-bedroom villa in Dubai Hills Estate,Dubai Hills Estate,villa,rent,4,5,4240,589000,1,2026-07-13
+L0291,3-bedroom villa in Arabian Ranches,Arabian Ranches,villa,sale,3,4,3345,4900000,0,2026-08-22
+L0292,2-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,sale,2,3,1055,3330000,0,2026-10-04
+L0293,1-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,sale,1,1,675,805000,0,2026-08-04
+L0294,4-bedroom villa in Al Barsha,Al Barsha,villa,sale,4,5,4075,5100000,0,2026-07-20
+L0295,3-bedroom apartment in International City,International City,apartment,rent,3,4,1700,111000,0,2026-08-23
+L0296,4-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,rent,4,5,4145,710000,0,2026-07-07
+L0297,4-bedroom townhouse in Dubai Hills Estate,Dubai Hills Estate,townhouse,rent,4,5,2965,316000,1,2026-09-06
+L0298,3-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,3,4,1535,2590000,0,2026-09-11
+L0299,4-bedroom villa in Mirdif,Mirdif,villa,sale,4,5,4350,4070000,0,2026-07-20
+L0300,1-bedroom apartment in Al Barsha,Al Barsha,apartment,rent,1,1,735,63000,0,2026-09-02
+L0301,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,1,1,880,845000,0,2026-07-25
+L0302,Studio apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,sale,0,1,450,1060000,0,2026-09-06
+L0303,2-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,2,3,1075,81000,0,2026-09-16
+L0304,1-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,rent,1,1,910,81000,0,2026-08-01
+L0305,1-bedroom apartment in Business Bay,Business Bay,apartment,sale,1,1,920,2050000,0,2026-09-18
+L0306,3-bedroom apartment in International City,International City,apartment,rent,3,4,1585,84000,0,2026-08-23
+L0307,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,1,1,825,890000,1,2026-09-18
+L0308,3-bedroom townhouse in Dubai Hills Estate,Dubai Hills Estate,townhouse,rent,3,4,2510,268000,1,2026-09-26
+L0309,5-bedroom villa in Mirdif,Mirdif,villa,rent,5,6,6670,383000,1,2026-08-01
+L0310,1-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,1,1,735,105000,0,2026-09-04
+L0311,3-bedroom apartment in Mirdif,Mirdif,apartment,rent,3,4,1665,119000,1,2026-09-02
+L0312,1-bedroom apartment in Mirdif,Mirdif,apartment,sale,1,1,780,970000,1,2026-09-23
+L0313,2-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,sale,2,3,1135,3100000,0,2026-08-26
+L0314,Studio apartment in International City,International City,apartment,rent,0,1,475,33000,0,2026-09-14
+L0315,3-bedroom apartment in Mirdif,Mirdif,apartment,rent,3,4,1735,122000,0,2026-08-12
+L0316,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,1,1,865,740000,0,2026-07-29
+L0317,3-bedroom apartment in Al Barsha,Al Barsha,apartment,sale,3,4,2080,3080000,1,2026-09-26
+L0318,1-bedroom apartment in International City,International City,apartment,sale,1,1,715,490000,1,2026-08-28
+L0319,1-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,1,1,865,1670000,0,2026-10-13
+L0320,4-bedroom villa in Mirdif,Mirdif,villa,sale,4,5,3815,3575000,0,2026-08-05
+L0321,2-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,2,3,1425,2335000,0,2026-07-07
+L0322,3-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,sale,3,4,3125,12330000,0,2026-10-10
+L0323,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,1,1,935,915000,1,2026-07-17
+L0324,1-bedroom apartment in Deira,Deira,apartment,sale,1,1,950,895000,0,2026-07-27
+L0325,3-bedroom villa in Dubai Hills Estate,Dubai Hills Estate,villa,rent,3,4,2755,331000,1,2026-08-09
+L0326,1-bedroom apartment in Al Barsha,Al Barsha,apartment,sale,1,1,695,880000,0,2026-08-09
+L0327,1-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,1,1,660,106000,1,2026-08-20
+L0328,2-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,sale,2,3,1270,3480000,0,2026-08-31
+L0329,3-bedroom villa in Dubai Hills Estate,Dubai Hills Estate,villa,sale,3,4,2845,6340000,0,2026-07-24
+L0330,4-bedroom apartment in Deira,Deira,apartment,sale,4,5,2815,2230000,0,2026-08-27
+L0331,Studio apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,0,1,385,540000,0,2026-10-03
+L0332,3-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,3,4,1590,172000,0,2026-09-08
+L0333,2-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,rent,2,3,1225,103000,0,2026-07-17
+L0334,Studio apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,rent,0,1,530,58000,0,2026-07-11
+L0335,1-bedroom apartment in Business Bay,Business Bay,apartment,rent,1,1,910,127000,0,2026-09-29
+L0336,4-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,rent,4,5,3865,636000,0,2026-09-19
+L0337,3-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,sale,3,4,1745,3855000,0,2026-08-25
+L0338,3-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,3,4,1690,124000,0,2026-08-22
+L0339,1-bedroom apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,sale,1,1,795,1530000,0,2026-07-24
+L0340,Studio apartment in International City,International City,apartment,sale,0,1,470,340000,0,2026-09-22
+L0341,3-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,3,4,1690,153000,0,2026-08-04
+L0342,5-bedroom villa in Al Barsha,Al Barsha,villa,rent,5,6,6340,551000,1,2026-09-07
+L0343,2-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,2,3,1295,1205000,1,2026-10-04
+L0344,1-bedroom apartment in Deira,Deira,apartment,sale,1,1,865,775000,0,2026-08-30
+L0345,3-bedroom apartment in Al Barsha,Al Barsha,apartment,rent,3,4,2075,199000,0,2026-08-31
+L0346,4-bedroom villa in Al Barsha,Al Barsha,villa,rent,4,5,4365,409000,0,2026-07-01
+L0347,4-bedroom villa in Mirdif,Mirdif,villa,sale,4,5,4795,4570000,0,2026-08-01
+L0348,3-bedroom apartment in International City,International City,apartment,sale,3,4,1860,1145000,0,2026-08-06
+L0349,4-bedroom townhouse in Dubai Hills Estate,Dubai Hills Estate,townhouse,rent,4,5,2550,307000,0,2026-07-26
+L0350,3-bedroom apartment in Deira,Deira,apartment,rent,3,4,1805,110000,0,2026-09-19
+L0351,1-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,1,1,835,91000,0,2026-08-21
+L0352,2-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,2,3,1300,2625000,0,2026-07-31
+L0353,2-bedroom apartment in Al Barsha,Al Barsha,apartment,rent,2,3,1245,115000,0,2026-08-14
+L0354,4-bedroom apartment in International City,International City,apartment,sale,4,5,3020,1820000,0,2026-08-08
+L0355,1-bedroom apartment in Deira,Deira,apartment,rent,1,1,700,52000,0,2026-10-09
+L0356,4-bedroom apartment in International City,International City,apartment,sale,4,5,2400,1780000,0,2026-07-11
+L0357,Studio apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,sale,0,1,440,595000,0,2026-09-22
+L0358,1-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,1,1,695,51000,1,2026-07-21
+L0359,4-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,rent,4,5,2710,232000,1,2026-10-15
+L0360,4-bedroom apartment in Mirdif,Mirdif,apartment,rent,4,5,2355,134000,0,2026-09-18
+L0361,3-bedroom villa in Mirdif,Mirdif,villa,rent,3,4,2760,158000,0,2026-09-07
+L0362,4-bedroom villa in Arabian Ranches,Arabian Ranches,villa,sale,4,5,3995,5840000,0,2026-08-29
+L0363,3-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,3,4,1625,3140000,0,2026-10-14
+L0364,2-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,sale,2,3,1445,1600000,0,2026-08-12
+L0365,3-bedroom villa in Dubai Hills Estate,Dubai Hills Estate,villa,rent,3,4,2620,351000,0,2026-07-06
+L0366,Studio apartment in Dubai Marina,Dubai Marina,apartment,sale,0,1,400,855000,0,2026-10-05
+L0367,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,1,1,845,850000,1,2026-08-12
+L0368,2-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,rent,2,3,1625,152000,1,2026-10-05
+L0369,3-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,rent,3,4,1975,312000,0,2026-08-16
+L0370,3-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,sale,3,4,1890,6375000,0,2026-09-30
+L0371,Studio apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,0,1,400,670000,0,2026-08-24
+L0372,Studio apartment in Deira,Deira,apartment,rent,0,1,435,26000,1,2026-07-09
+L0373,3-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,rent,3,4,2525,235000,0,2026-07-26
+L0374,2-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,2,3,1180,180000,0,2026-07-22
+L0375,3-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,rent,3,4,2045,151000,0,2026-08-14
+L0376,2-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,rent,2,3,1665,120000,0,2026-09-03
+L0377,5-bedroom villa in Arabian Ranches,Arabian Ranches,villa,rent,5,6,6545,486000,0,2026-09-06
+L0378,2-bedroom apartment in International City,International City,apartment,rent,2,3,1310,96000,0,2026-08-17
+L0379,Studio apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,0,1,500,34000,1,2026-08-24
+L0380,4-bedroom villa in Al Barsha,Al Barsha,villa,rent,4,5,3615,289000,0,2026-08-18
+L0381,2-bedroom apartment in International City,International City,apartment,rent,2,3,1065,77000,0,2026-08-06
+L0382,1-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,1,1,685,47000,0,2026-09-04
+L0383,3-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,3,4,1965,382000,1,2026-07-12
+L0384,3-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,rent,3,4,1675,285000,0,2026-09-25
+L0385,4-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,rent,4,5,3115,260000,1,2026-07-08
+L0386,Studio apartment in Business Bay,Business Bay,apartment,rent,0,1,525,56000,0,2026-07-16
+L0387,Studio apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,0,1,410,445000,0,2026-09-08
+L0388,3-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,rent,3,4,2085,368000,1,2026-09-08
+L0389,3-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,3,4,2000,1940000,1,2026-08-27
+L0390,3-bedroom townhouse in Dubai Hills Estate,Dubai Hills Estate,townhouse,sale,3,4,2285,4580000,0,2026-09-02
+L0391,4-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,4,5,2725,439000,0,2026-08-07
+L0392,1-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,1,1,910,100000,1,2026-09-21
+L0393,2-bedroom apartment in Dubai Marina,Dubai Marina,apartment,rent,2,3,1150,169000,1,2026-08-14
+L0394,1-bedroom apartment in Deira,Deira,apartment,sale,1,1,775,675000,0,2026-09-02
+L0395,3-bedroom apartment in Business Bay,Business Bay,apartment,sale,3,4,1870,3355000,0,2026-08-12
+L0396,1-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,1,1,680,84000,0,2026-08-29
+L0397,2-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,sale,2,3,1100,3775000,0,2026-08-02
+L0398,1-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,1,1,745,127000,0,2026-08-17
+L0399,1-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,1,1,910,64000,1,2026-08-27
+L0400,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,2,3,1220,1135000,0,2026-07-04
+L0401,1-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,sale,1,1,665,700000,0,2026-08-22
+L0402,3-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,3,4,2075,4500000,0,2026-09-21
+L0403,2-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,2,3,1020,102000,1,2026-07-23
+L0404,3-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,3,4,2035,2090000,0,2026-09-29
+L0405,1-bedroom apartment in Al Barsha,Al Barsha,apartment,sale,1,1,655,800000,0,2026-09-07
+L0406,4-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,rent,4,5,3220,294000,0,2026-09-28
+L0407,3-bedroom apartment in Dubai Marina,Dubai Marina,apartment,rent,3,4,1935,286000,0,2026-07-30
+L0408,1-bedroom apartment in Al Barsha,Al Barsha,apartment,rent,1,1,865,60000,1,2026-08-11
+L0409,3-bedroom apartment in Mirdif,Mirdif,apartment,sale,3,4,2010,2460000,0,2026-09-25
+L0410,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,1,1,730,630000,0,2026-07-28
+L0411,2-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,sale,2,3,1885,2235000,0,2026-10-14
+L0412,2-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,2,3,1410,3235000,0,2026-07-24
+L0413,5-bedroom villa in Mirdif,Mirdif,villa,sale,5,6,6560,8110000,0,2026-10-14
+L0414,2-bedroom apartment in Business Bay,Business Bay,apartment,sale,2,3,1370,2825000,1,2026-08-18
+L0415,Studio apartment in Dubai Sports City,Dubai Sports City,apartment,rent,0,1,500,38000,1,2026-09-30
+L0416,4-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,sale,4,5,4850,16795000,0,2026-09-06
+L0417,2-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,2,3,1235,217000,0,2026-07-12
+L0418,1-bedroom apartment in Al Barsha,Al Barsha,apartment,rent,1,1,760,51000,0,2026-08-02
+L0419,Studio apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,0,1,505,42000,0,2026-08-24
+L0420,2-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,2,3,1145,130000,0,2026-10-05
+L0421,3-bedroom apartment in Dubai Marina,Dubai Marina,apartment,rent,3,4,1785,283000,0,2026-09-24
+L0422,1-bedroom apartment in Dubai Marina,Dubai Marina,apartment,rent,1,1,780,110000,1,2026-08-23
+L0423,Studio apartment in Dubai Marina,Dubai Marina,apartment,rent,0,1,435,53000,1,2026-09-07
+L0424,2-bedroom apartment in Business Bay,Business Bay,apartment,rent,2,3,1005,134000,0,2026-08-20
+L0425,1-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,sale,1,1,650,785000,0,2026-09-19
+L0426,5-bedroom villa in Dubai Hills Estate,Dubai Hills Estate,villa,rent,5,6,5610,549000,1,2026-07-06
+L0427,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,1,1,945,73000,1,2026-08-03
+L0428,2-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,2,3,1260,3065000,0,2026-07-05
+L0429,3-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,rent,3,4,1460,228000,0,2026-08-17
+L0430,1-bedroom apartment in Deira,Deira,apartment,sale,1,1,935,735000,0,2026-10-01
+L0431,Studio apartment in Business Bay,Business Bay,apartment,rent,0,1,435,54000,1,2026-07-18
+L0432,Studio apartment in Mirdif,Mirdif,apartment,sale,0,1,460,555000,0,2026-10-03
+L0433,3-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,rent,3,4,3455,546000,1,2026-07-11
+L0434,2-bedroom townhouse in Dubai Hills Estate,Dubai Hills Estate,townhouse,rent,2,3,1690,173000,1,2026-08-08
+L0435,2-bedroom apartment in Dubai Marina,Dubai Marina,apartment,rent,2,3,1030,148000,0,2026-08-13
+L0436,2-bedroom apartment in Deira,Deira,apartment,sale,2,3,1300,1205000,0,2026-07-06
+L0437,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,1,1,740,750000,0,2026-07-20
+L0438,1-bedroom apartment in Al Barsha,Al Barsha,apartment,rent,1,1,875,68000,0,2026-07-16
+L0439,5-bedroom villa in Al Barsha,Al Barsha,villa,sale,5,6,7100,8130000,0,2026-08-17
+L0440,4-bedroom villa in Al Barsha,Al Barsha,villa,sale,4,5,3900,5050000,0,2026-08-16
+L0441,1-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,1,1,910,60000,0,2026-07-01
+L0442,Studio apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,rent,0,1,495,47000,0,2026-07-02
+L0443,2-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,2,3,1375,1795000,1,2026-07-21
+L0444,2-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,sale,2,3,1360,2920000,0,2026-08-26
+L0445,Studio apartment in Mirdif,Mirdif,apartment,sale,0,1,410,510000,0,2026-07-07
+L0446,3-bedroom apartment in International City,International City,apartment,rent,3,4,1840,107000,0,2026-10-08
+L0447,1-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,sale,1,1,930,2255000,1,2026-09-02
+L0448,3-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,3,4,1605,229000,1,2026-09-11
+L0449,Studio apartment in Business Bay,Business Bay,apartment,rent,0,1,455,49000,1,2026-10-03
+L0450,Studio apartment in International City,International City,apartment,rent,0,1,385,26000,0,2026-07-14
+L0451,Studio apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,0,1,415,66000,1,2026-09-02
+L0452,3-bedroom villa in Dubai Hills Estate,Dubai Hills Estate,villa,rent,3,4,2955,303000,0,2026-08-28
+L0453,Studio apartment in Mirdif,Mirdif,apartment,sale,0,1,380,455000,1,2026-08-28
+L0454,3-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,sale,3,4,2720,8690000,1,2026-10-04
+L0455,Studio apartment in Dubai Marina,Dubai Marina,apartment,sale,0,1,385,895000,0,2026-09-27
+L0456,2-bedroom apartment in Mirdif,Mirdif,apartment,sale,2,3,1430,1730000,0,2026-09-15
+L0457,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,1,1,880,78000,0,2026-07-15
+L0458,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,1,1,885,61000,1,2026-07-15
+L0459,1-bedroom apartment in Business Bay,Business Bay,apartment,sale,1,1,935,2015000,1,2026-09-13
+L0460,4-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,4,5,2780,204000,0,2026-08-17
+L0461,3-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,sale,3,4,1920,3265000,0,2026-07-03
+L0462,1-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,1,1,795,51000,0,2026-10-02
+L0463,4-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,sale,4,5,2920,9895000,1,2026-07-24
+L0464,3-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,sale,3,4,1840,4685000,0,2026-09-05
+L0465,2-bedroom apartment in Business Bay,Business Bay,apartment,sale,2,3,1020,1760000,0,2026-09-13
+L0466,3-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,3,4,1790,173000,1,2026-08-15
+L0467,3-bedroom villa in Al Barsha,Al Barsha,villa,sale,3,4,3550,4830000,1,2026-07-24
+L0468,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,2,3,1320,1340000,0,2026-09-26
+L0469,5-bedroom villa in Mirdif,Mirdif,villa,rent,5,6,6210,426000,0,2026-09-11
+L0470,4-bedroom villa in Arabian Ranches,Arabian Ranches,villa,sale,4,5,4755,8415000,0,2026-10-12
+L0471,1-bedroom apartment in International City,International City,apartment,rent,1,1,700,38000,0,2026-08-19
+L0472,3-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,3,4,2020,378000,0,2026-09-05
+L0473,3-bedroom villa in Mirdif,Mirdif,villa,rent,3,4,2885,194000,1,2026-07-03
+L0474,4-bedroom villa in Mirdif,Mirdif,villa,sale,4,5,4790,4845000,1,2026-08-25
+L0475,3-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,sale,3,4,2165,3610000,0,2026-07-19
+L0476,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,2,3,1240,1405000,0,2026-09-16
+L0477,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,1,1,850,64000,0,2026-08-28
+L0478,1-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,1,1,850,890000,0,2026-07-10
+L0479,2-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,rent,2,3,1690,160000,1,2026-08-19
+L0480,1-bedroom apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,sale,1,1,950,1870000,0,2026-08-05
+L0481,1-bedroom apartment in Deira,Deira,apartment,sale,1,1,720,575000,0,2026-08-28
+L0482,3-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,sale,3,4,2200,2775000,1,2026-07-02
+L0483,3-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,sale,3,4,1515,5120000,0,2026-07-23
+L0484,3-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,sale,3,4,2070,3155000,0,2026-07-06
+L0485,3-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,sale,3,4,1610,2040000,0,2026-08-29
+L0486,4-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,4,5,2815,443000,0,2026-07-04
+L0487,Studio apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,0,1,510,37000,1,2026-08-20
+L0488,4-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,sale,4,5,3010,4145000,1,2026-08-09
+L0489,2-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,sale,2,3,1230,3360000,0,2026-08-20
+L0490,5-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,sale,5,6,7370,28470000,1,2026-08-10
+L0491,1-bedroom apartment in International City,International City,apartment,rent,1,1,780,50000,0,2026-09-04
+L0492,4-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,sale,4,5,2555,8790000,0,2026-10-13
+L0493,1-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,1,1,925,86000,1,2026-08-01
+L0494,2-bedroom apartment in Business Bay,Business Bay,apartment,sale,2,3,1450,2560000,1,2026-10-03
+L0495,1-bedroom apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,sale,1,1,930,1975000,0,2026-08-05
+L0496,3-bedroom villa in Arabian Ranches,Arabian Ranches,villa,rent,3,4,2935,206000,0,2026-08-29
+L0497,3-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,sale,3,4,1970,2615000,0,2026-08-17
+L0498,3-bedroom apartment in Business Bay,Business Bay,apartment,sale,3,4,2075,4600000,1,2026-08-13
+L0499,1-bedroom apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,rent,1,1,725,87000,0,2026-09-19
+L0500,3-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,sale,3,4,2340,2620000,0,2026-10-03
+L0501,1-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,1,1,815,730000,0,2026-07-22
+L0502,5-bedroom villa in Dubai Hills Estate,Dubai Hills Estate,villa,sale,5,6,6350,15180000,0,2026-09-26
+L0503,2-bedroom apartment in Dubai Marina,Dubai Marina,apartment,rent,2,3,1105,165000,1,2026-08-30
+L0504,3-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,rent,3,4,2040,167000,0,2026-09-18
+L0505,2-bedroom apartment in Business Bay,Business Bay,apartment,rent,2,3,1260,150000,1,2026-07-16
+L0506,4-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,4,5,2245,163000,0,2026-09-29
+L0507,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,2,3,1200,100000,0,2026-07-25
+L0508,Studio apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,rent,0,1,480,61000,1,2026-08-01
+L0509,Studio apartment in Dubai Sports City,Dubai Sports City,apartment,rent,0,1,520,40000,0,2026-07-06
+L0510,3-bedroom apartment in Business Bay,Business Bay,apartment,sale,3,4,1680,3725000,0,2026-09-27
+L0511,4-bedroom villa in Arabian Ranches,Arabian Ranches,villa,sale,4,5,4735,7900000,1,2026-10-15
+L0512,2-bedroom apartment in Mirdif,Mirdif,apartment,rent,2,3,1155,73000,0,2026-07-26
+L0513,3-bedroom villa in Arabian Ranches,Arabian Ranches,villa,rent,3,4,3350,302000,0,2026-07-14
+L0514,4-bedroom villa in Al Barsha,Al Barsha,villa,rent,4,5,3865,330000,0,2026-07-16
+L0515,1-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,1,1,805,1295000,0,2026-09-13
+L0516,2-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,sale,2,3,1400,1795000,1,2026-09-12
+L0517,2-bedroom apartment in Mirdif,Mirdif,apartment,rent,2,3,1255,72000,1,2026-09-18
+L0518,3-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,3,4,1665,99000,0,2026-10-05
+L0519,1-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,1,1,815,129000,1,2026-08-17
+L0520,4-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,sale,4,5,2975,11900000,0,2026-09-22
+L0521,Studio apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,rent,0,1,535,42000,1,2026-09-15
+L0522,4-bedroom apartment in Dubai Marina,Dubai Marina,apartment,sale,4,5,3130,7790000,1,2026-07-14
+L0523,1-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,1,1,905,61000,1,2026-09-22
+L0524,4-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,4,5,2270,2075000,0,2026-08-28
+L0525,1-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,1,1,910,110000,1,2026-09-07
+L0526,1-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,1,1,740,53000,1,2026-07-26
+L0527,Studio apartment in Downtown Dubai,Downtown Dubai,apartment,sale,0,1,400,1230000,0,2026-07-28
+L0528,3-bedroom villa in Palm Jumeirah,Palm Jumeirah,villa,sale,3,4,3395,13350000,0,2026-08-13
+L0529,2-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,2,3,1335,226000,0,2026-08-09
+L0530,2-bedroom apartment in International City,International City,apartment,sale,2,3,1240,955000,0,2026-09-21
+L0531,Studio apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,0,1,525,80000,1,2026-09-15
+L0532,Studio apartment in Downtown Dubai,Downtown Dubai,apartment,sale,0,1,380,1235000,0,2026-10-07
+L0533,Studio apartment in Dubai Sports City,Dubai Sports City,apartment,sale,0,1,545,535000,0,2026-09-07
+L0534,1-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,1,1,950,800000,1,2026-09-03
+L0535,3-bedroom apartment in International City,International City,apartment,rent,3,4,1765,108000,0,2026-08-03
+L0536,1-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,1,1,860,915000,0,2026-07-07
+L0537,4-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,rent,4,5,2625,403000,0,2026-08-29
+L0538,1-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,rent,1,1,710,67000,1,2026-10-14
+L0539,4-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,4,5,2200,1940000,0,2026-10-12
+L0540,5-bedroom villa in Dubai Hills Estate,Dubai Hills Estate,villa,sale,5,6,5690,11775000,1,2026-09-23
+L0541,2-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,2,3,1235,185000,1,2026-10-10
+L0542,2-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,2,3,1260,213000,1,2026-07-30
+L0543,Studio apartment in Dubai Marina,Dubai Marina,apartment,sale,0,1,435,905000,0,2026-07-05
+L0544,5-bedroom villa in Arabian Ranches,Arabian Ranches,villa,rent,5,6,6665,584000,0,2026-09-23
+L0545,2-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,2,3,1180,117000,1,2026-07-03
+L0546,1-bedroom apartment in International City,International City,apartment,sale,1,1,830,585000,1,2026-07-26
+L0547,Studio apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,0,1,495,76000,1,2026-08-20
+L0548,2-bedroom apartment in Mirdif,Mirdif,apartment,rent,2,3,1450,107000,1,2026-07-12
+L0549,Studio apartment in Dubai Hills Estate,Dubai Hills Estate,apartment,rent,0,1,430,42000,1,2026-09-15
+L0550,1-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,1,1,685,103000,0,2026-08-17
+L0551,Studio apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,sale,0,1,455,445000,0,2026-08-05
+L0552,1-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,rent,1,1,910,86000,0,2026-08-04
+L0553,3-bedroom villa in Dubai Hills Estate,Dubai Hills Estate,villa,rent,3,4,2730,333000,1,2026-08-16
+L0554,Studio apartment in Al Barsha,Al Barsha,apartment,rent,0,1,455,38000,1,2026-10-05
+L0555,1-bedroom apartment in Downtown Dubai,Downtown Dubai,apartment,rent,1,1,915,148000,1,2026-10-08
+L0556,2-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,2,3,1335,179000,0,2026-08-19
+L0557,1-bedroom apartment in Jumeirah Beach Residence,Jumeirah Beach Residence,apartment,rent,1,1,835,142000,1,2026-07-10
+L0558,1-bedroom apartment in International City,International City,apartment,sale,1,1,675,515000,0,2026-07-26
+L0559,2-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,2,3,1200,1570000,0,2026-08-19
+L0560,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,2,3,1210,97000,1,2026-08-20
+L0561,2-bedroom apartment in Mirdif,Mirdif,apartment,rent,2,3,1295,91000,0,2026-08-08
+L0562,Studio apartment in International City,International City,apartment,rent,0,1,405,24000,0,2026-08-10
+L0563,2-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,sale,2,3,1140,4475000,1,2026-07-02
+L0564,2-bedroom apartment in International City,International City,apartment,rent,2,3,1370,72000,1,2026-08-07
+L0565,Studio apartment in Business Bay,Business Bay,apartment,sale,0,1,420,885000,0,2026-07-26
+L0566,2-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,2,3,1190,99000,0,2026-10-07
+L0567,Studio apartment in International City,International City,apartment,sale,0,1,405,270000,0,2026-07-12
+L0568,1-bedroom apartment in Business Bay,Business Bay,apartment,rent,1,1,935,101000,0,2026-07-08
+L0569,1-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,1,1,890,1005000,0,2026-07-14
+L0570,3-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,3,4,1670,162000,0,2026-09-23
+L0571,Studio apartment in Downtown Dubai,Downtown Dubai,apartment,rent,0,1,420,63000,1,2026-08-25
+L0572,1-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,rent,1,1,875,92000,1,2026-09-17
+L0573,2-bedroom apartment in Al Barsha,Al Barsha,apartment,rent,2,3,1225,95000,0,2026-08-26
+L0574,1-bedroom apartment in Business Bay,Business Bay,apartment,sale,1,1,920,1870000,0,2026-09-08
+L0575,3-bedroom apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,3,4,1700,131000,0,2026-07-25
+L0576,Studio apartment in Deira,Deira,apartment,rent,0,1,420,22000,1,2026-09-13
+L0577,1-bedroom apartment in Jumeirah Village Circle,Jumeirah Village Circle,apartment,sale,1,1,820,1080000,0,2026-07-31
+L0578,3-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,3,4,2035,2265000,0,2026-10-03
+L0579,Studio apartment in Dubai Marina,Dubai Marina,apartment,rent,0,1,540,72000,0,2026-09-12
+L0580,Studio apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,0,1,420,720000,0,2026-08-29
+L0581,2-bedroom townhouse in Arabian Ranches,Arabian Ranches,townhouse,rent,2,3,1855,145000,1,2026-08-01
+L0582,3-bedroom apartment in Business Bay,Business Bay,apartment,rent,3,4,1775,238000,0,2026-10-09
+L0583,Studio apartment in Al Barsha,Al Barsha,apartment,sale,0,1,490,570000,0,2026-09-29
+L0584,3-bedroom villa in Mirdif,Mirdif,villa,sale,3,4,2645,3110000,0,2026-08-29
+L0585,1-bedroom apartment in Deira,Deira,apartment,rent,1,1,820,56000,0,2026-09-12
+L0586,2-bedroom townhouse in Dubai Hills Estate,Dubai Hills Estate,townhouse,rent,2,3,1615,174000,1,2026-07-30
+L0587,Studio apartment in Dubai Silicon Oasis,Dubai Silicon Oasis,apartment,rent,0,1,520,33000,1,2026-10-13
+L0588,4-bedroom villa in Al Barsha,Al Barsha,villa,sale,4,5,4855,5875000,1,2026-07-09
+L0589,3-bedroom apartment in Mirdif,Mirdif,apartment,rent,3,4,1470,104000,1,2026-07-18
+L0590,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,2,3,1370,1560000,0,2026-09-08
+L0591,4-bedroom villa in Mirdif,Mirdif,villa,rent,4,5,4045,286000,0,2026-08-31
+L0592,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,2,3,1405,1355000,0,2026-07-21
+L0593,3-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,rent,3,4,1980,128000,0,2026-08-20
+L0594,4-bedroom villa in Arabian Ranches,Arabian Ranches,villa,rent,4,5,4100,329000,0,2026-07-04
+L0595,2-bedroom townhouse in Jumeirah Village Circle,Jumeirah Village Circle,townhouse,sale,2,3,1620,1870000,0,2026-09-25
+L0596,1-bedroom apartment in Deira,Deira,apartment,sale,1,1,750,755000,0,2026-08-29
+L0597,1-bedroom apartment in Palm Jumeirah,Palm Jumeirah,apartment,rent,1,1,740,160000,0,2026-07-19
+L0598,2-bedroom apartment in Deira,Deira,apartment,rent,2,3,1330,85000,0,2026-07-27
+L0599,2-bedroom apartment in Jumeirah Lake Towers,Jumeirah Lake Towers,apartment,sale,2,3,1315,1685000,1,2026-08-08
+L0600,2-bedroom apartment in Dubai Sports City,Dubai Sports City,apartment,sale,2,3,1215,1385000,0,2026-07-09
