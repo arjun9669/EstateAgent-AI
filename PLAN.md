@@ -60,8 +60,9 @@ Each tool returns JSON with a `source` field so the agent can cite it.
    model over Ollama's hosted API: [live demo](https://appapppy-hadkfldjgvu3gw24nfdysg.streamlit.app/), [notes](docs/HOSTING.md).
 5. ✅ **Evaluation**: 30 frozen questions scored on tool choice, correctness,
    citation support and grounding; recorded runs are re-scored in CI. First run
-   with gemma4:cloud: 27/30 ([docs/EVALUATION.md](docs/EVALUATION.md)). Found a
-   retrieval miss (contract registration) and two loose quotations to fix next.
+   with gemma4:cloud: 27/30. Hybrid law search and a quotation rule fixed all three
+   failures; run 2 is also 27/30 with three different, completeness-type failures
+   ([docs/EVALUATION.md](docs/EVALUATION.md)).
 6. **Polish** *(next)*: README with demo GIF, architecture diagram, release tag.
 
 ## Ground rules

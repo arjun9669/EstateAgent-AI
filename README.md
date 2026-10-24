@@ -30,7 +30,7 @@ figures can be checked rather than trusted.
 | `compare_properties` | "Compare L0435 and L0503" | Price per sqft against similar listings |
 | `area_price_stats` | "Are Dubai Marina prices rising?" | Median sale prices, this year vs. last |
 | `mortgage_calculator` | "Monthly payment on AED 1.8M?" | UAE Central Bank loan-to-value caps, DLD fees |
-| `search_rules` | "How much can my landlord raise the rent?" | Semantic search (MiniLM embeddings, ChromaDB) over official Dubai legislation |
+| `search_rules` | "How much can my landlord raise the rent?" | Hybrid search over official Dubai legislation: MiniLM embeddings in ChromaDB plus BM25 keywords |
 
 Each tool returns JSON with a `source` field, and errors come back as messages
 the agent can read and correct, not crashes. The JSON schemas for LLM tool
@@ -65,16 +65,18 @@ question ─▶ agent ──tool calls──▶ tools ──results──▶ age
 ## Evaluation
 
 A frozen set of 30 questions ([`eval/cases-v1.json`](eval/cases-v1.json)) scores
-each answer on tool choice, correctness, citation support and grounding. First
-run with `gemma4:cloud`:
+each answer on tool choice, correctness, citation support and grounding, with
+`gemma4:cloud`:
 
-| Tool choice | Correctness | Citations | Grounding | All four |
-|---:|---:|---:|---:|---:|
-| 30/30 | 30/30 | 27/30 | 30/30 | **27/30** |
+| Run | Tool choice | Correctness | Citations | Grounding | All four |
+|---|---:|---:|---:|---:|---:|
+| 1: meaning-only law search | 30/30 | 30/30 | 27/30 | 30/30 | **27/30** |
+| 2: hybrid search + quotation rule | 30/30 | 28/30 | 29/30 | 30/30 | **27/30** |
 
-The three failures are reported as they are: one retrieval miss (the law search
-did not find the contract-registration article) and two loose quotations.
-Details, protocol and next steps: [docs/EVALUATION.md](docs/EVALUATION.md).
+Run 2 fixed all three run-1 failures (a law-search miss and two loose quotations;
+law questions now 7/7) but failed three others on completeness and style.
+Every result is recorded and explained, not just the best one:
+[docs/EVALUATION.md](docs/EVALUATION.md).
 
 ## Try the tools
 
@@ -190,7 +192,7 @@ Details, sources and known gaps: [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md).
 2. ✅ Official legislation, embeddings + ChromaDB for `search_rules`, DLD loader
 3. ✅ LangGraph agent on a local Ollama model or Groq's free API, with checks that answers match tool output
 4. ✅ Chat showing each agent step, [hosted free on Streamlit Community Cloud](https://appapppy-hadkfldjgvu3gw24nfdysg.streamlit.app/)
-5. ✅ Evaluation set for tool choice, correctness and citations ([27/30](docs/EVALUATION.md))
+5. ✅ Evaluation set for tool choice, correctness and citations ([results](docs/EVALUATION.md))
 6. Demo GIF, architecture diagram, release
 
 Built to run entirely on free tiers.
