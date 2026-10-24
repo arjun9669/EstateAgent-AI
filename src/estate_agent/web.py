@@ -4,6 +4,7 @@ Shows each tool call as an expandable step while the agent works, then the
 grounding check and the answer. Run locally with `streamlit run streamlit_app.py`.
 """
 
+import os
 import threading
 
 import streamlit as st
@@ -16,8 +17,26 @@ from estate_agent.agent import CheckEvent, StepEvent, stream
 MAX_QUESTIONS_PER_SESSION = 10
 
 
+def load_secrets_into_environment() -> None:
+    """Copy root-level text secrets into os.environ, where config.py reads settings.
+
+    Streamlit parses secrets only when st.secrets is first used, so without this
+    the hosted app never sees settings like OLLAMA_BASE_URL. Existing environment
+    variables win. No secrets file (e.g. when run locally) is fine.
+    """
+    try:
+        st.secrets.load_if_toml_exists()
+        secrets = {key: st.secrets[key] for key in st.secrets}
+    except Exception:  # missing or unreadable secrets: fall back to the environment and .env
+        return
+    for key, value in secrets.items():
+        if isinstance(value, str):
+            os.environ.setdefault(key, value)
+
+
 def make_agent():
     """Replaced in tests with an agent on a scripted model."""
+    load_secrets_into_environment()
     return presentation.default_agent()
 
 

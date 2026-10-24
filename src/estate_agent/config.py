@@ -105,7 +105,11 @@ def check_ollama() -> str | None:
     try:
         installed = {m.model for m in client.list().models}
     except Exception:
-        return "Ollama is not running. Install it from https://ollama.com and open the Ollama app."
+        return (
+            f"Ollama is not running at {ollama_url()}. On your computer: install it from "
+            "https://ollama.com and open the Ollama app. On a hosted app: set "
+            "OLLAMA_BASE_URL=https://ollama.com and OLLAMA_API_KEY in its secrets."
+        )
     wanted = model_name()
     if is_ollama_cloud_model(wanted):
         return None

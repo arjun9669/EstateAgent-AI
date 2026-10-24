@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import pytest
@@ -91,3 +92,28 @@ def test_session_question_limit(use_agent, toolbox, monkeypatch):
     at.chat_input[0].set_value("one").run()
     assert at.chat_input[0].disabled
     assert len(at.session_state["history"]) == 1
+
+
+def test_hosted_secrets_reach_the_model_settings(monkeypatch):
+    """Streamlit secrets must become environment variables before the agent is built."""
+    for name in ("OLLAMA_BASE_URL", "OLLAMA_MODEL", "OLLAMA_API_KEY"):
+        monkeypatch.setenv(name, "")  # so pytest restores the original value afterwards
+        monkeypatch.delenv(name)
+    seen = {}
+
+    def fake_default_agent():
+        seen.update({k: os.environ.get(k) for k in ("OLLAMA_BASE_URL", "OLLAMA_MODEL", "OLLAMA_API_KEY")})
+        raise RuntimeError("stop here")
+
+    st.cache_resource.clear()
+    monkeypatch.setattr(web.presentation, "default_agent", fake_default_agent)
+    at = AppTest.from_file(APP)
+    at.secrets["OLLAMA_BASE_URL"] = "https://ollama.com"
+    at.secrets["OLLAMA_MODEL"] = "gemma4:31b"
+    at.secrets["OLLAMA_API_KEY"] = "test-key-not-real"
+    at.run()
+    at.chat_input[0].set_value("hello").run()
+    st.cache_resource.clear()
+    assert seen == {"OLLAMA_BASE_URL": "https://ollama.com", "OLLAMA_MODEL": "gemma4:31b",
+                    "OLLAMA_API_KEY": "test-key-not-real"}
+    assert "stop here" in at.error[0].value
