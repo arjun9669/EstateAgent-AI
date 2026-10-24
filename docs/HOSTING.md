@@ -1,7 +1,7 @@
 # Hosting the demo for free on Streamlit Community Cloud
 
-Status: **ready to deploy; not deployed yet.** The Streamlit page
-(`streamlit_app.py`) is tested and runs locally with `streamlit run streamlit_app.py`.
+Status: **live at https://appapppy-hadkfldjgvu3gw24nfdysg.streamlit.app/** (deployed 24 October 2026). Pushes to `main` redeploy it.
+Locally: `streamlit run streamlit_app.py`.
 
 ## Why Streamlit Community Cloud
 
@@ -68,11 +68,19 @@ only in Streamlit's secret store, never in the repository.
 5. **Deploy.** Streamlit installs `requirements.txt` (exact versions) and starts the
    app; later pushes to `main` redeploy it automatically.
 
-## Not verified yet
+## Deployment notes
 
-- The hosted-API path (`OLLAMA_BASE_URL=https://ollama.com` with a key) is covered
-  by unit tests but has not been called for real; locally the app uses the
-  signed-in Ollama app instead.
+- Streamlit parses secrets lazily, so `web.py` loads them and copies root-level
+  text values into the environment before building the agent. Before that fix the
+  hosted app ignored its secrets and looked for a local Ollama.
+- If the model can't be reached, the page lists which setting names it found
+  (never values). On first deploy it reported none: the secrets had not been
+  saved. After saving them in **Settings → Secrets**, two live questions (market
+  statistics and a tenancy-law lookup) used the right tools, passed the grounding
+  check and matched the local answers.
+
+## Still open
+
 - How much of Ollama's monthly free usage a public demo consumes.
 - Visitors' questions are sent to Ollama's cloud; the page says questions leave
   the app. Ollama states it does not train on cloud prompts.

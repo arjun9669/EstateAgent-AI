@@ -7,10 +7,13 @@ statistics, mortgage maths, official rules), runs them, and answers with sources
 > *"Find 2-bedroom apartments in Dubai Marina under AED 170k a year, compare
 > them with the area's typical prices, and explain how rent increases are regulated."*
 
-🚧 **Status: milestone 4 of 6.** The tools, semantic search over official Dubai
-tenancy law, the LangGraph agent and a Gradio chat interface are built and
-tested. The public demo on Streamlit Community Cloud is [ready to deploy](docs/HOSTING.md).
-See [PLAN.md](PLAN.md).
+**[▶ Try the live demo](https://appapppy-hadkfldjgvu3gw24nfdysg.streamlit.app/)** (free hosting; the first visit after a quiet
+period takes a moment to wake up, and each visitor gets 10 questions).
+
+🚧 **Status: milestone 4 of 6 done.** The tools, semantic search over official Dubai
+tenancy law, the LangGraph agent and the chat interface are built, tested and
+[hosted free on Streamlit Community Cloud](docs/HOSTING.md). Evaluation and
+polish come next. See [PLAN.md](PLAN.md).
 
 ## Why agentic?
 
@@ -168,7 +171,7 @@ Details, sources and known gaps: [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md).
 1. ✅ Tools, sample data, tests, CI
 2. ✅ Official legislation, embeddings + ChromaDB for `search_rules`, DLD loader
 3. ✅ LangGraph agent on a local Ollama model or Groq's free API, with checks that answers match tool output
-4. 🚧 Chat showing each agent step (✅), hosted free on Streamlit Community Cloud ([steps](docs/HOSTING.md))
+4. ✅ Chat showing each agent step, [hosted free on Streamlit Community Cloud](https://appapppy-hadkfldjgvu3gw24nfdysg.streamlit.app/)
 5. Evaluation set for tool choice, correctness and citations
 6. Demo GIF, architecture diagram, release
 
