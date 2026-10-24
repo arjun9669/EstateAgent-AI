@@ -2,7 +2,8 @@
 
     python scripts/ask.py "Find 2-bedroom apartments in Dubai Marina under AED 170k a year"
 
-Needs GROQ_API_KEY in the environment or in the project's .env file.
+Uses a local Ollama model by default (no API key). Set LLM_PROVIDER=groq and
+GROQ_API_KEY in .env to use Groq instead. See README.
 """
 
 import json
@@ -23,7 +24,10 @@ def main(argv: list[str]) -> int:
         return 2
     config.load_env()
     try:
-        model = config.make_groq_model()
+        problem = config.check_ollama() if config.provider() == "ollama" else None
+        if problem:
+            raise RuntimeError(problem)
+        model = config.make_model()
     except RuntimeError as e:
         print(e)
         return 1
@@ -37,7 +41,7 @@ def main(argv: list[str]) -> int:
     print(result.answer)
     if result.warning:
         print(f"\n⚠️  {result.warning}")
-    print(f"\n(model: {config.groq_model_name()}, revisions: {result.revisions})")
+    print(f"\n(model: {config.provider()} {config.model_name()}, revisions: {result.revisions})")
     return 0
 
 

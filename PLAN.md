@@ -51,7 +51,8 @@ Each tool returns JSON with a `source` field so the agent can cite it.
 3. ✅ **Agent**: LangGraph loop with tool calling on Groq, a six-round tool
    limit, and a grounding check that every figure and ID in the answer appears
    in a tool result or the question (one revision, then a visible warning).
-   Tested with a scripted model. Gemini as a backup provider is deferred.
+   Runs on a local Ollama model (default, no key) or Groq. Tested with a
+   scripted model; live quality on each provider still to be measured.
 4. **Interface and hosting** *(next)*: Gradio chat that shows each agent step, deployed
    to Hugging Face Spaces with the API key as a Space secret.
 5. **Evaluation**: a frozen question set measuring tool choice, answer

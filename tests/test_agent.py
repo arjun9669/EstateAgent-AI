@@ -150,20 +150,46 @@ def test_question_numbers_count_as_evidence(toolbox):
     assert result.grounding["ok"] and result.steps == []
 
 
-def test_missing_api_key_explains_setup(monkeypatch, tmp_path):
-    monkeypatch.delenv("GROQ_API_KEY", raising=False)
+@pytest.fixture
+def clean_env(monkeypatch, tmp_path):
+    for name in ("LLM_PROVIDER", "GROQ_API_KEY", "GROQ_MODEL", "OLLAMA_MODEL", "OLLAMA_BASE_URL"):
+        monkeypatch.delenv(name, raising=False)
     monkeypatch.setattr(config, "ENV_FILE", tmp_path / ".env")
-    config.load_env()
+    return monkeypatch
+
+
+def test_default_provider_is_local_ollama_without_a_key(clean_env):
+    from langchain_ollama import ChatOllama
+
+    model = config.make_model()  # constructing it does not contact Ollama
+    assert isinstance(model, ChatOllama)
+    assert (config.provider(), model.model) == ("ollama", "qwen3:4b")
+    assert model.num_ctx == config.OLLAMA_CONTEXT_TOKENS and model.reasoning is False
+
+
+def test_groq_provider_needs_a_key(clean_env):
+    clean_env.setenv("LLM_PROVIDER", "groq")
     with pytest.raises(RuntimeError, match="console.groq.com"):
-        config.make_groq_model()
+        config.make_model()
+    clean_env.setenv("GROQ_API_KEY", "test-key-not-real")
+    assert config.make_model().model_name == "llama-3.3-70b-versatile"
 
 
-def test_env_file_is_read_without_overriding(monkeypatch, tmp_path):
+def test_unknown_provider_is_rejected(clean_env):
+    clean_env.setenv("LLM_PROVIDER", "openai")
+    with pytest.raises(RuntimeError, match="LLM_PROVIDER must be one of"):
+        config.provider()
+
+
+def test_check_ollama_explains_what_is_missing(clean_env):
+    clean_env.setenv("OLLAMA_BASE_URL", "http://127.0.0.1:9")  # nothing listens here
+    assert "not running" in config.check_ollama()
+
+
+def test_env_file_is_read_without_overriding(clean_env, tmp_path):
     env = tmp_path / ".env"
-    env.write_text("# comment\nGROQ_MODEL='some-model'\nGROQ_API_KEY=from-file\n")
-    monkeypatch.delenv("GROQ_MODEL", raising=False)
-    monkeypatch.setenv("GROQ_API_KEY", "from-environment")
+    env.write_text("# comment\nOLLAMA_MODEL='some-model'\nLLM_PROVIDER=groq\n")
+    clean_env.setenv("LLM_PROVIDER", "ollama")
     config.load_env(env)
-    assert config.groq_model_name() == "some-model"
-    import os
-    assert os.environ["GROQ_API_KEY"] == "from-environment"
+    assert config.provider() == "ollama"
+    assert config.model_name() == "some-model"

@@ -34,8 +34,9 @@ test keeps them in sync with the Python functions.
 
 ## How the agent works
 
-Built with [LangGraph](https://github.com/langchain-ai/langgraph) on Groq's free API
-([`agent.py`](src/estate_agent/agent.py)):
+Built with [LangGraph](https://github.com/langchain-ai/langgraph)
+([`agent.py`](src/estate_agent/agent.py)). The model runs locally through
+[Ollama](https://ollama.com) with no API key, or on Groq's free cloud API:
 
 ```
 question ─▶ agent ──tool calls──▶ tools ──results──▶ agent   (up to 6 rounds)
@@ -89,19 +90,28 @@ agent can cite them, and returns nothing when no article is similar enough
 
 ## Ask the agent
 
-1. Create a free API key at [console.groq.com](https://console.groq.com) (no card needed).
-2. `cp .env.example .env` and put the key after `GROQ_API_KEY=`. `.env` is git-ignored.
+**Locally, free, no API key (default):**
+
+1. Install [Ollama](https://ollama.com/download) and open it.
+2. Download a model that supports tool calling: `ollama pull qwen3:4b` (about 2.5 GB;
+   comfortable on an 8 GB Mac). With 16 GB or more, `qwen3:8b` plans better
+   (set `OLLAMA_MODEL=qwen3:8b` in `.env`).
 3. Ask:
 
 ```bash
 python scripts/ask.py "Find 2-bedroom apartments in Dubai Marina under AED 170k a year and explain how rent increases are regulated"
 ```
 
-It prints each tool call, the answer, and a warning if any figure could not be
-verified. The default model is `llama-3.3-70b-versatile`; set `GROQ_MODEL` to
-use another Groq model that supports tool use. The free tier has rate limits.
+**On Groq's free cloud API:** create a key at [console.groq.com](https://console.groq.com),
+`cp .env.example .env`, set `LLM_PROVIDER=groq` and `GROQ_API_KEY=...`. `.env` is
+git-ignored. Groq's `llama-3.3-70b-versatile` is stronger than a small local
+model; the free tier has rate limits.
 
-The agent tests use a scripted stand-in model, so `pytest` needs no API key.
+The script prints each tool call, the answer, and a warning if any figure
+could not be verified. Small local models make more planning mistakes; the
+grounding check is there to catch the figures they get wrong.
+
+The agent tests use a scripted stand-in model, so `pytest` needs no model or key.
 
 ## Project structure
 
@@ -111,7 +121,7 @@ src/estate_agent/
   data.py           Loads CSVs into in-memory SQLite
   agent.py          LangGraph agent: plan, call tools, answer, check
   grounding.py      Checks every figure and ID in an answer against the evidence
-  config.py         .env loading and the Groq model
+  config.py         .env loading; Ollama (local) or Groq (cloud) model
   dld.py            Converts the Dubai Land Department transactions export
   tools/            The five agent tools and their schemas
 scripts/
@@ -140,7 +150,7 @@ Details, sources and known gaps: [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md).
 
 1. ✅ Tools, sample data, tests, CI
 2. ✅ Official legislation, embeddings + ChromaDB for `search_rules`, DLD loader
-3. ✅ LangGraph agent on Groq's free API, with checks that answers match tool output
+3. ✅ LangGraph agent on a local Ollama model or Groq's free API, with checks that answers match tool output
 4. Gradio chat showing each agent step, hosted free on Hugging Face Spaces
 5. Evaluation set for tool choice, correctness and citations
 6. Demo GIF, architecture diagram, release
