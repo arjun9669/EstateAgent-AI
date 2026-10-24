@@ -58,9 +58,11 @@ Each tool returns JSON with a `source` field so the agent can cite it.
    step, then the grounding check and the answer. Hugging Face Spaces turned out to
    need PRO for Gradio apps, so the demo runs on Streamlit Community Cloud with the
    model over Ollama's hosted API: [live demo](https://appapppy-hadkfldjgvu3gw24nfdysg.streamlit.app/), [notes](docs/HOSTING.md).
-5. **Evaluation** *(next)*: a frozen question set measuring tool choice, answer
-   correctness and citation support, run in CI against recorded tool outputs.
-6. **Polish**: README with demo GIF, architecture diagram, release tag.
+5. ✅ **Evaluation**: 30 frozen questions scored on tool choice, correctness,
+   citation support and grounding; recorded runs are re-scored in CI. First run
+   with gemma4:cloud: 27/30 ([docs/EVALUATION.md](docs/EVALUATION.md)). Found a
+   retrieval miss (contract registration) and two loose quotations to fix next.
+6. **Polish** *(next)*: README with demo GIF, architecture diagram, release tag.
 
 ## Ground rules
 

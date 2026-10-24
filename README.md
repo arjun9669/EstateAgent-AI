@@ -10,10 +10,11 @@ statistics, mortgage maths, official rules), runs them, and answers with sources
 **[▶ Try the live demo](https://appapppy-hadkfldjgvu3gw24nfdysg.streamlit.app/)** (free hosting; the first visit after a quiet
 period takes a moment to wake up, and each visitor gets 10 questions).
 
-🚧 **Status: milestone 4 of 6 done.** The tools, semantic search over official Dubai
+🚧 **Status: milestone 5 of 6 done.** The tools, semantic search over official Dubai
 tenancy law, the LangGraph agent and the chat interface are built, tested and
-[hosted free on Streamlit Community Cloud](docs/HOSTING.md). Evaluation and
-polish come next. See [PLAN.md](PLAN.md).
+[hosted free on Streamlit Community Cloud](docs/HOSTING.md). On a frozen
+30-question evaluation, **27/30 pass**, with tool choice, correctness and grounding
+all 30/30 ([results](docs/EVALUATION.md)). Polish comes next. See [PLAN.md](PLAN.md).
 
 ## Why agentic?
 
@@ -60,6 +61,20 @@ question ─▶ agent ──tool calls──▶ tools ──results──▶ age
    "AED 2.3 million" passes if a tool returned 2,277,500; "AED 2.5 million" does
    not. The model gets one chance to fix anything unsupported; whatever is still
    unsupported is shown as a warning next to the answer.
+
+## Evaluation
+
+A frozen set of 30 questions ([`eval/cases-v1.json`](eval/cases-v1.json)) scores
+each answer on tool choice, correctness, citation support and grounding. First
+run with `gemma4:cloud`:
+
+| Tool choice | Correctness | Citations | Grounding | All four |
+|---:|---:|---:|---:|---:|
+| 30/30 | 30/30 | 27/30 | 30/30 | **27/30** |
+
+The three failures are reported as they are: one retrieval miss (the law search
+did not find the contract-registration article) and two loose quotations.
+Details, protocol and next steps: [docs/EVALUATION.md](docs/EVALUATION.md).
 
 ## Try the tools
 
@@ -142,16 +157,19 @@ src/estate_agent/
   agent.py          LangGraph agent: plan, call tools, answer, check
   grounding.py      Checks every figure and ID in an answer against the evidence
   config.py         .env loading; Ollama (local) or Groq (cloud) model
+  evaluation.py     Scores recorded answers on the four evaluation dimensions
   dld.py            Converts the Dubai Land Department transactions export
   tools/            The five agent tools and their schemas
 scripts/
   ask.py                    Ask the agent from the command line
+  run_eval.py               Run the frozen evaluation set and record the run
   generate_sample_data.py   Reproducible synthetic data (CI checks it)
   fetch_rules.py            Official legislation -> article text
   load_dld_transactions.py  Your DLD download -> transactions.csv
 data/sample/        Synthetic listings and transactions
 data/rules/         Dubai tenancy legislation, one section per article
-docs/               DATA_SOURCES.md, HOSTING.md, SAMPLE_RUN.md
+eval/               Frozen evaluation set and recorded runs
+docs/               DATA_SOURCES.md, EVALUATION.md, HOSTING.md, SAMPLE_RUN.md
 ```
 
 ## Data
@@ -172,7 +190,7 @@ Details, sources and known gaps: [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md).
 2. ✅ Official legislation, embeddings + ChromaDB for `search_rules`, DLD loader
 3. ✅ LangGraph agent on a local Ollama model or Groq's free API, with checks that answers match tool output
 4. ✅ Chat showing each agent step, [hosted free on Streamlit Community Cloud](https://appapppy-hadkfldjgvu3gw24nfdysg.streamlit.app/)
-5. Evaluation set for tool choice, correctness and citations
+5. ✅ Evaluation set for tool choice, correctness and citations ([27/30](docs/EVALUATION.md))
 6. Demo GIF, architecture diagram, release
 
 Built to run entirely on free tiers.
