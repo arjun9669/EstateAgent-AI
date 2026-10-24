@@ -5,7 +5,9 @@ from pathlib import Path
 import pytest
 
 from estate_agent.tools import ToolError
-from estate_agent.tools.rules import RULES_DIR, RulesIndex, search_rules, split_document
+from chromadb.api.types import Documents, EmbeddingFunction, Embeddings
+
+from estate_agent.tools.rules import BM25, RULES_DIR, RulesIndex, search_rules, split_document, tokenize
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import fetch_rules  # noqa: E402
@@ -100,6 +102,53 @@ def test_k_is_capped_and_unrelated_sections_dropped(rules_dir, embedding):
     assert "similar enough" in unrelated["note"]
 
 
+class TopicEmbedding(EmbeddingFunction[Documents]):
+    """Ranks by one topic only: texts about deposits ('deposit' or 'money') point one way."""
+
+    def __init__(self):
+        pass
+
+    def __call__(self, input: Documents) -> Embeddings:
+        return [[1.0, 0.0] if ("deposit" in text.lower() or "money" in text.lower()) else [0.6, 0.8]
+                for text in input]
+
+    @staticmethod
+    def name() -> str:
+        return "topic-test"
+
+    def get_config(self) -> dict:
+        return {}
+
+    @staticmethod
+    def build_from_config(config: dict) -> "TopicEmbedding":
+        return TopicEmbedding()
+
+
+def test_tokenize_cuts_words_to_a_shared_prefix():
+    assert tokenize("Registration of the registered Tenancy") == ["regis", "regis", "tenan"]
+
+
+def test_bm25_prefers_the_section_with_the_rare_term():
+    scores = BM25(["rent is paid yearly", "contracts are registered with RERA", "rent rules"]).scores("registration")
+    assert scores[1] > 0 and scores[0] == scores[2] == 0
+
+
+def test_keyword_match_is_added_when_meaning_misses_it(tmp_path):
+    (tmp_path / "law.md").write_text(
+        "# Law\n\n## Article (1) Deposit\n\nThe deposit is returned at the end.\n\n"
+        "## Article (2) Contracts\n\nAll contracts will be registered with RERA.\n")
+    index = RulesIndex.from_directory(tmp_path, TopicEmbedding())
+    # "money" finds Article 1 by meaning only; "registration" finds Article 2 by keyword only.
+    results = search_rules(index, "money registration", k=1)["results"]
+    assert [(r["passage_id"], r["matched_by"]) for r in results] == [("law#art1", "meaning"), ("law#art2", "keywords")]
+
+
+def test_keyword_match_already_found_by_meaning_is_not_duplicated(tmp_path):
+    (tmp_path / "law.md").write_text("# Law\n\n## Article (1) Deposit\n\nThe deposit is returned.\n")
+    results = search_rules(RulesIndex.from_directory(tmp_path, TopicEmbedding()), "deposit", k=3)["results"]
+    assert [(r["passage_id"], r["matched_by"]) for r in results] == [("law#art1", "meaning and keywords")]
+
+
 # --- committed legislation -------------------------------------------------
 
 
@@ -143,6 +192,10 @@ def real_index():
     ("How many days notice must be given before changing the lease terms at renewal?", "law-26-2007#art14"),
     ("Can the landlord evict me because he wants to sell the property?", "law-26-2007#art25"),
     ("Who pays for maintenance and repairs of the property?", "law-26-2007#art16"),
+    # Missed by meaning-only search in evaluation run 1 (case R7):
+    ("registration of tenancy contract Ejari", "law-26-2007#art4"),
+    ("Does a tenancy contract have to be registered?", "law-26-2007#art4"),
+    ("when is rent due if not specified in the lease", "law-26-2007#art12"),
 ])
 def test_real_model_retrieves_expected_article(real_index, question, expected):
     ids = [r["passage_id"] for r in search_rules(real_index, question, k=4)["results"]]

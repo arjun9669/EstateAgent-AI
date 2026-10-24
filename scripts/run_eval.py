@@ -11,6 +11,7 @@ new run gets a new file. CI re-scores saved runs (tests/test_evaluation.py).
 import argparse
 import json
 import platform
+import subprocess
 import sys
 import time
 from datetime import date
@@ -27,6 +28,12 @@ from estate_agent.presentation import default_agent  # noqa: E402
 
 CASES = ROOT / "eval" / "cases-v1.json"
 RUNS = ROOT / "eval" / "runs"
+
+
+def git_state() -> dict:
+    def git(*args):
+        return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True).stdout.strip()
+    return {"commit": git("rev-parse", "HEAD"), "uncommitted_changes": bool(git("status", "--porcelain"))}
 
 
 def run_case(agent, case: dict) -> dict:
@@ -62,8 +69,13 @@ def main(argv: list[str]) -> int:
         print(error)
         return 1
 
+    code = git_state()
+    if code["uncommitted_changes"] and not args.only:
+        print("Commit your changes first: a recorded run must point to the exact code it ran.")
+        return 1
     run = {
         "cases_file": CASES.name,
+        "git_commit": code["commit"],
         "date": date.today().isoformat(),
         "provider": config.provider(),
         "model": config.model_name(),
@@ -88,7 +100,8 @@ def main(argv: list[str]) -> int:
 
     if not args.only:
         RUNS.mkdir(exist_ok=True)
-        path = RUNS / f"{run['date']}-{run['model'].replace(':', '-').replace('/', '-')}.json"
+        model = run["model"].replace(":", "-").replace("/", "-")
+        path = RUNS / f"{run['date']}-{model}-{code['commit'][:7]}.json"
         if path.exists():
             print(f"{path.name} already exists; not overwriting a recorded run.")
             return 1

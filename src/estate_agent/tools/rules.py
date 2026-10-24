@@ -1,13 +1,26 @@
-"""search_rules: semantic search over official tenancy documents.
+"""search_rules: hybrid keyword + semantic search over official tenancy documents.
 
 Documents in data/rules/ are split into passages (one per "## " section, such as
-an article of a law) and embedded into an in-memory ChromaDB collection. The
-default embedding model is all-MiniLM-L6-v2 (ONNX), which Chroma downloads on
-first use; tests pass a small offline embedding function instead.
+an article of a law). Each query is ranked two ways:
+
+- by meaning: chunks embedded in an in-memory ChromaDB collection (default model
+  all-MiniLM-L6-v2, ONNX, downloaded by Chroma on first use; tests pass a small
+  offline embedding function instead);
+- by keywords: BM25 over whole sections, with words cut to a short prefix so
+  "registration" matches "registered".
+
+Results are the top-k sections by meaning, plus the strongest keyword match if
+it is not already among them. Embeddings alone missed literal terms (evaluation
+run 1, case R7: "registration of tenancy contract" did not find Article 4, "will
+be registered with RERA"). Adding, rather than re-ranking, means a keyword match
+can never push out a section the meaning search found: an even rank fusion did
+exactly that on other queries (docs/EVALUATION.md).
 """
 
+import math
 import re
 import uuid
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -22,8 +35,40 @@ RULES_DIR = Path(__file__).resolve().parents[3] / "data" / "rules"
 # Results always return the whole section, so a list is never cut in half.
 PASSAGE_MAX_WORDS = 170
 MAX_K = 8
-# Below this cosine similarity a section is treated as unrelated to the query.
+# Below this cosine similarity a section is not a meaning match.
 MIN_SIMILARITY = 0.2
+STEM_PREFIX = 5
+STOPWORDS = frozenset(
+    "a an and any are as at be by can do does for from has have how i if in is it its may my "
+    "of on or the this to what when which who will with".split()
+)
+
+
+def tokenize(text: str) -> list[str]:
+    """Lowercase words without stopwords, cut to STEM_PREFIX letters (a crude stemmer)."""
+    return [w[:STEM_PREFIX] for w in re.findall(r"[a-z0-9]+", text.lower()) if w not in STOPWORDS]
+
+
+class BM25:
+    def __init__(self, documents: list[str], k1: float = 1.5, b: float = 0.75):
+        self.k1, self.b = k1, b
+        self._terms = [Counter(tokenize(d)) for d in documents]
+        self._lengths = [sum(t.values()) for t in self._terms]
+        self._average = sum(self._lengths) / len(documents) if documents else 0
+        frequency = Counter(term for terms in self._terms for term in terms)
+        n = len(documents)
+        self._idf = {t: math.log(1 + (n - f + 0.5) / (f + 0.5)) for t, f in frequency.items()}
+
+    def scores(self, query: str) -> list[float]:
+        query_terms = set(tokenize(query))
+        result = []
+        for terms, length in zip(self._terms, self._lengths):
+            norm = self.k1 * (1 - self.b + self.b * length / self._average)
+            result.append(sum(
+                self._idf[t] * terms[t] * (self.k1 + 1) / (terms[t] + norm)
+                for t in query_terms & terms.keys()
+            ))
+        return result
 
 
 @dataclass(frozen=True)
@@ -113,6 +158,9 @@ class RulesIndex:
                 ids=[p.chunk_id for p in passages],
                 documents=[f"{p.section}\n\n{p.text}".strip() for p in passages],
             )
+        # Keyword index over whole sections (one entry per passage_id).
+        self._sections = list({p.passage_id: p for p in passages}.values())
+        self._bm25 = BM25([f"{p.section}\n\n{p.section_text}" for p in self._sections])
 
     @classmethod
     def from_directory(cls, path: Path = RULES_DIR, embedding_function: EmbeddingFunction | None = None) -> "RulesIndex":
@@ -121,22 +169,40 @@ class RulesIndex:
         )
         return cls([p for f in files for p in split_document(f)], embedding_function)
 
-    def search(self, query: str, k: int = 4) -> list[tuple[Passage, float]]:
-        """Top-k sections, each scored by its best chunk's cosine similarity."""
+    def search(self, query: str, k: int = 4) -> list["Match"]:
+        """Top-k sections by meaning, plus the best keyword match if not among them."""
         if self._collection is None:
             return []
-        # Fetch extra chunks so k distinct sections survive de-duplication.
-        found = self._collection.query(query_texts=[query], n_results=min(k * 3, len(self.passages)))
-        best: dict[str, tuple[Passage, float]] = {}
+        # Similarity of each section = its best chunk's cosine similarity.
+        found = self._collection.query(query_texts=[query], n_results=len(self.passages))
+        similarity: dict[str, float] = {}
         for chunk_id, distance in zip(found["ids"][0], found["distances"][0]):
-            passage = self._by_id[chunk_id]
-            if passage.passage_id not in best:  # results arrive best first
-                best[passage.passage_id] = (passage, 1 - distance)
-        return list(best.values())[:k]
+            similarity.setdefault(self._by_id[chunk_id].passage_id, 1 - distance)
+        keyword = dict(zip((p.passage_id for p in self._sections), self._bm25.scores(query)))
+        section = {p.passage_id: p for p in self._sections}
+
+        by_meaning = [pid for pid in sorted(similarity, key=lambda p: (-similarity[p], p))
+                      if similarity[pid] >= MIN_SIMILARITY][:k]
+        chosen = [(pid, "meaning") for pid in by_meaning]
+        best_keyword = max(keyword, key=lambda p: (keyword[p], p), default=None)
+        if best_keyword is not None and keyword[best_keyword] > 0:
+            if best_keyword in by_meaning:
+                chosen[by_meaning.index(best_keyword)] = (best_keyword, "meaning and keywords")
+            else:
+                chosen.append((best_keyword, "keywords"))
+        return [Match(section[pid], similarity.get(pid, 0.0), keyword[pid], how) for pid, how in chosen]
+
+
+@dataclass(frozen=True)
+class Match:
+    passage: Passage
+    similarity: float
+    keyword_score: float
+    matched_by: str  # "meaning", "keywords" or "meaning and keywords"
 
 
 def search_rules(index: RulesIndex, query: str, k: int = 4) -> dict:
-    """Return the passages most similar to query, each citable by passage_id."""
+    """Return the sections most related to query, each citable by passage_id."""
     if not query.strip():
         raise ToolError("query must not be empty")
     k = max(1, min(k, MAX_K))
@@ -148,19 +214,21 @@ def search_rules(index: RulesIndex, query: str, k: int = 4) -> dict:
     if not index.passages:
         result["note"] = "No rule documents have been added yet"
         return result
-    for passage, score in index.search(query, k):
-        if score < MIN_SIMILARITY:
-            continue
+    for match in index.search(query, k):
+        passage = match.passage
         result["results"].append({
             "passage_id": passage.passage_id,
             "document": passage.document,
             "title": passage.title,
             "section": passage.section,
-            "similarity": round(score, 3),
+            "similarity": round(match.similarity, 3),
+            "keyword_score": round(match.keyword_score, 3),
+            "matched_by": match.matched_by,
             "text": passage.section_text,
         })
     if result["results"]:
-        result["note"] = "Ranked by meaning, not verified relevance; check each passage answers the question"
+        result["note"] = ("Found by meaning and keywords, not verified relevance; "
+                          "check each passage answers the question")
     else:
         result["note"] = "No passage is similar enough to the query; the documents may not cover it"
     return result
