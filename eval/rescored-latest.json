@@ -1,0 +1,38 @@
+{
+ "scorer_version": "1.1",
+ "runs": [
+  {
+   "run": "2026-10-24-gemma4-cloud-06ba204.json",
+   "original_scorer": "1.0",
+   "original": {
+    "passed": 27,
+    "citations": 29
+   },
+   "latest": {
+    "passed": 28,
+    "citations": 30
+   },
+   "changed_cases": [
+    {
+     "id": "M2",
+     "was": "FAIL",
+     "now": "PASS",
+     "problems_now": []
+    }
+   ]
+  },
+  {
+   "run": "2026-10-24-gemma4-cloud.json",
+   "original_scorer": "1.0",
+   "original": {
+    "passed": 27,
+    "citations": 27
+   },
+   "latest": {
+    "passed": 27,
+    "citations": 27
+   },
+   "changed_cases": []
+  }
+ ]
+}

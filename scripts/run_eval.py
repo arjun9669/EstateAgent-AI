@@ -23,7 +23,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from estate_agent import config  # noqa: E402
 from estate_agent.agent import SYSTEM_PROMPT, ask  # noqa: E402
-from estate_agent.evaluation import load_cases, score_run  # noqa: E402
+from estate_agent.evaluation import LATEST_SCORER, load_cases, score_run  # noqa: E402
 from estate_agent.presentation import default_agent  # noqa: E402
 
 CASES = ROOT / "eval" / "cases-v1.json"
@@ -33,7 +33,9 @@ RUNS = ROOT / "eval" / "runs"
 def git_state() -> dict:
     def git(*args):
         return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True).stdout.strip()
-    return {"commit": git("rev-parse", "HEAD"), "uncommitted_changes": bool(git("status", "--porcelain"))}
+    # New run files from earlier repeats of the same code don't count as changes.
+    changes = git("status", "--porcelain", "--", ".", ":(exclude)eval/runs")
+    return {"commit": git("rev-parse", "HEAD"), "uncommitted_changes": bool(changes)}
 
 
 def run_case(agent, case: dict) -> dict:
@@ -76,6 +78,7 @@ def main(argv: list[str]) -> int:
     run = {
         "cases_file": CASES.name,
         "git_commit": code["commit"],
+        "scorer_version": LATEST_SCORER,
         "date": date.today().isoformat(),
         "provider": config.provider(),
         "model": config.model_name(),
@@ -91,7 +94,7 @@ def main(argv: list[str]) -> int:
         print(f"{case['id']:>3} {record['seconds']:5.1f}s  {len(record['steps'])} tool calls"
               + (f"  ERROR {record['error']}" if record.get("error") else ""), flush=True)
 
-    scores, summary = score_run(cases, run)
+    scores, summary = score_run(cases, run, LATEST_SCORER)
     run["scores"], run["summary"] = scores, summary
     for score in scores:
         mark = "PASS" if score["passed"] else "FAIL"
@@ -101,10 +104,12 @@ def main(argv: list[str]) -> int:
     if not args.only:
         RUNS.mkdir(exist_ok=True)
         model = run["model"].replace(":", "-").replace("/", "-")
-        path = RUNS / f"{run['date']}-{model}-{code['commit'][:7]}.json"
-        if path.exists():
-            print(f"{path.name} already exists; not overwriting a recorded run.")
-            return 1
+        # Repeat runs of the same code get -2, -3, ... (never overwrite a record).
+        stem = f"{run['date']}-{model}-{code['commit'][:7]}"
+        path, repeat = RUNS / f"{stem}.json", 1
+        while path.exists():
+            repeat += 1
+            path = RUNS / f"{stem}-{repeat}.json"
         path.write_text(json.dumps(run, indent=1, ensure_ascii=False) + "\n")
         print(f"Saved {path.relative_to(ROOT)}")
     return 0

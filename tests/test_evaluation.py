@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from estate_agent.data import connect
-from estate_agent.evaluation import load_cases, score_case, score_run, summarize
+from estate_agent.evaluation import load_cases, quotations, score_case, score_run, summarize
 from estate_agent.tools.listings import compare_properties, search_listings
 from estate_agent.tools.market import area_price_stats
 from estate_agent.tools.mortgage import mortgage_calculator
@@ -120,3 +120,30 @@ def test_recorded_runs_rescore_identically():
         run = json.loads(path.read_text())
         _, summary = score_run(cases, run)
         assert summary == run["summary"], path.name
+
+
+def test_scorer_1_1_pairs_quotation_marks_in_order():
+    answer = 'The median is "2138.9" AED. This represents a "5.3" percent increase.'
+    assert quotations(answer, "1.0") == [" AED. This represents a "]  # the 1.0 bug
+    assert quotations(answer, "1.1") == []  # both quotes are under 12 characters
+    assert quotations('He said "registered with RERA" and "no".', "1.1") == ["registered with RERA"]
+    assert quotations("Curly “will be registered with RERA” works.", "1.1") == ["will be registered with RERA"]
+
+
+def test_scorer_versions_score_the_bug_case_differently():
+    case = {"id": "T3", "category": "market", "question": "q", "facts": [{"number": 2138.9}]}
+    answer = 'Median "2138.9" AED. This represents a "5.3" percent rise.'
+    step = {"tool": "area_price_stats", "ok": True, "arguments": {}, "result": {"median": 2138.9, "change": 5.3}}
+    assert not score_case(case, record(answer, [step]), "1.0")["citations"]
+    assert score_case(case, record(answer, [step]), "1.1")["citations"]
+    with pytest.raises(ValueError, match="Unknown scorer"):
+        score_case(case, record(answer, [step]), "9.9")
+
+
+def test_rescored_report_matches_the_latest_scorer():
+    import sys
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import rescore_runs
+
+    committed = json.loads((ROOT / "eval" / "rescored-latest.json").read_text())
+    assert committed == json.loads(json.dumps(rescore_runs.rescore()))

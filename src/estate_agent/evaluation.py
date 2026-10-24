@@ -9,6 +9,15 @@ Each case is scored on four dimensions; a case passes only if all four pass.
   grounding     the agent's own grounding check passed (no unsupported numbers)
 
 Numbers are matched like the grounding check: "AED 2.3 million" matches 2,277,500.
+
+Scorer versions. Recorded runs keep the version they were scored with, so their
+stored results can always be reproduced; newer versions are reported alongside.
+
+  1.0  first version (runs 1 and 2)
+  1.1  quotation marks are paired in order. In 1.0 a quote shorter than 12
+       characters was skipped and the search restarted at its closing mark, so
+       the text *between* two quotes ("2138.9" AED. This is a "5.3") was checked
+       as if it were a quote.
 """
 
 import json
@@ -19,7 +28,18 @@ from pathlib import Path
 from estate_agent.grounding import LISTING_ID, PASSAGE_ID, _matches, numbers_in
 
 DIMENSIONS = ("tool_choice", "correctness", "citations", "grounding")
-QUOTE = re.compile(r"[\"“]([^\"”]{12,})[\"”]")
+SCORER_VERSIONS = ("1.0", "1.1")
+LATEST_SCORER = "1.1"
+MIN_QUOTE_CHARS = 12
+_QUOTE_1_0 = re.compile(r"[\"“]([^\"”]{12,})[\"”]")
+_QUOTE_PAIR = re.compile(r"[\"“]([^\"”]*)[\"”]")
+
+
+def quotations(answer: str, scorer: str = LATEST_SCORER) -> list[str]:
+    """Quoted passages of at least MIN_QUOTE_CHARS characters."""
+    if scorer == "1.0":
+        return _QUOTE_1_0.findall(answer)
+    return [q for q in _QUOTE_PAIR.findall(answer) if len(q) >= MIN_QUOTE_CHARS]
 
 
 def _norm(text: str) -> str:
@@ -58,8 +78,10 @@ def _describe(fact: dict) -> str:
     return fact.get("text") or " / ".join(fact["any_of"])
 
 
-def score_case(case: dict, record: dict) -> dict:
+def score_case(case: dict, record: dict, scorer: str = LATEST_SCORER) -> dict:
     """Score one recorded answer. record has: answer, steps, grounding."""
+    if scorer not in SCORER_VERSIONS:
+        raise ValueError(f"Unknown scorer version {scorer!r}")
     answer, steps = record["answer"], record["steps"]
     problems = {dimension: [] for dimension in DIMENSIONS}
 
@@ -89,7 +111,7 @@ def score_case(case: dict, record: dict) -> dict:
         problems["citations"].append(f"cites {citation}, which no tool returned")
     evidence = _norm(" ".join([record.get("question", case["question"])]
                               + [s for step in steps if step["ok"] for s in _strings(step["result"])]))
-    for quote in QUOTE.findall(answer):
+    for quote in quotations(answer, scorer):
         if _norm(quote).strip(" .,;:") not in evidence:
             problems["citations"].append(f"quote not found word for word: \"{quote[:60]}\"")
 
@@ -121,11 +143,15 @@ def load_cases(path: Path) -> list[dict]:
     return json.loads(path.read_text())["cases"]
 
 
-def score_run(cases: list[dict], run: dict) -> tuple[list[dict], dict]:
-    """Score a recorded run (as written by scripts/run_eval.py) against the cases."""
+def score_run(cases: list[dict], run: dict, scorer: str | None = None) -> tuple[list[dict], dict]:
+    """Score a recorded run (as written by scripts/run_eval.py) against the cases.
+
+    scorer defaults to the version the run was recorded with (1.0 if not stated).
+    """
+    scorer = scorer or run.get("scorer_version", "1.0")
     records = {r["id"]: r for r in run["results"]}
     missing = [c["id"] for c in cases if c["id"] not in records]
     if missing:
         raise ValueError(f"Run has no result for cases: {', '.join(missing)}")
-    scores = [score_case(case, records[case["id"]]) for case in cases]
+    scores = [score_case(case, records[case["id"]], scorer) for case in cases]
     return scores, summarize(scores)
