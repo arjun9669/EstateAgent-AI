@@ -48,10 +48,11 @@ Each tool returns JSON with a `source` field so the agent can cite it.
    `search_rules` on MiniLM embeddings in ChromaDB; loader for the Dubai Land
    Department transactions export (not redistributed: licence unspecified).
    Open: verify the loader and DLD area-name mapping on the real file.
-3. **Agent** *(next)*: LangGraph loop with tool calling on Groq (Gemini free tier as
-   backup), a step limit, and an answer check that every figure and rule is
-   backed by a tool result.
-4. **Interface and hosting**: Gradio chat that shows each agent step, deployed
+3. ✅ **Agent**: LangGraph loop with tool calling on Groq, a six-round tool
+   limit, and a grounding check that every figure and ID in the answer appears
+   in a tool result or the question (one revision, then a visible warning).
+   Tested with a scripted model. Gemini as a backup provider is deferred.
+4. **Interface and hosting** *(next)*: Gradio chat that shows each agent step, deployed
    to Hugging Face Spaces with the API key as a Space secret.
 5. **Evaluation**: a frozen question set measuring tool choice, answer
    correctness and citation support, run in CI against recorded tool outputs.

@@ -10,6 +10,7 @@ dist/
 # Secrets
 .env
 .env.*
+!.env.example
 
 # Downloaded raw data (see docs/DATA_SOURCES.md)
 data/raw/

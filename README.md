@@ -7,9 +7,9 @@ statistics, mortgage maths, official rules), runs them, and answers with sources
 > *"Find 2-bedroom apartments in Dubai Marina under AED 170k a year, compare
 > them with the area's typical prices, and explain how rent increases are regulated."*
 
-🚧 **Status: milestone 2 of 6 done.** The five tools work and are tested, and
-`search_rules` does semantic search over official Dubai tenancy law. The
-language-model agent, chat interface and live demo come next. See [PLAN.md](PLAN.md).
+🚧 **Status: milestone 3 of 6.** The five tools, semantic search over official
+Dubai tenancy law and the LangGraph agent are built and tested. The chat
+interface and live demo come next. See [PLAN.md](PLAN.md).
 
 ## Why agentic?
 
@@ -31,6 +31,30 @@ Each tool returns JSON with a `source` field, and errors come back as messages
 the agent can read and correct, not crashes. The JSON schemas for LLM tool
 calling are in [`tools/__init__.py`](src/estate_agent/tools/__init__.py), and a
 test keeps them in sync with the Python functions.
+
+## How the agent works
+
+Built with [LangGraph](https://github.com/langchain-ai/langgraph) on Groq's free API
+([`agent.py`](src/estate_agent/agent.py)):
+
+```
+question ─▶ agent ──tool calls──▶ tools ──results──▶ agent   (up to 6 rounds)
+              │  └── tool limit hit ──▶ force_answer ──┐
+              ▼ answer                                  ▼
+            check ◀─────────────────────────────────────┘
+              ├── figures not in evidence (once) ──▶ agent
+              ▼
+            answer + tool steps + grounding report
+```
+
+1. The model plans and calls tools, as many rounds as the question needs. Tool
+   errors go back to it as messages, so it can fix its arguments.
+2. If it keeps calling tools past the limit, it is made to answer with what it has.
+3. A **grounding check** ([`grounding.py`](src/estate_agent/grounding.py)) compares
+   every number and ID in the answer with the tool results and the question.
+   "AED 2.3 million" passes if a tool returned 2,277,500; "AED 2.5 million" does
+   not. The model gets one chance to fix anything unsupported; whatever is still
+   unsupported is shown as a warning next to the answer.
 
 ## Try the tools
 
@@ -63,15 +87,35 @@ tools.run("search_rules", {"query": "How much can my landlord increase the rent 
 agent can cite them, and returns nothing when no article is similar enough
 (for example, "What is the capital of Mars?").
 
+## Ask the agent
+
+1. Create a free API key at [console.groq.com](https://console.groq.com) (no card needed).
+2. `cp .env.example .env` and put the key after `GROQ_API_KEY=`. `.env` is git-ignored.
+3. Ask:
+
+```bash
+python scripts/ask.py "Find 2-bedroom apartments in Dubai Marina under AED 170k a year and explain how rent increases are regulated"
+```
+
+It prints each tool call, the answer, and a warning if any figure could not be
+verified. The default model is `llama-3.3-70b-versatile`; set `GROQ_MODEL` to
+use another Groq model that supports tool use. The free tier has rate limits.
+
+The agent tests use a scripted stand-in model, so `pytest` needs no API key.
+
 ## Project structure
 
 ```
 src/estate_agent/
   areas.py          Dubai communities and aliases (JVC, JLT, JBR…)
   data.py           Loads CSVs into in-memory SQLite
+  agent.py          LangGraph agent: plan, call tools, answer, check
+  grounding.py      Checks every figure and ID in an answer against the evidence
+  config.py         .env loading and the Groq model
   dld.py            Converts the Dubai Land Department transactions export
   tools/            The five agent tools and their schemas
 scripts/
+  ask.py                    Ask the agent from the command line
   generate_sample_data.py   Reproducible synthetic data (CI checks it)
   fetch_rules.py            Official legislation -> article text
   load_dld_transactions.py  Your DLD download -> transactions.csv
@@ -96,7 +140,7 @@ Details, sources and known gaps: [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md).
 
 1. ✅ Tools, sample data, tests, CI
 2. ✅ Official legislation, embeddings + ChromaDB for `search_rules`, DLD loader
-3. LangGraph agent on Groq's free API, with checks that answers match tool output
+3. ✅ LangGraph agent on Groq's free API, with checks that answers match tool output
 4. Gradio chat showing each agent step, hosted free on Hugging Face Spaces
 5. Evaluation set for tool choice, correctness and citations
 6. Demo GIF, architecture diagram, release
