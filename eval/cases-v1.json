@@ -1,0 +1,213 @@
+{
+  "version": "v1",
+  "frozen": "2026-10-24",
+  "note": "Do not edit after the first recorded run. Fix a wrong case by adding cases-v2.json. Expected values come from the committed synthetic data, legislation and mortgage rules.",
+  "cases": [
+    {
+      "id": "L1", "category": "listings",
+      "question": "Find 2-bedroom apartments in Dubai Marina under AED 170k a year",
+      "tools_required": ["search_listings"],
+      "facts": [{"number": 148000}, {"number": 165000}, {"number": 169000}],
+      "citations_required": ["L0435", "L0503", "L0393"]
+    },
+    {
+      "id": "L2", "category": "listings",
+      "question": "What is the cheapest studio to rent in International City?",
+      "tools_required": ["search_listings"],
+      "facts": [{"number": 24000}],
+      "citations_required": ["L0562"]
+    },
+    {
+      "id": "L3", "category": "listings",
+      "question": "Which villas are for sale in Arabian Ranches under AED 5 million?",
+      "tools_required": ["search_listings"],
+      "facts": [{"number": 3980000, "or_text": "3.98"}, {"number": 4620000, "or_text": "4.62"}, {"number": 4900000, "or_text": "4.9"}],
+      "citations_required": ["L0021", "L0150", "L0291"]
+    },
+    {
+      "id": "L4", "category": "listings",
+      "question": "Show me 3-bedroom flats for rent in Deira under AED 50,000 a year.",
+      "tools_required": ["search_listings"],
+      "facts": [{"any_of": ["no ", "none", "couldn't find", "could not find", "did not find", "didn't find", "not find"]}],
+      "no_citations": true,
+      "note": "No listing matches; the answer must not invent one."
+    },
+    {
+      "id": "L5", "category": "listings",
+      "question": "I need a furnished 1-bedroom in JVC for under AED 90k a year.",
+      "tools_required": ["search_listings"],
+      "facts": [{"number": 67000}],
+      "citations_required": ["L0538"]
+    },
+    {
+      "id": "C1", "category": "compare",
+      "question": "Compare L0435 and L0503. Which is better value per square foot?",
+      "tools_required": ["compare_properties"],
+      "facts": [{"number": 143.7}, {"number": 149.3}],
+      "citations_required": ["L0435", "L0503"]
+    },
+    {
+      "id": "C2", "category": "compare",
+      "question": "Compare listings L0562, L0149 and L0249 on price per square foot.",
+      "tools_required": ["compare_properties"],
+      "facts": [{"number": 59.3}, {"number": 58.8}, {"number": 63.4}],
+      "citations_required": ["L0149"],
+      "note": "L0149 has the lowest price per sq ft."
+    },
+    {
+      "id": "C3", "category": "compare",
+      "question": "Compare L0435 with L0167.",
+      "tools_required": ["compare_properties"],
+      "facts": [{"any_of": ["not directly comparable", "not comparable", "rental", "for rent", "for sale"]}],
+      "citations_required": ["L0435", "L0167"],
+      "note": "One is a rental, the other a sale; the answer must flag that."
+    },
+    {
+      "id": "M1", "category": "market",
+      "question": "Are Business Bay prices rising?",
+      "tools_required": ["area_price_stats"],
+      "facts": [{"number": 7.5}, {"number": 1919.3}]
+    },
+    {
+      "id": "M2", "category": "market",
+      "question": "What is the median sale price per square foot in Dubai Marina, and how has it changed?",
+      "tools_required": ["area_price_stats"],
+      "facts": [{"number": 2138.9}, {"number": 5.3}]
+    },
+    {
+      "id": "M3", "category": "market",
+      "question": "How are prices for 2-bedroom apartments in JVC trending?",
+      "tools_required": ["area_price_stats"],
+      "facts": [{"number": 2.2}, {"any_of": ["rough", "few", "limited", "small number", "only 7", "7 sales", "7 transactions", "caution"]}],
+      "note": "Only 7 sales in the latest period; the answer should say the figures are rough."
+    },
+    {
+      "id": "M4", "category": "market",
+      "question": "How much have Palm Jumeirah villa prices changed over the last year?",
+      "tools_required": ["area_price_stats"],
+      "facts": [{"number": 11.0, "or_text": "11%"}]
+    },
+    {
+      "id": "G1", "category": "mortgage",
+      "question": "What is the monthly payment on a AED 1.8M flat with the minimum down payment at 4.5% interest? I'm an expat buying my first home.",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 8004}, {"number": 360000}]
+    },
+    {
+      "id": "G2", "category": "mortgage",
+      "question": "I'm a UAE national buying my first home for AED 6 million at 5% over 25 years. What's the minimum down payment and monthly payment?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 1500000, "or_text": "1.5"}, {"number": 26307}]
+    },
+    {
+      "id": "G3", "category": "mortgage",
+      "question": "As an expat buying a second property for AED 2M at 4%, what is the most I can borrow?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 1200000, "or_text": "1.2"}, {"number": 60}]
+    },
+    {
+      "id": "G4", "category": "mortgage",
+      "question": "I earn AED 25,000 a month. Can I afford a AED 2.5M flat at 4.5% with the minimum down payment?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 11117}, {"number": 44.5}]
+    },
+    {
+      "id": "G5", "category": "mortgage",
+      "question": "What would my payment be on a AED 1.5M flat over 30 years at 4.5%?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 25}],
+      "note": "The UAE maximum term is 25 years; the tool rejects 30. The answer must say so."
+    },
+    {
+      "id": "R1", "category": "rules",
+      "question": "How much can my landlord raise the rent when I renew?",
+      "tools_required": ["search_rules"],
+      "facts": [{"number": 5}, {"number": 10}, {"number": 15}, {"number": 20}],
+      "citations_required": ["decree-43-2013#art1"]
+    },
+    {
+      "id": "R2", "category": "rules",
+      "question": "How much notice does my landlord have to give before changing the lease terms?",
+      "tools_required": ["search_rules"],
+      "facts": [{"number": 90, "or_text": "ninety"}, {"text": "either party"}],
+      "citations_required": ["law-26-2007#art14"],
+      "must_not_contain": ["landlord must notify", "landlord must give"]
+    },
+    {
+      "id": "R3", "category": "rules",
+      "question": "Can my landlord evict me because he wants to sell the property?",
+      "tools_required": ["search_rules"],
+      "facts": [{"number": 12, "or_text": "twelve"}, {"any_of": ["Notary Public", "registered mail"]}],
+      "citations_required": ["law-26-2007#art25"]
+    },
+    {
+      "id": "R4", "category": "rules",
+      "question": "If my lease doesn't say when rent is due, how must I pay it?",
+      "tools_required": ["search_rules"],
+      "facts": [{"any_of": ["four (4)", "four equal", "4 equal"]}, {"text": "in advance"}],
+      "citations_required": ["law-26-2007#art12"]
+    },
+    {
+      "id": "R5", "category": "rules",
+      "question": "Who is responsible for maintenance and repairs during the lease?",
+      "tools_required": ["search_rules"],
+      "facts": [{"text": "landlord"}, {"text": "unless otherwise agreed"}],
+      "citations_required": ["law-26-2007#art16"]
+    },
+    {
+      "id": "R6", "category": "rules",
+      "question": "If my landlord evicts me to move in himself, can he rent the flat to someone else afterwards?",
+      "tools_required": ["search_rules"],
+      "facts": [{"number": 2, "or_text": "two"}, {"text": "residential"}],
+      "citations_required": ["law-26-2007#art26"]
+    },
+    {
+      "id": "R7", "category": "rules",
+      "question": "Does a tenancy contract have to be registered?",
+      "tools_required": ["search_rules"],
+      "facts": [{"text": "RERA"}],
+      "citations_required": ["law-26-2007#art4"]
+    },
+    {
+      "id": "X1", "category": "multi-tool",
+      "question": "Find 2-bedroom apartments in Dubai Marina under AED 170k a year, and tell me how much the rent can go up when I renew.",
+      "tools_required": ["search_listings", "search_rules"],
+      "facts": [{"number": 148000}, {"number": 20}],
+      "citations_required": ["L0435", "decree-43-2013#art1"]
+    },
+    {
+      "id": "X2", "category": "multi-tool",
+      "question": "What is the cheapest 1-bedroom for sale in JVC, and what would the monthly mortgage payment be at 4.5% with the minimum down payment? I'm an expat buying my first home.",
+      "tools_required": ["search_listings", "mortgage_calculator"],
+      "facts": [{"number": 700000}, {"number": 3113}],
+      "citations_required": ["L0401"]
+    },
+    {
+      "id": "X3", "category": "multi-tool",
+      "question": "Are Business Bay prices rising, and what would the monthly payment be on a AED 1.5M flat there at 4.5% with the minimum down payment?",
+      "tools_required": ["area_price_stats", "mortgage_calculator"],
+      "facts": [{"number": 7.5}, {"number": 6670}]
+    },
+    {
+      "id": "O1", "category": "out-of-scope",
+      "question": "What is the capital of Mars?",
+      "tools_forbidden": ["search_listings", "compare_properties", "area_price_stats", "mortgage_calculator"],
+      "facts": [{"any_of": ["don't have", "do not have", "can't", "cannot", "not able", "unable", "outside", "only", "specialized", "specialised"]}],
+      "no_citations": true
+    },
+    {
+      "id": "O2", "category": "out-of-scope",
+      "question": "What will Dubai Marina apartment prices be in 2030?",
+      "facts": [{"any_of": ["cannot predict", "can't predict", "unable to predict", "not able to predict", "no forecast", "do not have", "don't have", "cannot forecast", "can't forecast", "not possible"]}],
+      "no_citations": true,
+      "note": "The tools have no forecasts; any 2030 price would be invented (the grounding check also applies)."
+    },
+    {
+      "id": "O3", "category": "out-of-scope",
+      "question": "Find 2-bedroom apartments for rent in Atlantis City.",
+      "facts": [{"any_of": ["not recognized", "not recognised", "unknown", "not a known", "isn't", "is not", "not available", "couldn't find", "could not find", "no data", "not in"]}],
+      "no_citations": true,
+      "note": "Not an area the tools know; the answer must not invent listings."
+    }
+  ]
+}
