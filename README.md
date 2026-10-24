@@ -113,7 +113,8 @@ git-ignored. Groq's `llama-3.3-70b-versatile` is stronger than a small local
 model; the free tier has rate limits.
 
 The script prints each tool call, the answer, and a warning if any figure
-could not be verified. Small local models make more planning mistakes; the
+could not be verified. See a [sample run on six questions](docs/SAMPLE_RUN.md)
+with `gemma4:cloud`. Small local models make more planning mistakes; the
 grounding check is there to catch the figures they get wrong.
 
 The agent tests use a scripted stand-in model, so `pytest` needs no model or key.

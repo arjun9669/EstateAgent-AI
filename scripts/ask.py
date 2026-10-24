@@ -37,6 +37,9 @@ def main(argv: list[str]) -> int:
     for number, step in enumerate(result.steps, 1):
         status = "ok" if step["ok"] else f"error: {step['error']}"
         print(f"[{number}] {step['tool']}({json.dumps(step['arguments'])}) -> {status}")
+    for check in result.checks[:-1]:
+        problems = check["ungrounded_numbers"] + check["unknown_citations"]
+        print(f"[revised] an earlier draft had unsupported figures or IDs: {', '.join(problems)}")
     print()
     print(result.answer)
     if result.warning:

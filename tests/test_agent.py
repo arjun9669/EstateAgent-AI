@@ -97,6 +97,8 @@ def test_ungrounded_figure_triggers_one_revision(toolbox):
     assert result.revisions == 1
     assert result.answer == fixed
     assert result.grounding["ok"]
+    assert [c["draft"] for c in result.checks] == [wrong, fixed]
+    assert result.checks[0]["ungrounded_numbers"] == ["99,000"] and result.checks[1]["ok"]
     _, revision_messages = model.calls[-1]
     assert isinstance(revision_messages[-1], HumanMessage)
     assert "99,000" in revision_messages[-1].content

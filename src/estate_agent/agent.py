@@ -58,6 +58,7 @@ class AgentState(TypedDict):
     tool_rounds: int
     revisions: int
     grounding: dict
+    checks: Annotated[list[dict], operator.add]
 
 
 @dataclass
@@ -67,6 +68,7 @@ class AgentResult:
     steps: list[dict]  # each tool call: tool, arguments, ok, result or error
     grounding: dict
     revisions: int
+    checks: list[dict]  # every checked draft with its grounding report, in order
 
     @property
     def warning(self) -> str | None:
@@ -123,7 +125,7 @@ def build_agent(model, toolbox: Toolbox, max_tool_rounds: int = MAX_TOOL_ROUNDS,
     def check(state: AgentState) -> dict:
         answer = state["messages"][-1].content
         report = grounding.check(answer, _evidence(state["messages"]))
-        update = {"grounding": report.as_dict()}
+        update = {"grounding": report.as_dict(), "checks": [{"draft": answer, **report.as_dict()}]}
         if not report.ok and state["revisions"] < max_revisions:
             problems = ", ".join(report.ungrounded_numbers + report.unknown_citations)
             update["messages"] = [HumanMessage(REVISION_PROMPT.format(problems=problems),
@@ -160,6 +162,7 @@ def ask(graph, question: str) -> AgentResult:
             "tool_rounds": 0,
             "revisions": 0,
             "grounding": {},
+            "checks": [],
         },
         # Each tool round is two graph steps; leave room for revisions.
         {"recursion_limit": 4 * (MAX_TOOL_ROUNDS + 2) * (MAX_REVISIONS + 1)},
@@ -170,4 +173,5 @@ def ask(graph, question: str) -> AgentResult:
         steps=state["steps"],
         grounding=state["grounding"],
         revisions=state["revisions"],
+        checks=state["checks"],
     )
