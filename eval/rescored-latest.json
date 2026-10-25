@@ -82,6 +82,36 @@
     "citations": 27
    },
    "changed_cases": []
+  },
+  {
+   "run": "2026-10-25-gemma4-cloud-9d81aaa-v2-2.json",
+   "cases_file": "cases-v2.json",
+   "cases": 20,
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 18,
+    "citations": 20
+   },
+   "latest": {
+    "passed": 18,
+    "citations": 20
+   },
+   "changed_cases": []
+  },
+  {
+   "run": "2026-10-25-gemma4-cloud-9d81aaa-v2.json",
+   "cases_file": "cases-v2.json",
+   "cases": 20,
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 18,
+    "citations": 19
+   },
+   "latest": {
+    "passed": 18,
+    "citations": 19
+   },
+   "changed_cases": []
   }
  ]
 }
