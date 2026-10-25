@@ -87,7 +87,7 @@
     {
       "id": "F11", "category": "topic-change",
       "context": ["Find 2-bedroom apartments for rent in Dubai Marina under AED 170k a year."],
-      "question": "What is the capital of Mars?",
+      "question": "Who won the 2022 football World Cup?",
       "tools_forbidden": ["search_listings", "compare_properties", "area_price_stats", "mortgage_calculator"],
       "facts": [{"any_of": ["don't have", "do not have", "can't", "cannot", "not able", "unable", "outside", "only", "specialized", "specialised"]}],
       "no_citations": true,
