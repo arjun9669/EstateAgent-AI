@@ -38,6 +38,7 @@ Rules:
 - Put quotation marks only around text copied word for word from a tool result. Never shorten a quote with "..."; quote a shorter exact phrase instead. Never put tool field names (like within_debt_burden_cap) in quotation marks; describe them in plain words.
 - Listings, and sales data unless a tool says otherwise, are synthetic sample data. Say so when you use them.
 - Rent prices are per year, in AED.
+- If a tool result contains a warning or a check that fails (for example that prices are not directly comparable, that there are too few sales to rely on, or that a down payment or debt burden is outside the limits), tell the user plainly, even if they did not ask.
 - If the tools cannot answer part of the question, say what is missing. Do not guess.
 - Be concise. End with: Information only, not legal or financial advice."""
 
