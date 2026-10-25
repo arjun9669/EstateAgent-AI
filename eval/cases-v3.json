@@ -1,0 +1,103 @@
+{
+  "version": "v3",
+  "frozen": "2026-10-25",
+  "note": "Held-out set: written and committed before the plain-language mortgage checks change, with new questions only. Corrects two case-design issues found in v2 without editing v2: W4's phrase list lacked 'outside' (D1, D2 accept it), and N7 expected a 50% figure its question did not ask for (D5 asks only for the amount; D6 asks for the percentage). Do not edit after the first recorded run.",
+  "cases": [
+    {
+      "id": "D1", "category": "mortgage-checks",
+      "question": "I'm an expat buying my first flat for AED 1.5M and can put down AED 150,000. What would I pay each month at 4%?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 300000, "or_text": "300k"}, {"any_of": ["outside", "not meet", "doesn't meet", "does not meet", "below", "less than", "too low", "exceed", "short", "not enough", "insufficient", "under the"]}],
+      "note": "AED 150k is under the 20% minimum (AED 300k)."
+    },
+    {
+      "id": "D2", "category": "mortgage-checks",
+      "question": "I'm a UAE national buying my first home for AED 4M with a 10% deposit, at 4.5%. Is that enough?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 600000, "or_text": "600k"}, {"number": 85}, {"any_of": ["outside", "not meet", "doesn't meet", "does not meet", "below", "less than", "too low", "exceed", "short", "not enough", "insufficient", "under the"]}],
+      "note": "Nationals can borrow up to 85% under AED 5M, so the minimum is AED 600k; AED 400k is not enough."
+    },
+    {
+      "id": "D3", "category": "mortgage-checks",
+      "question": "My salary is AED 12,000 a month. Could I manage a AED 1.6M apartment at 4.5% with the smallest down payment allowed?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 7115}, {"number": 59.3}, {"any_of": ["above", "exceed", "over the", "higher than", "not within", "outside", "more than"]}],
+      "note": "59.3% of income, over the 50% debt burden limit."
+    },
+    {
+      "id": "D4", "category": "mortgage-checks",
+      "question": "On AED 40,000 a month, is a AED 3M home at 4% affordable with the minimum down payment?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 12668}, {"number": 31.7}, {"any_of": ["within", "below the", "under the", "less than", "inside"]}],
+      "note": "31.7% of income, within the 50% limit. Also a check for quoted field names (v1 G4)."
+    },
+    {
+      "id": "D5", "category": "mortgage-checks",
+      "question": "What's the minimum down payment on an off-plan flat priced at AED 900,000?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 450000, "or_text": "450k"}],
+      "note": "Corrected form of v2 N7: asks only for the amount."
+    },
+    {
+      "id": "D6", "category": "mortgage-checks",
+      "question": "What share of the price can I borrow for an off-plan property costing AED 2M, at 4.5%?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 50}],
+      "note": "Asks for the percentage explicitly: 50% for off-plan."
+    },
+    {
+      "id": "D7", "category": "mortgage-checks",
+      "question": "As an expat buying a second home for AED 1.8M at 4.25%, how much must I put down and what's the monthly payment?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 720000, "or_text": "720k"}, {"number": 5851}]
+    },
+    {
+      "id": "E1", "category": "listings",
+      "question": "What's the cheapest 2-bedroom for sale in Dubai Silicon Oasis?",
+      "tools_required": ["search_listings"],
+      "facts": [{"number": 935000}],
+      "citations_required": ["L0063"]
+    },
+    {
+      "id": "E2", "category": "compare",
+      "question": "Which is better value per square foot, L0130 or L0143?",
+      "tools_required": ["compare_properties"],
+      "facts": [{"number": 78.5}, {"number": 82.4}],
+      "citations_required": ["L0130"]
+    },
+    {
+      "id": "E3", "category": "market",
+      "question": "How much have Al Barsha villa prices risen over the last year?",
+      "tools_required": ["area_price_stats"],
+      "facts": [{"number": 13.6}]
+    },
+    {
+      "id": "E4", "category": "rules",
+      "question": "Can my landlord keep my security deposit when I move out?",
+      "tools_required": ["search_rules"],
+      "facts": [{"text": "refund"}],
+      "citations_required": ["law-26-2007#art20"]
+    },
+    {
+      "id": "E5", "category": "rules",
+      "question": "Does my rent include using the building's pool and gym?",
+      "tools_required": ["search_rules"],
+      "facts": [{"any_of": ["swimming pool", "gymnasium", "amenities"]}, {"text": "unless otherwise agreed"}],
+      "citations_required": ["law-26-2007#art11"]
+    },
+    {
+      "id": "E6", "category": "multi-tool",
+      "question": "Find the cheapest 2-bedroom for sale in Dubai Silicon Oasis and the monthly payment at 4.5% with the minimum down payment, as an expat first-time buyer.",
+      "tools_required": ["search_listings", "mortgage_calculator"],
+      "facts": [{"number": 935000}, {"number": 4158}],
+      "citations_required": ["L0063"]
+    },
+    {
+      "id": "E7", "category": "out-of-scope",
+      "question": "Which school is best near Dubai Marina?",
+      "tools_forbidden": ["search_listings", "compare_properties", "area_price_stats", "mortgage_calculator"],
+      "facts": [{"any_of": ["don't have", "do not have", "can't", "cannot", "not able", "unable", "outside", "only", "specialized", "specialised"]}],
+      "no_citations": true
+    }
+  ]
+}

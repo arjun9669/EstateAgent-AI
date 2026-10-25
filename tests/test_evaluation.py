@@ -37,7 +37,8 @@ def test_frozen_cases_are_unchanged(path):
 
 
 @pytest.mark.parametrize("path, expected_count", [(ROOT / "eval" / "cases-v1.json", 30),
-                                                  (ROOT / "eval" / "cases-v2.json", 20)])
+                                                  (ROOT / "eval" / "cases-v2.json", 20),
+                                                  (ROOT / "eval" / "cases-v3.json", 14)])
 def test_case_ids_are_unique_and_well_formed(path, expected_count):
     cases = load_cases(path)
     assert len({c["id"] for c in cases}) == len(cases) == expected_count
@@ -46,9 +47,12 @@ def test_case_ids_are_unique_and_well_formed(path, expected_count):
         assert case.get("facts"), case["id"]
 
 
-def test_v2_questions_are_new():
-    v1 = {c["question"] for c in load_cases(ROOT / "eval" / "cases-v1.json")}
-    assert not v1 & {c["question"] for c in load_cases(ROOT / "eval" / "cases-v2.json")}
+def test_later_sets_ask_new_questions():
+    seen = set()
+    for name in ("cases-v1.json", "cases-v2.json", "cases-v3.json"):
+        questions = {c["question"] for c in load_cases(ROOT / "eval" / name)}
+        assert not seen & questions, name
+        seen |= questions
 
 
 def test_passing_answer():
@@ -179,3 +183,23 @@ def test_rescored_report_matches_the_latest_scorer():
 
     committed = json.loads((ROOT / "eval" / "rescored-latest.json").read_text())
     assert committed == json.loads(json.dumps(rescore_runs.rescore()))
+
+
+def test_v3_expected_values_match_the_tools():
+    conn = connect()
+    assert mortgage_calculator(property_price=1_500_000, annual_rate_pct=4, down_payment=150_000)["minimum_down_payment"] == 300_000
+    national = mortgage_calculator(property_price=4_000_000, annual_rate_pct=4.5, buyer="national", down_payment=400_000)
+    assert (national["minimum_down_payment"], national["max_loan_to_value_pct"]) == (600_000, 85.0)
+    over = mortgage_calculator(property_price=1_600_000, annual_rate_pct=4.5, monthly_income=12_000)
+    assert (over["monthly_payment"], over["debt_burden_pct"]) == (7115, 59.3)
+    within = mortgage_calculator(property_price=3_000_000, annual_rate_pct=4, monthly_income=40_000)
+    assert (within["monthly_payment"], within["debt_burden_pct"]) == (12668, 31.7)
+    assert mortgage_calculator(property_price=900_000, annual_rate_pct=4.5, off_plan=True)["minimum_down_payment"] == 450_000
+    assert mortgage_calculator(property_price=2_000_000, annual_rate_pct=4.5, off_plan=True)["max_loan_to_value_pct"] == 50.0
+    second = mortgage_calculator(property_price=1_800_000, annual_rate_pct=4.25, first_home=False)
+    assert (second["minimum_down_payment"], second["monthly_payment"]) == (720_000, 5851)
+    dso = search_listings(conn, purpose="sale", area="DSO", bedrooms=2, limit=1)["results"][0]
+    assert (dso["listing_id"], dso["price_aed"]) == ("L0063", 935000)
+    assert compare_properties(conn, ["L0130", "L0143"])["lowest_price_per_sqft"] == "L0130"
+    assert area_price_stats(conn, "Al Barsha", property_type="villa")["price_per_sqft_change_pct"] == 13.6
+    assert mortgage_calculator(property_price=935_000, annual_rate_pct=4.5)["monthly_payment"] == 4158
