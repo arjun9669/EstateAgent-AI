@@ -42,6 +42,15 @@ def quotations(answer: str, scorer: str = LATEST_SCORER) -> list[str]:
     return [q for q in _QUOTE_PAIR.findall(answer) if len(q) >= MIN_QUOTE_CHARS]
 
 
+CODE_NAME = re.compile(r"\b[a-z]+(?:_[a-z]+)+\b")
+
+
+def field_name_leaks(answer: str) -> list[str]:
+    """Code-style names (like within_debt_burden_cap) shown to the user. Not part of
+    pass/fail; reported separately so changes to it don't alter recorded scores."""
+    return sorted(set(CODE_NAME.findall(answer)))
+
+
 def _norm(text: str) -> str:
     return " ".join(text.lower().split())
 

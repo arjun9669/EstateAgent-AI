@@ -1,7 +1,7 @@
 import pytest
 
 from estate_agent.tools import ToolError
-from estate_agent.tools.mortgage import max_loan_to_value, monthly_payment, mortgage_calculator
+from estate_agent.tools.mortgage import calculate_mortgage, max_loan_to_value, monthly_payment, mortgage_calculator
 
 
 def test_monthly_payment_matches_standard_amortisation():
@@ -24,7 +24,7 @@ def test_loan_to_value_caps(price, buyer, first_home, off_plan, expected):
 
 
 def test_defaults_to_minimum_down_payment():
-    result = mortgage_calculator(property_price=2_000_000, annual_rate_pct=4.5)
+    result = calculate_mortgage(property_price=2_000_000, annual_rate_pct=4.5)
     assert result["down_payment"] == 400_000
     assert result["loan_amount"] == 1_600_000
     assert result["meets_ltv_cap"] is True
@@ -37,21 +37,21 @@ def test_defaults_to_minimum_down_payment():
 
 
 def test_flags_down_payment_below_cap():
-    result = mortgage_calculator(property_price=2_000_000, annual_rate_pct=4.5, down_payment=200_000)
+    result = calculate_mortgage(property_price=2_000_000, annual_rate_pct=4.5, down_payment=200_000)
     assert result["meets_ltv_cap"] is False
     assert result["minimum_down_payment"] == 400_000
 
 
 def test_debt_burden_check():
-    result = mortgage_calculator(property_price=125_000, annual_rate_pct=6, down_payment=25_000,
-                                 monthly_income=1_000)
+    result = calculate_mortgage(property_price=125_000, annual_rate_pct=6, down_payment=25_000,
+                                monthly_income=1_000)
     assert result["monthly_payment"] == 644
     assert result["debt_burden_pct"] == 64.4
     assert result["within_debt_burden_cap"] is False
 
 
 def test_cash_purchase_has_no_loan():
-    result = mortgage_calculator(property_price=1_000_000, annual_rate_pct=5, down_payment=1_000_000)
+    result = calculate_mortgage(property_price=1_000_000, annual_rate_pct=5, down_payment=1_000_000)
     assert result["loan_amount"] == 0 and result["monthly_payment"] == 0
     assert result["upfront_costs"]["mortgage_registration_fee"] == 0
 
@@ -67,3 +67,30 @@ def test_cash_purchase_has_no_loan():
 def test_rejects_bad_input(kwargs, message):
     with pytest.raises(ToolError, match=message):
         mortgage_calculator(**kwargs)
+
+
+def test_tool_output_uses_plain_english_names_and_sentences():
+    result = mortgage_calculator(property_price=2_000_000, annual_rate_pct=4.5, down_payment=200_000,
+                                 monthly_income=15_000)
+    keys = list(result) + list(result["upfront costs (AED)"]) + list(result["assumptions"])
+    assert not [k for k in keys if "_" in k], "no code-style field names in what the agent sees"
+    assert result["minimum down payment (AED)"] == 400_000
+    ltv, debt = result["checks"]
+    assert ltv.startswith("The down payment of AED 200,000 is below the minimum of AED 400,000")
+    assert "at most 80% of the price for a first home up to AED 5,000,000 for an expatriate" in ltv
+    assert "and this loan would be 90%" in ltv
+    assert debt.startswith("The monthly payment is 66.7% of monthly income, above the 50% debt burden limit")
+
+
+def test_tool_checks_when_limits_are_met():
+    result = mortgage_calculator(property_price=1_200_000, annual_rate_pct=4.25, off_plan=True, monthly_income=40_000)
+    ltv, debt = result["checks"]
+    assert "meets the minimum of AED 600,000" in ltv and "50% of the price for an off-plan property" in ltv
+    assert "within the 50% debt burden limit" in debt
+
+
+def test_tool_without_income_has_one_check():
+    result = mortgage_calculator(property_price=1_800_000, annual_rate_pct=4.5, first_home=False, buyer="national")
+    assert result["checks"] == ["The down payment of AED 630,000 meets the minimum of AED 630,000: banks can lend "
+                                "up to 65% of the price for a second or later home for a UAE national."]
+    assert "payment as % of monthly income" not in result

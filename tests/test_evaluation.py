@@ -5,10 +5,10 @@ from pathlib import Path
 import pytest
 
 from estate_agent.data import connect
-from estate_agent.evaluation import cases_for_run, load_cases, quotations, score_case, score_run, summarize
+from estate_agent.evaluation import cases_for_run, field_name_leaks, load_cases, quotations, score_case, score_run, summarize
 from estate_agent.tools.listings import compare_properties, search_listings
 from estate_agent.tools.market import area_price_stats
-from estate_agent.tools.mortgage import mortgage_calculator
+from estate_agent.tools.mortgage import calculate_mortgage as mortgage_calculator  # figures with code-style keys
 
 ROOT = Path(__file__).resolve().parents[1]
 CASES_FILE = ROOT / "eval" / "cases-v1.json"
@@ -203,3 +203,9 @@ def test_v3_expected_values_match_the_tools():
     assert compare_properties(conn, ["L0130", "L0143"])["lowest_price_per_sqft"] == "L0130"
     assert area_price_stats(conn, "Al Barsha", property_type="villa")["price_per_sqft_change_pct"] == 13.6
     assert mortgage_calculator(property_price=935_000, annual_rate_pct=4.5)["monthly_payment"] == 4158
+
+
+def test_field_name_leaks():
+    assert field_name_leaks('It is "within_debt_burden_cap"; dld_transfer_fee AED 4, ok.') == [
+        "dld_transfer_fee", "within_debt_burden_cap"]
+    assert field_name_leaks("The DLD transfer fee is AED 72,000.") == []

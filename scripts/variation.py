@@ -13,7 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from estate_agent.evaluation import DIMENSIONS, LATEST_SCORER, cases_for_run, score_run  # noqa: E402
+from estate_agent.evaluation import DIMENSIONS, LATEST_SCORER, cases_for_run, field_name_leaks, score_run  # noqa: E402
 
 
 def variation(paths: list[Path]) -> dict:
@@ -26,6 +26,8 @@ def variation(paths: list[Path]) -> dict:
     totals = {key: [summary[key] for _, summary in scored] for key in ("passed", *DIMENSIONS)}
     passes = {c["id"]: [next(s for s in scores if s["id"] == c["id"])["passed"] for scores, _ in scored]
               for c in cases}
+    leaks = {f"{p.name}:{r['id']}": field_name_leaks(r["answer"])
+             for p, run in zip(paths, runs) for r in run["results"] if field_name_leaks(r["answer"])}
     return {
         "scorer_version": LATEST_SCORER,
         "cases_file": case_files.pop(),
@@ -35,6 +37,7 @@ def variation(paths: list[Path]) -> dict:
         "always_pass": sum(all(v) for v in passes.values()),
         "never_pass": [cid for cid, v in passes.items() if not any(v)],
         "unstable": {cid: "".join("P" if x else "F" for x in v) for cid, v in passes.items() if 0 < sum(v) < len(v)},
+        "answers_with_field_names": {"count": len(leaks), "of": sum(len(r["results"]) for r in runs), "where": leaks},
     }
 
 

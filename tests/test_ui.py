@@ -58,7 +58,7 @@ def test_step_summaries():
     error = {"tool": "area_price_stats", "ok": False, "arguments": {"area": "X"}, "error": "Unknown area 'X'"}
     assert summarize_step(error) == "error: Unknown area 'X'"
     assert "Unknown area" in step_message(error).content
-    mortgage = {"tool": "mortgage_calculator", "ok": True, "arguments": {}, "result": {"monthly_payment": 8004}}
+    mortgage = {"tool": "mortgage_calculator", "ok": True, "arguments": {}, "result": {"monthly payment (AED)": 8004}}
     assert summarize_step(mortgage) == "AED 8,004 a month"
     stats = {"tool": "area_price_stats", "ok": True, "arguments": {},
              "result": {"current_period": {"transactions": 12}, "price_per_sqft_change_pct": 10.0}}

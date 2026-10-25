@@ -53,7 +53,7 @@ def summarize_step(step: dict) -> str:
         current = result["current_period"]["transactions"]
         return f"{current} sale{'' if current == 1 else 's'} in the last period" + (f", price/sqft {change:+}%" if change is not None else "")
     if tool == "mortgage_calculator":
-        return f"AED {result['monthly_payment']:,} a month"
+        return f"AED {result['monthly payment (AED)']:,} a month"
     if tool == "search_rules":
         ids = ", ".join(r["passage_id"] for r in result["results"])
         return ids or result.get("note", "no matching passage")
