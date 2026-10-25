@@ -340,18 +340,74 @@ and too loose with its answer format for this use. Running gemma4 on Ollama's cl
 is the right default; a local model would need a stricter final-answer step (for
 example, a separate call that only rewrites the checked facts) rather than more prompting.
 
+## Follow-up questions, checked on a held-out multi-turn set
+
+### The held-out set: [`eval/cases-v4.json`](../eval/cases-v4.json)
+
+Until this change every question was answered on its own, so "What about in JLT?"
+after a Dubai Marina search had nothing to refer to. Before adding memory, a set of
+12 multi-turn cases was written and committed (`ff6629e`, corrected in `749cc94`
+before any run: one scored question repeated a v1 question). Each case lists the
+earlier questions under `context`; the runner asks them first in the same
+conversation and scores the final answer. Ten are follow-ups (a new area, "compare
+the two cheapest", a mortgage on the listing found, "what if I were a national",
+"how much notice would I get", one with three turns), one is an unrelated follow-up
+that must not drag in earlier listings, and one is a single-turn control.
+
+### The change (commit `de1d25e`)
+
+- `ask()` and `stream()` take the conversation's earlier results (the last 3 turns).
+  Their questions and answers go to the model as messages; their tool calls and
+  results count as evidence for the grounding check, so a follow-up may cite a
+  listing or article found earlier.
+- One prompt rule: use earlier turns to understand follow-ups and keep their details
+  (area, bedrooms, budget, price, buyer) unless the user changes them; call the tools
+  again for figures; ignore earlier turns when the new question is unrelated.
+- Both chat pages keep the conversation's results and pass them in.
+
+### Results: two runs before and two after, scorer 1.2
+
+| Set | Before (no memory) | After (memory) |
+|---|---|---|
+| **v4, held out, multi-turn (12)** | **3, 3** | **10, 10** |
+| v3 (14) | 14, 14 | 14, 14 |
+| v2 (20) | 20, 20 | 20, 20 |
+| v1 (30) | 30, 30 | 30, 30 |
+
+Tool choice, correctness and grounding on v1–v3 are unchanged; no answer showed a
+code-style field name (0 / 152). Reports: [v4 before](../eval/variation-v4-before-memory.json),
+[v4 after](../eval/variation-v4-after-memory.json), and v1–v3 after
+([v1](../eval/variation-v1-after-memory.json), [v2](../eval/variation-v2-after-memory.json),
+[v3](../eval/variation-v3-after-memory.json)).
+
+**Reading the result:**
+
+- **Without memory** only the control, the unrelated follow-up and F5 passed. The
+  other follow-ups called no tool or the wrong one: "Compare the two cheapest ones."
+  has nothing to compare.
+- **With memory** F1–F4, F6–F8, F10 and F11 pass in both runs: the agent carries the
+  area, bedrooms and budget to JLT, compares the right listings, prices the mortgage
+  on the listing it found, recalculates for a national buyer, and ignores the earlier
+  listings when asked something unrelated.
+- **F5 and F9 fail on a case-design point, not a wrong answer.** Both answers are
+  correct, quote the law word for word ("either party … ninety (90) days";
+  "at least twelve (12) months before the date of eviction") and cite the right
+  article, and the grounding check passed. They did not search again because the
+  first turn had already retrieved that article; the frozen cases require a new
+  `search_rules` call in the final turn. Read by hand, all 12 follow-ups are right.
+
 ## What to do next
 
-1. If the Groq account is unblocked, add `llama-3.3-70b-versatile` to the model
+1. A held-out set where reusing an earlier tool result is allowed, so the F5/F9
+   kind of answer is judged on content rather than on calling a tool again.
+2. If the Groq account is unblocked, add `llama-3.3-70b-versatile` to the model
    comparison (`LLM_PROVIDER=groq`, then `scripts/compare_models.py`).
-2. Follow-up questions (conversation memory), with a held-out set of multi-turn
-   questions written before the change.
 3. For local models: a final-answer step that rewrites only checked facts, measured
-   on qwen3:4b against this run.
+   on qwen3:4b against its recorded run.
 
 ## Limits
 
-- 64 author-written questions on synthetic data; passing them says little about
+- 76 author-written questions on synthetic data; passing them says little about
   real listings or questions phrased very differently.
 - Phrase checks (for example "either party", "rough") can miss a correct answer
   worded another way, or reward a tool's wording (v2 above); each failure was read

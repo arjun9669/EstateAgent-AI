@@ -1,0 +1,1659 @@
+{
+ "cases_file": "cases-v2.json",
+ "git_commit": "de1d25e3c409818cf06688f017a28b6eb9ec6946",
+ "scorer_version": "1.2",
+ "date": "2026-10-25",
+ "provider": "ollama",
+ "model": "gemma4:cloud",
+ "temperature": 0,
+ "system_prompt": "You are EstateAgent AI, an assistant for the Dubai property market.\n\nRules:\n- Use the tools for every fact: listings, prices, market statistics, mortgage figures and rules. Never state a number or rule that is not in a tool result or the user's question.\n- Call as many tools as the question needs, one after another. If a tool returns an error, read it, fix the arguments and try again.\n- Cite the listing IDs (like L0435) and rule passage IDs (like law-26-2007#art14) behind each fact.\n- When you state a legal rule, keep the law's own wording for who must act (\"either party\", \"the Landlord\", \"the Tenant\"), and for its conditions and exceptions (\"unless otherwise agreed\"). Quote the key phrase. Do not narrow a rule to fit the question: if the user asks what the landlord must do and the law says either party, say either party.\n- Put quotation marks only around text copied word for word from a tool result. Never shorten a quote with \"...\"; quote a shorter exact phrase instead. Never put tool field names (like within_debt_burden_cap) in quotation marks; describe them in plain words.\n- Listings, and sales data unless a tool says otherwise, are synthetic sample data. Say so when you use them.\n- Rent prices are per year, in AED.\n- If a tool result contains a warning or a check that fails (for example that prices are not directly comparable, that there are too few sales to rely on, or that a down payment or debt burden is outside the limits), tell the user plainly, even if they did not ask.\n- If the tools cannot answer part of the question, say what is missing. Do not guess.\n- Earlier questions and answers in this conversation are context. Use them to understand follow-ups such as \"what about JLT?\", \"compare the two cheapest\" or \"what if I were a national?\": keep the earlier details (area, bedrooms, budget, price, buyer) unless the user changes them. Call the tools again for the figures in your answer. If the new question is unrelated, ignore the earlier turns.\n- Be concise. End with: Information only, not legal or financial advice.",
+ "versions": {
+  "langgraph": "1.2.14",
+  "langchain-core": "1.6.9",
+  "langchain-ollama": "1.1.0",
+  "chromadb": "1.5.9",
+  "python": "3.12.2"
+ },
+ "results": [
+  {
+   "id": "W1",
+   "question": "Compare L0521 and L0583 for me.",
+   "answer": "Based on synthetic sample data, these two listings are not directly comparable as one is for rent and the other is for sale:\n\n*   **L0521**: A furnished studio apartment in Jumeirah Village Circle for rent at \"42,000\" AED per year. It is 535 sqft, with a price per sqft of 78.5, which is 16.8% below the median for similar listings.\n*   **L0583**: An unfurnished studio apartment in Al Barsha for sale at \"570,000\" AED. It is 490 sqft, with a price per sqft of 1,163.3, which is 7.2% below the median for similar listings.\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "compare_properties",
+     "arguments": {
+      "listing_ids": [
+       "L0521",
+       "L0583"
+      ]
+     },
+     "ok": true,
+     "result": {
+      "source": "Synthetic sample data (not real listings or sales)",
+      "listings": [
+       {
+        "listing_id": "L0521",
+        "title": "Studio apartment in Jumeirah Village Circle",
+        "area": "Jumeirah Village Circle",
+        "property_type": "apartment",
+        "purpose": "rent",
+        "bedrooms": 0,
+        "bathrooms": 1,
+        "size_sqft": 535,
+        "price_aed": 42000,
+        "furnished": true,
+        "listed_date": "2026-09-15",
+        "price_per_sqft": 78.5,
+        "peer_count": 11,
+        "peer_median_price_per_sqft": 94.4,
+        "vs_peers_pct": -16.8
+       },
+       {
+        "listing_id": "L0583",
+        "title": "Studio apartment in Al Barsha",
+        "area": "Al Barsha",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 0,
+        "bathrooms": 1,
+        "size_sqft": 490,
+        "price_aed": 570000,
+        "furnished": false,
+        "listed_date": "2026-09-29",
+        "price_per_sqft": 1163.3,
+        "peer_count": 8,
+        "peer_median_price_per_sqft": 1254.2,
+        "vs_peers_pct": -7.2
+       }
+      ],
+      "warning": "Mixes rentals and sales; prices are not directly comparable"
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Based on synthetic sample data, these two listings are not directly comparable as one is for rent and the other is for sale:\n\n*   **L0521**: A furnished studio apartment in Jumeirah Village Circle for rent at \"42,000\" AED per year. It is 535 sqft, with a price per sqft of 78.5, which is 16.8% below the median for similar listings.\n*   **L0583**: An unfurnished studio apartment in Al Barsha for sale at \"570,000\" AED. It is 490 sqft, with a price per sqft of 1,163.3, which is 7.2% below the median for similar listings.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 2.1
+  },
+  {
+   "id": "W2",
+   "question": "How have prices for studio apartments in Downtown Dubai changed?",
+   "answer": "Based on synthetic sample data, the median price for studio apartments in Downtown Dubai has increased. \n\nThe median price per square foot rose by 8.0%, moving from \"2870.4\" in the previous period (2024-09-30 to 2025-09-30) to \"3099.0\" in the current period (2025-09-30 to 2026-09-30). The median sale price increased from \"1319500\" AED to \"1426000\" AED.\n\nPlease note that there were fewer than 10 transactions in the current period (7 transactions), so these figures should be treated as rough estimates.\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "area_price_stats",
+     "arguments": {
+      "area": "Downtown Dubai",
+      "bedrooms": 0,
+      "property_type": "apartment"
+     },
+     "ok": true,
+     "result": {
+      "source": "Synthetic sample data (not real listings or sales)",
+      "filters": {
+       "area": "Downtown Dubai",
+       "property_type": "apartment",
+       "bedrooms": 0
+      },
+      "data_as_of": "2026-09-30",
+      "current_period": {
+       "from": "2025-09-30",
+       "to": "2026-09-30",
+       "transactions": 7,
+       "median_price_aed": 1426000,
+       "median_price_per_sqft": 3099.0
+      },
+      "previous_period": {
+       "from": "2024-09-30",
+       "to": "2025-09-30",
+       "transactions": 12,
+       "median_price_aed": 1319500,
+       "median_price_per_sqft": 2870.4
+      },
+      "price_per_sqft_change_pct": 8.0,
+      "warning": "Fewer than 10 transactions in a period; treat figures as rough"
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Based on synthetic sample data, the median price for studio apartments in Downtown Dubai has increased. \n\nThe median price per square foot rose by 8.0%, moving from \"2870.4\" in the previous period (2024-09-30 to 2025-09-30) to \"3099.0\" in the current period (2025-09-30 to 2026-09-30). The median sale price increased from \"1319500\" AED to \"1426000\" AED.\n\nPlease note that there were fewer than 10 transactions in the current period (7 transactions), so these figures should be treated as rough estimates.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.6
+  },
+  {
+   "id": "W3",
+   "question": "How are 3-bedroom apartment prices in JBR moving?",
+   "answer": "Based on synthetic sample data, the median price for 3-bedroom apartments in Jumeirah Beach Residence is moving upwards. \n\nThe median price per sqft increased by 8.8% between the previous period (2024-09-30 to 2025-09-30) and the current period (2025-09-30 to 2026-09-30), rising from \"2083.0\" to \"2266.5\" AED. The median sale price rose from \"3438000\" to \"4002000\" AED.\n\nPlease note that there were fewer than 10 transactions in each period (7 in the previous and 9 in the current), so these figures should be treated as rough estimates.\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "area_price_stats",
+     "arguments": {
+      "area": "Jumeirah Beach Residence",
+      "bedrooms": 3,
+      "property_type": "apartment"
+     },
+     "ok": true,
+     "result": {
+      "source": "Synthetic sample data (not real listings or sales)",
+      "filters": {
+       "area": "Jumeirah Beach Residence",
+       "property_type": "apartment",
+       "bedrooms": 3
+      },
+      "data_as_of": "2026-09-30",
+      "current_period": {
+       "from": "2025-09-30",
+       "to": "2026-09-30",
+       "transactions": 9,
+       "median_price_aed": 4002000,
+       "median_price_per_sqft": 2266.5
+      },
+      "previous_period": {
+       "from": "2024-09-30",
+       "to": "2025-09-30",
+       "transactions": 7,
+       "median_price_aed": 3438000,
+       "median_price_per_sqft": 2083.0
+      },
+      "price_per_sqft_change_pct": 8.8,
+      "warning": "Fewer than 10 transactions in a period; treat figures as rough"
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Based on synthetic sample data, the median price for 3-bedroom apartments in Jumeirah Beach Residence is moving upwards. \n\nThe median price per sqft increased by 8.8% between the previous period (2024-09-30 to 2025-09-30) and the current period (2025-09-30 to 2026-09-30), rising from \"2083.0\" to \"2266.5\" AED. The median sale price rose from \"3438000\" to \"4002000\" AED.\n\nPlease note that there were fewer than 10 transactions in each period (7 in the previous and 9 in the current), so these figures should be treated as rough estimates.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 2.8
+  },
+  {
+   "id": "W4",
+   "question": "I'm an expat buying my first home for AED 2M with a AED 200k down payment at 4.5%. What's my monthly payment?",
+   "answer": "Your monthly payment would be 10,005 AED.\n\nHowever, please be aware that your down payment of 200,000 AED is below the minimum required. For an expatriate buying their first home up to 5,000,000 AED, banks can lend \"at most 80% of the price\", meaning a minimum down payment of 400,000 AED is required. Your current loan would be 90%.\n\nAdditionally, you would need a total of 326,500 AED in cash at purchase to cover the down payment and upfront costs, which include:\n- DLD transfer fee (4% of price): 80,000 AED\n- Mortgage registration fee (0.25% of loan): 4,500 AED\n- Agency commission (2% plus 5% VAT): 42,000 AED\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "mortgage_calculator",
+     "arguments": {
+      "annual_rate_pct": 4.5,
+      "buyer": "expat",
+      "down_payment": 200000,
+      "first_home": true,
+      "property_price": 2000000
+     },
+     "ok": true,
+     "result": {
+      "source": "UAE Central Bank mortgage rules and Dubai Land Department fees, checked October 2026; lenders may apply stricter limits",
+      "monthly payment (AED)": 10005,
+      "loan amount (AED)": 1800000,
+      "down payment (AED)": 200000,
+      "minimum down payment (AED)": 400000,
+      "loan as % of price": 90.0,
+      "maximum loan as % of price": 80.0,
+      "total interest over the term (AED)": 1201495,
+      "upfront costs (AED)": {
+       "DLD transfer fee (4% of price)": 80000,
+       "mortgage registration fee (0.25% of loan)": 4500,
+       "agency commission (2% plus 5% VAT)": 42000
+      },
+      "cash needed at purchase (AED)": 326500,
+      "checks": [
+       "The down payment of AED 200,000 is below the minimum of AED 400,000: banks can lend at most 80% of the price for a first home up to AED 5,000,000 for an expatriate, and this loan would be 90%."
+      ],
+      "assumptions": {
+       "interest rate (% a year)": 4.5,
+       "term (years)": 25,
+       "buyer": "expatriate",
+       "first home": true,
+       "off-plan": false,
+       "rate fixed for the whole term": true
+      }
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Your monthly payment would be 10,005 AED.\n\nHowever, please be aware that your down payment of 200,000 AED is below the minimum required. For an expatriate buying their first home up to 5,000,000 AED, banks can lend \"at most 80% of the price\", meaning a minimum down payment of 400,000 AED is required. Your current loan would be 90%.\n\nAdditionally, you would need a total of 326,500 AED in cash at purchase to cover the down payment and upfront costs, which include:\n- DLD transfer fee (4% of price): 80,000 AED\n- Mortgage registration fee (0.25% of loan): 4,500 AED\n- Agency commission (2% plus 5% VAT): 42,000 AED\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.8
+  },
+  {
+   "id": "W5",
+   "question": "I earn AED 15,000 a month. Can I afford a AED 2.5M flat at 4.5% with the minimum down payment?",
+   "answer": "Based on the figures provided, you likely cannot afford this property.\n\nWhile the minimum down payment of \"AED 500,000\" is met, the monthly payment of \"11,117\" AED represents \"74.1%\" of your monthly income. This is \"above the 50% debt burden limit\" set by UAE Central Bank rules.\n\nTo proceed with this purchase, you would need \"AED 657,500\" in cash upfront to cover the down payment and associated fees (including the DLD transfer fee, mortgage registration, and agency commission).\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "mortgage_calculator",
+     "arguments": {
+      "annual_rate_pct": 4.5,
+      "buyer": "expat",
+      "monthly_income": 15000,
+      "property_price": 2500000
+     },
+     "ok": true,
+     "result": {
+      "source": "UAE Central Bank mortgage rules and Dubai Land Department fees, checked October 2026; lenders may apply stricter limits",
+      "monthly payment (AED)": 11117,
+      "loan amount (AED)": 2000000,
+      "down payment (AED)": 500000,
+      "minimum down payment (AED)": 500000,
+      "loan as % of price": 80.0,
+      "maximum loan as % of price": 80.0,
+      "total interest over the term (AED)": 1334995,
+      "upfront costs (AED)": {
+       "DLD transfer fee (4% of price)": 100000,
+       "mortgage registration fee (0.25% of loan)": 5000,
+       "agency commission (2% plus 5% VAT)": 52500
+      },
+      "cash needed at purchase (AED)": 657500,
+      "payment as % of monthly income": 74.1,
+      "checks": [
+       "The down payment of AED 500,000 meets the minimum of AED 500,000: banks can lend up to 80% of the price for a first home up to AED 5,000,000 for an expatriate.",
+       "The monthly payment is 74.1% of monthly income, above the 50% debt burden limit. The limit covers all debt repayments; this counts only this mortgage."
+      ],
+      "assumptions": {
+       "interest rate (% a year)": 4.5,
+       "term (years)": 25,
+       "buyer": "expatriate",
+       "first home": true,
+       "off-plan": false,
+       "rate fixed for the whole term": true
+      }
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Based on the figures provided, you likely cannot afford this property.\n\nWhile the minimum down payment of \"AED 500,000\" is met, the monthly payment of \"11,117\" AED represents \"74.1%\" of your monthly income. This is \"above the 50% debt burden limit\" set by UAE Central Bank rules.\n\nTo proceed with this purchase, you would need \"AED 657,500\" in cash upfront to cover the down payment and associated fees (including the DLD transfer fee, mortgage registration, and agency commission).\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.7
+  },
+  {
+   "id": "N1",
+   "question": "Any 1-bedroom flats to rent in Business Bay for AED 100k a year or less?",
+   "answer": "I found one 1-bedroom apartment for rent in Business Bay for AED 100,000 per year (synthetic sample data):\n\n*   **Listing L0077**: 1-bedroom apartment, 850 sqft, unfurnished. Price: \"100,000\" AED per year.\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "search_listings",
+     "arguments": {
+      "area": "Business Bay",
+      "bedrooms": 1,
+      "max_price": 100000,
+      "property_type": "apartment",
+      "purpose": "rent"
+     },
+     "ok": true,
+     "result": {
+      "source": "Synthetic sample data (not real listings or sales)",
+      "filters": {
+       "purpose": "rent",
+       "area": "Business Bay",
+       "property_type": "apartment",
+       "bedrooms": 1,
+       "max_price": 100000
+      },
+      "price_unit": "AED per year",
+      "total_matches": 1,
+      "results": [
+       {
+        "listing_id": "L0077",
+        "title": "1-bedroom apartment in Business Bay",
+        "area": "Business Bay",
+        "property_type": "apartment",
+        "purpose": "rent",
+        "bedrooms": 1,
+        "bathrooms": 1,
+        "size_sqft": 850,
+        "price_aed": 100000,
+        "furnished": false,
+        "listed_date": "2026-10-06",
+        "price_per_sqft": 117.6
+       }
+      ]
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "I found one 1-bedroom apartment for rent in Business Bay for AED 100,000 per year (synthetic sample data):\n\n*   **Listing L0077**: 1-bedroom apartment, 850 sqft, unfurnished. Price: \"100,000\" AED per year.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.5
+  },
+  {
+   "id": "N2",
+   "question": "What is the cheapest studio for sale in Downtown Dubai?",
+   "answer": "Based on synthetic sample data, the cheapest studio for sale in Downtown Dubai is listing L0527, priced at 1,230,000 AED.\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "search_listings",
+     "arguments": {
+      "area": "Downtown Dubai",
+      "bedrooms": 0,
+      "property_type": "apartment",
+      "purpose": "sale",
+      "sort": "price_asc"
+     },
+     "ok": true,
+     "result": {
+      "source": "Synthetic sample data (not real listings or sales)",
+      "filters": {
+       "purpose": "sale",
+       "area": "Downtown Dubai",
+       "property_type": "apartment",
+       "bedrooms": 0
+      },
+      "price_unit": "AED",
+      "total_matches": 3,
+      "results": [
+       {
+        "listing_id": "L0527",
+        "title": "Studio apartment in Downtown Dubai",
+        "area": "Downtown Dubai",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 0,
+        "bathrooms": 1,
+        "size_sqft": 400,
+        "price_aed": 1230000,
+        "furnished": false,
+        "listed_date": "2026-07-28",
+        "price_per_sqft": 3075.0
+       },
+       {
+        "listing_id": "L0532",
+        "title": "Studio apartment in Downtown Dubai",
+        "area": "Downtown Dubai",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 0,
+        "bathrooms": 1,
+        "size_sqft": 380,
+        "price_aed": 1235000,
+        "furnished": false,
+        "listed_date": "2026-10-07",
+        "price_per_sqft": 3250.0
+       },
+       {
+        "listing_id": "L0206",
+        "title": "Studio apartment in Downtown Dubai",
+        "area": "Downtown Dubai",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 0,
+        "bathrooms": 1,
+        "size_sqft": 500,
+        "price_aed": 1510000,
+        "furnished": false,
+        "listed_date": "2026-09-22",
+        "price_per_sqft": 3020.0
+       }
+      ]
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Based on synthetic sample data, the cheapest studio for sale in Downtown Dubai is listing L0527, priced at 1,230,000 AED.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 2.0
+  },
+  {
+   "id": "N3",
+   "question": "Show me the three cheapest villas for rent in Mirdif.",
+   "answer": "Based on synthetic sample data, the three cheapest villas for rent in Mirdif are:\n\n1. **3-bedroom villa** (L0361): 158,000 AED per year, unfurnished.\n2. **3-bedroom villa** (L0473): 194,000 AED per year, furnished.\n3. **4-bedroom villa** (L0187): 263,000 AED per year, unfurnished.\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "search_listings",
+     "arguments": {
+      "area": "Mirdif",
+      "limit": 3,
+      "property_type": "villa",
+      "purpose": "rent",
+      "sort": "price_asc"
+     },
+     "ok": true,
+     "result": {
+      "source": "Synthetic sample data (not real listings or sales)",
+      "filters": {
+       "purpose": "rent",
+       "area": "Mirdif",
+       "property_type": "villa"
+      },
+      "price_unit": "AED per year",
+      "total_matches": 14,
+      "results": [
+       {
+        "listing_id": "L0361",
+        "title": "3-bedroom villa in Mirdif",
+        "area": "Mirdif",
+        "property_type": "villa",
+        "purpose": "rent",
+        "bedrooms": 3,
+        "bathrooms": 4,
+        "size_sqft": 2760,
+        "price_aed": 158000,
+        "furnished": false,
+        "listed_date": "2026-09-07",
+        "price_per_sqft": 57.2
+       },
+       {
+        "listing_id": "L0473",
+        "title": "3-bedroom villa in Mirdif",
+        "area": "Mirdif",
+        "property_type": "villa",
+        "purpose": "rent",
+        "bedrooms": 3,
+        "bathrooms": 4,
+        "size_sqft": 2885,
+        "price_aed": 194000,
+        "furnished": true,
+        "listed_date": "2026-07-03",
+        "price_per_sqft": 67.2
+       },
+       {
+        "listing_id": "L0187",
+        "title": "4-bedroom villa in Mirdif",
+        "area": "Mirdif",
+        "property_type": "villa",
+        "purpose": "rent",
+        "bedrooms": 4,
+        "bathrooms": 5,
+        "size_sqft": 4265,
+        "price_aed": 263000,
+        "furnished": false,
+        "listed_date": "2026-09-10",
+        "price_per_sqft": 61.7
+       }
+      ]
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Based on synthetic sample data, the three cheapest villas for rent in Mirdif are:\n\n1. **3-bedroom villa** (L0361): 158,000 AED per year, unfurnished.\n2. **3-bedroom villa** (L0473): 194,000 AED per year, furnished.\n3. **4-bedroom villa** (L0187): 263,000 AED per year, unfurnished.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.6
+  },
+  {
+   "id": "N4",
+   "question": "I'd like a furnished 2-bedroom to rent in JLT. What's available?",
+   "answer": "Based on synthetic sample data, there are 3 furnished 2-bedroom apartments available for rent in JLT:\n\n*   **L0403**: 102,000 AED per year (1,020 sqft)\n*   **L0545**: 117,000 AED per year (1,180 sqft)\n*   **L0198**: 152,000 AED per year (1,235 sqft)\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "search_listings",
+     "arguments": {
+      "area": "JLT",
+      "bedrooms": 2,
+      "furnished": true,
+      "property_type": "apartment",
+      "purpose": "rent"
+     },
+     "ok": true,
+     "result": {
+      "source": "Synthetic sample data (not real listings or sales)",
+      "filters": {
+       "purpose": "rent",
+       "area": "Jumeirah Lake Towers",
+       "property_type": "apartment",
+       "bedrooms": 2,
+       "furnished": true
+      },
+      "price_unit": "AED per year",
+      "total_matches": 3,
+      "results": [
+       {
+        "listing_id": "L0403",
+        "title": "2-bedroom apartment in Jumeirah Lake Towers",
+        "area": "Jumeirah Lake Towers",
+        "property_type": "apartment",
+        "purpose": "rent",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1020,
+        "price_aed": 102000,
+        "furnished": true,
+        "listed_date": "2026-07-23",
+        "price_per_sqft": 100.0
+       },
+       {
+        "listing_id": "L0545",
+        "title": "2-bedroom apartment in Jumeirah Lake Towers",
+        "area": "Jumeirah Lake Towers",
+        "property_type": "apartment",
+        "purpose": "rent",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1180,
+        "price_aed": 117000,
+        "furnished": true,
+        "listed_date": "2026-07-03",
+        "price_per_sqft": 99.2
+       },
+       {
+        "listing_id": "L0198",
+        "title": "2-bedroom apartment in Jumeirah Lake Towers",
+        "area": "Jumeirah Lake Towers",
+        "property_type": "apartment",
+        "purpose": "rent",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1235,
+        "price_aed": 152000,
+        "furnished": true,
+        "listed_date": "2026-08-23",
+        "price_per_sqft": 123.1
+       }
+      ]
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Based on synthetic sample data, there are 3 furnished 2-bedroom apartments available for rent in JLT:\n\n*   **L0403**: 102,000 AED per year (1,020 sqft)\n*   **L0545**: 117,000 AED per year (1,180 sqft)\n*   **L0198**: 152,000 AED per year (1,235 sqft)\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.5
+  },
+  {
+   "id": "N5",
+   "question": "Are sale prices in Deira going up or down?",
+   "answer": "Based on synthetic sample data, sale prices in Deira are showing a mixed trend:\n\n*   The median sale price decreased from 1,031,000 AED in the previous period to 1,003,000 AED in the current period.\n*   However, the median price per sqft increased by 7.4%, rising from 844.9 AED to 907.6 AED.\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "area_price_stats",
+     "arguments": {
+      "area": "Deira"
+     },
+     "ok": true,
+     "result": {
+      "source": "Synthetic sample data (not real listings or sales)",
+      "filters": {
+       "area": "Deira"
+      },
+      "data_as_of": "2026-09-30",
+      "current_period": {
+       "from": "2025-09-30",
+       "to": "2026-09-30",
+       "transactions": 58,
+       "median_price_aed": 1003000,
+       "median_price_per_sqft": 907.6
+      },
+      "previous_period": {
+       "from": "2024-09-30",
+       "to": "2025-09-30",
+       "transactions": 50,
+       "median_price_aed": 1031000,
+       "median_price_per_sqft": 844.9
+      },
+      "price_per_sqft_change_pct": 7.4
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Based on synthetic sample data, sale prices in Deira are showing a mixed trend:\n\n*   The median sale price decreased from 1,031,000 AED in the previous period to 1,003,000 AED in the current period.\n*   However, the median price per sqft increased by 7.4%, rising from 844.9 AED to 907.6 AED.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 3.4
+  },
+  {
+   "id": "N6",
+   "question": "As a UAE national buying a second property for AED 3M at 4%, what's the minimum down payment and monthly payment?",
+   "answer": "For a UAE national buying a second property for AED 3,000,000 at a 4% interest rate:\n\n*   **Minimum Down Payment:** AED 1,050,000\n*   **Monthly Payment:** AED 10,293\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "mortgage_calculator",
+     "arguments": {
+      "annual_rate_pct": 4,
+      "buyer": "national",
+      "first_home": false,
+      "property_price": 3000000
+     },
+     "ok": true,
+     "result": {
+      "source": "UAE Central Bank mortgage rules and Dubai Land Department fees, checked October 2026; lenders may apply stricter limits",
+      "monthly payment (AED)": 10293,
+      "loan amount (AED)": 1950000,
+      "down payment (AED)": 1050000,
+      "minimum down payment (AED)": 1050000,
+      "loan as % of price": 65.0,
+      "maximum loan as % of price": 65.0,
+      "total interest over the term (AED)": 1137846,
+      "upfront costs (AED)": {
+       "DLD transfer fee (4% of price)": 120000,
+       "mortgage registration fee (0.25% of loan)": 4875,
+       "agency commission (2% plus 5% VAT)": 63000
+      },
+      "cash needed at purchase (AED)": 1237875,
+      "checks": [
+       "The down payment of AED 1,050,000 meets the minimum of AED 1,050,000: banks can lend up to 65% of the price for a second or later home for a UAE national."
+      ],
+      "assumptions": {
+       "interest rate (% a year)": 4,
+       "term (years)": 25,
+       "buyer": "UAE national",
+       "first home": false,
+       "off-plan": false,
+       "rate fixed for the whole term": true
+      }
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "For a UAE national buying a second property for AED 3,000,000 at a 4% interest rate:\n\n*   **Minimum Down Payment:** AED 1,050,000\n*   **Monthly Payment:** AED 10,293\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.8
+  },
+  {
+   "id": "N7",
+   "question": "How much do I need to put down on an off-plan apartment costing AED 1.2M, with a loan at 4.25%?",
+   "answer": "For an off-plan apartment costing AED 1.2M with a loan at 4.25%, you would need a minimum down payment of \"AED 600,000\", as banks can lend up to \"50% of the price for an off-plan property\".\n\nIncluding upfront costs, the total cash needed at purchase is \"AED 674,700\". This includes:\n*   Down payment: \"AED 600,000\"\n*   DLD transfer fee (4% of price): \"AED 48,000\"\n*   Agency commission (2% plus 5% VAT): \"AED 25,200\"\n*   Mortgage registration fee (0.25% of loan): \"AED 1,500\"\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "mortgage_calculator",
+     "arguments": {
+      "annual_rate_pct": 4.25,
+      "off_plan": true,
+      "property_price": 1200000
+     },
+     "ok": true,
+     "result": {
+      "source": "UAE Central Bank mortgage rules and Dubai Land Department fees, checked October 2026; lenders may apply stricter limits",
+      "monthly payment (AED)": 3250,
+      "loan amount (AED)": 600000,
+      "down payment (AED)": 600000,
+      "minimum down payment (AED)": 600000,
+      "loan as % of price": 50.0,
+      "maximum loan as % of price": 50.0,
+      "total interest over the term (AED)": 375129,
+      "upfront costs (AED)": {
+       "DLD transfer fee (4% of price)": 48000,
+       "mortgage registration fee (0.25% of loan)": 1500,
+       "agency commission (2% plus 5% VAT)": 25200
+      },
+      "cash needed at purchase (AED)": 674700,
+      "checks": [
+       "The down payment of AED 600,000 meets the minimum of AED 600,000: banks can lend up to 50% of the price for an off-plan property."
+      ],
+      "assumptions": {
+       "interest rate (% a year)": 4.25,
+       "term (years)": 25,
+       "buyer": "expatriate",
+       "first home": true,
+       "off-plan": true,
+       "rate fixed for the whole term": true
+      }
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "For an off-plan apartment costing AED 1.2M with a loan at 4.25%, you would need a minimum down payment of \"AED 600,000\", as banks can lend up to \"50% of the price for an off-plan property\".\n\nIncluding upfront costs, the total cash needed at purchase is \"AED 674,700\". This includes:\n*   Down payment: \"AED 600,000\"\n*   DLD transfer fee (4% of price): \"AED 48,000\"\n*   Agency commission (2% plus 5% VAT): \"AED 25,200\"\n*   Mortgage registration fee (0.25% of loan): \"AED 1,500\"\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.7
+  },
+  {
+   "id": "N8",
+   "question": "Am I allowed to sublet my apartment?",
+   "answer": "According to Law No. 26 of 2007, \"Unless otherwise agreed by the parties to the Lease Contract, the Tenant may not assign the use of or sub-lease the Real Property to third parties unless written consent of the Landlord is obtained\" (law-26-2007#art24).\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "search_rules",
+     "arguments": {
+      "query": "subletting apartment tenant landlord permission"
+     },
+     "ok": true,
+     "result": {
+      "source": "Official Dubai legislation in data/rules (English versions; Arabic text prevails)",
+      "query": "subletting apartment tenant landlord permission",
+      "results": [
+       {
+        "passage_id": "law-26-2007#art24",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (24)",
+        "similarity": 0.612,
+        "keyword_score": 1.076,
+        "matched_by": "meaning",
+        "text": "Unless otherwise agreed by the parties to the Lease Contract, the Tenant may not assign the use of or sub-lease the Real Property to third parties unless written consent of the Landlord is obtained."
+       },
+       {
+        "passage_id": "law-26-2007#art30",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (30)",
+        "similarity": 0.527,
+        "keyword_score": 1.207,
+        "matched_by": "meaning",
+        "text": "If the Tribunal issues an award terminating the Lease Contract and the Real Property is occupied by a Sub-tenant under a contract entered into with the Tenant and approved by the Landlord, the Sub-tenant may continue to occupy the Real Property under the terms of the sub-lease contract."
+       },
+       {
+        "passage_id": "law-26-2007#art2",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (2) Definitions and Scope of Application",
+        "similarity": 0.524,
+        "keyword_score": 3.682,
+        "matched_by": "meaning",
+        "text": "*Text as superseded by Law No. 33 of 2008.*\n\nIn implementing the provisions of this Law, the following words and expressions will have the meaning indicated opposite each of them unless the context implies otherwise:\n\nEmirate:\n\nThe Emirate of Dubai.\n\nTribunal:\n\nThe Special Tribunal to Determine Disputes between Landlords and Tenants.\n\nRERA:\n\nThe Real Estate Regulatory Agency.\n\nReal Property:\n\nImmovable property, and everything attached or annexed to it, which is leased out for residential purposes or for practising any commercial activity, trade, profession, or other lawful activity.\n\nLease Contract:\n\nA contract pursuant to which a Landlord is bound to allow a Tenant to use Real Property for a specific purpose, over a specific term, and in return for specific consideration.\n\nLandlord:\n\nA natural or legal person who is entitled by law or agreement to dispose of Real Property. This includes any person to whom the ownership of the Real Property is transferred during the term of lease, agent or legal representative of the Landlord, or Tenant who is permitted by the Landlord to sublet the Real Property.\n\nTenant:\n\nA natural or legal person who is entitled to use Real Property pursuant to a Lease Contract, or any person to whom the lease is legally transferred from the Tenant.\n\nSubtenant:\n\nA natural or legal person who is entitled to use Real Property or any part thereof pursuant to a Lease Contract entered into with the Tenant.\n\nRent:\n\nThe specific consideration which a Tenant is bound to pay pursuant to a Lease Contract.\n\nNotice:\n\nA written notification sent by either party to a Lease Contract to the other party through a Notary Public; or delivered by registered mail, by hand, or by any other technological means approved by law."
+       },
+       {
+        "passage_id": "law-26-2007#art28",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (28)",
+        "similarity": 0.489,
+        "keyword_score": 0.427,
+        "matched_by": "meaning",
+        "text": "Transferring the ownership of Real Property to a new owner does not affect the Tenant's right to continue to occupy the Real Property by virtue of the Lease Contract entered into with the previous owner, provided that such Lease Contract has a fixed term."
+       },
+       {
+        "passage_id": "law-26-2007#art35",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (35)",
+        "similarity": 0.047,
+        "keyword_score": 4.206,
+        "matched_by": "keywords",
+        "text": "The awards relating to vacating the Real Property will be executed through the Tribunal and pursuant to the rules and procedures issued in this respect. Apart from such awards, other awards issued by the Tribunal will be executed by the Execution Section of Dubai Courts."
+       }
+      ],
+      "note": "Found by meaning and keywords, not verified relevance; check each passage answers the question"
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "According to Law No. 26 of 2007, \"Unless otherwise agreed by the parties to the Lease Contract, the Tenant may not assign the use of or sub-lease the Real Property to third parties unless written consent of the Landlord is obtained\" (law-26-2007#art24).\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.7
+  },
+  {
+   "id": "N9",
+   "question": "My landlord is renovating the building. Do I have any right to move back in afterwards?",
+   "answer": "Under Law No. 26 of 2007, \"A Tenant will have the right of first refusal to return to the Real Property where it is demolished and reconstructed, or renovated and restored, by the Landlord\" (law-26-2007#art29).\n\nIf this applies, the following conditions exist:\n*   **Rent:** The rent for the return must be \"determined in accordance with the provisions of Article (9) of this Law\" (law-26-2007#art29).\n*   **Deadline:** \"The Tenant must exercise the right of first refusal\" within \"a period not exceeding thirty (30) days from the date on which the Tenant is notified of the same by the Landlord\" (law-26-2007#art29).\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "search_rules",
+     "arguments": {
+      "query": "tenant right to return after landlord renovation or eviction for renovation"
+     },
+     "ok": true,
+     "result": {
+      "source": "Official Dubai legislation in data/rules (English versions; Arabic text prevails)",
+      "query": "tenant right to return after landlord renovation or eviction for renovation",
+      "results": [
+       {
+        "passage_id": "law-26-2007#art29",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (29)",
+        "similarity": 0.671,
+        "keyword_score": 10.36,
+        "matched_by": "meaning and keywords",
+        "text": "*Text as superseded by Law No. 33 of 2008.*\n\n1. A Tenant will have the right of first refusal to return to the Real Property where it is demolished and reconstructed, or renovated and restored, by the Landlord, in which case the Rent must be determined in accordance with the provisions of Article (9) of this Law.\n\n2. The Tenant must exercise the right of first refusal referred to in the preceding paragraph within a period not exceeding thirty (30) days from the date on which the Tenant is notified of the same by the Landlord."
+       },
+       {
+        "passage_id": "law-26-2007#art19",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (19) Tenant's Obligations",
+        "similarity": 0.6,
+        "keyword_score": 3.672,
+        "matched_by": "meaning",
+        "text": "The Tenant must pay the Rent on due dates and maintain the Real Property in such a manner as an ordinary person would maintain his own property. Without prejudice to the Tenant's obligation to carry out the restorations that have been agreed upon or which are customary for Tenants to undertake, the Tenant may not make any changes or carry out any restoration or maintenance works to the Real Property unless so permitted by the Landlord and after obtaining required licences from the competent official entities."
+       },
+       {
+        "passage_id": "law-26-2007#art23",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (23)",
+        "similarity": 0.557,
+        "keyword_score": 0.631,
+        "matched_by": "meaning",
+        "text": "Unless otherwise agreed by the parties, upon vacating and surrendering possession of the Real Property, the Tenant may not remove any leasehold improvements made by the Tenant."
+       },
+       {
+        "passage_id": "law-26-2007#art16",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (16)",
+        "similarity": 0.548,
+        "keyword_score": 1.027,
+        "matched_by": "meaning",
+        "text": "Unless otherwise agreed by the parties, the Landlord will, during the term of the Lease Contract, be responsible for the Real Property maintenance works and for repairing any defect or damage that may affect the Tenant's intended use of the Real Property."
+       }
+      ],
+      "note": "Found by meaning and keywords, not verified relevance; check each passage answers the question"
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Under Law No. 26 of 2007, \"A Tenant will have the right of first refusal to return to the Real Property where it is demolished and reconstructed, or renovated and restored, by the Landlord\" (law-26-2007#art29).\n\nIf this applies, the following conditions exist:\n*   **Rent:** The rent for the return must be \"determined in accordance with the provisions of Article (9) of this Law\" (law-26-2007#art29).\n*   **Deadline:** \"The Tenant must exercise the right of first refusal\" within \"a period not exceeding thirty (30) days from the date on which the Tenant is notified of the same by the Landlord\" (law-26-2007#art29).\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.9
+  },
+  {
+   "id": "N10",
+   "question": "Can my landlord cancel my lease halfway through just because he wants to?",
+   "answer": "No, a landlord cannot cancel a lease halfway through simply because they want to.\n\nAccording to Law No. 26 of 2007, \"Where a Lease Contract is valid, it may not be unilaterally terminated during its term by the Landlord or the Tenant\" (law-26-2007#art7). The law states that a valid contract \"can only be terminated by mutual consent or in accordance with the provisions of this Law\" (law-26-2007#art7).\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "search_rules",
+     "arguments": {
+      "query": "can landlord terminate lease early or cancel lease halfway through"
+     },
+     "ok": true,
+     "result": {
+      "source": "Official Dubai legislation in data/rules (English versions; Arabic text prevails)",
+      "query": "can landlord terminate lease early or cancel lease halfway through",
+      "results": [
+       {
+        "passage_id": "law-26-2007#art7",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (7)",
+        "similarity": 0.674,
+        "keyword_score": 5.827,
+        "matched_by": "meaning and keywords",
+        "text": "Where a Lease Contract is valid, it may not be unilaterally terminated during its term by the Landlord or the Tenant. It can only be terminated by mutual consent or in accordance with the provisions of this Law."
+       },
+       {
+        "passage_id": "law-26-2007#art27",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (27) General Provisions",
+        "similarity": 0.628,
+        "keyword_score": 5.141,
+        "matched_by": "meaning",
+        "text": "The Lease Contract does not expire upon the death of the Landlord or the Tenant. The contractual relationship continues with the heirs, unless the heirs of the Tenant wish to terminate such relationship, provided that termination comes into effect no less than thirty (30) days from the date of notifying the Landlord of such intent or the expiry date of the Lease Contract, whichever comes first."
+       },
+       {
+        "passage_id": "law-26-2007#art14",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (14)",
+        "similarity": 0.548,
+        "keyword_score": 0.875,
+        "matched_by": "meaning",
+        "text": "*Text as superseded by Law No. 33 of 2008.*\n\nUnless otherwise agreed by the parties to a Lease Contract, where either party wishes to amend any of its terms pursuant to Article (13) of this Law, that party must notify the other party of this intent no less than ninety (90) days before the date on which the Lease Contract expires."
+       },
+       {
+        "passage_id": "law-26-2007#art6",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (6)",
+        "similarity": 0.541,
+        "keyword_score": 1.614,
+        "matched_by": "meaning",
+        "text": "Where the term of a Lease Contract expires, but the Tenant continues to occupy the Real Property without any objection by the Landlord, the Lease Contract will be renewed for the same term or for a term of one year, whichever is shorter, and under the same terms as the previous Lease Contract."
+       }
+      ],
+      "note": "Found by meaning and keywords, not verified relevance; check each passage answers the question"
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "No, a landlord cannot cancel a lease halfway through simply because they want to.\n\nAccording to Law No. 26 of 2007, \"Where a Lease Contract is valid, it may not be unilaterally terminated during its term by the Landlord or the Tenant\" (law-26-2007#art7). The law states that a valid contract \"can only be terminated by mutual consent or in accordance with the provisions of this Law\" (law-26-2007#art7).\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.8
+  },
+  {
+   "id": "N11",
+   "question": "Who has to pay the government fees and taxes for using the property, the tenant or the landlord?",
+   "answer": "\"Unless the Lease Contract states otherwise\", the Tenant must pay all fees and taxes due to Government entities and departments for use of the Real Property (law-26-2007#art22).\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "search_rules",
+     "arguments": {
+      "query": "who pays government fees and taxes for using the property tenant or landlord"
+     },
+     "ok": true,
+     "result": {
+      "source": "Official Dubai legislation in data/rules (English versions; Arabic text prevails)",
+      "query": "who pays government fees and taxes for using the property tenant or landlord",
+      "results": [
+       {
+        "passage_id": "law-26-2007#art22",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (22)",
+        "similarity": 0.737,
+        "keyword_score": 15.524,
+        "matched_by": "meaning and keywords",
+        "text": "Unless the Lease Contract states otherwise, the Tenant must pay all fees and taxes due to Government entities and departments for use of the Real Property as well as any fees or taxes prescribed for any sub-lease."
+       },
+       {
+        "passage_id": "law-26-2007#art2",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (2) Definitions and Scope of Application",
+        "similarity": 0.501,
+        "keyword_score": 1.981,
+        "matched_by": "meaning",
+        "text": "*Text as superseded by Law No. 33 of 2008.*\n\nIn implementing the provisions of this Law, the following words and expressions will have the meaning indicated opposite each of them unless the context implies otherwise:\n\nEmirate:\n\nThe Emirate of Dubai.\n\nTribunal:\n\nThe Special Tribunal to Determine Disputes between Landlords and Tenants.\n\nRERA:\n\nThe Real Estate Regulatory Agency.\n\nReal Property:\n\nImmovable property, and everything attached or annexed to it, which is leased out for residential purposes or for practising any commercial activity, trade, profession, or other lawful activity.\n\nLease Contract:\n\nA contract pursuant to which a Landlord is bound to allow a Tenant to use Real Property for a specific purpose, over a specific term, and in return for specific consideration.\n\nLandlord:\n\nA natural or legal person who is entitled by law or agreement to dispose of Real Property. This includes any person to whom the ownership of the Real Property is transferred during the term of lease, agent or legal representative of the Landlord, or Tenant who is permitted by the Landlord to sublet the Real Property.\n\nTenant:\n\nA natural or legal person who is entitled to use Real Property pursuant to a Lease Contract, or any person to whom the lease is legally transferred from the Tenant.\n\nSubtenant:\n\nA natural or legal person who is entitled to use Real Property or any part thereof pursuant to a Lease Contract entered into with the Tenant.\n\nRent:\n\nThe specific consideration which a Tenant is bound to pay pursuant to a Lease Contract.\n\nNotice:\n\nA written notification sent by either party to a Lease Contract to the other party through a Notary Public; or delivered by registered mail, by hand, or by any other technological means approved by law."
+       },
+       {
+        "passage_id": "law-26-2007#art12",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (12)",
+        "similarity": 0.479,
+        "keyword_score": 1.004,
+        "matched_by": "meaning",
+        "text": "The Tenant will pay the Landlord the Rent on the dates mutually agreed upon. Where there is no agreement or where it is impossible to verify the payment dates, the Rent must be annually paid in four (4) equal instalments to be paid in advance."
+       },
+       {
+        "passage_id": "law-26-2007#art31",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (31)",
+        "similarity": 0.455,
+        "keyword_score": 0.626,
+        "matched_by": "meaning",
+        "text": "Filing a claim to evict the Tenant does not exempt the Tenant from paying the Rent for the whole period during which the claim is considered, and until an award is rendered and executed."
+       }
+      ],
+      "note": "Found by meaning and keywords, not verified relevance; check each passage answers the question"
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "\"Unless the Lease Contract states otherwise\", the Tenant must pay all fees and taxes due to Government entities and departments for use of the Real Property (law-26-2007#art22).\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 2.8
+  },
+  {
+   "id": "N12",
+   "question": "What's the cheapest furnished 2-bedroom to rent in JLT, and how much could the rent go up when I renew?",
+   "answer": "Based on synthetic sample data, the cheapest furnished 2-bedroom apartment for rent in JLT is listing L0403, priced at 102,000 AED per year.\n\nRegarding rent increases upon renewal:\n\n*   **Notification:** \"Unless otherwise agreed by the parties to a Lease Contract\", if \"either party wishes to amend any of its terms\", they \"must notify the other party of this intent no less than ninety (90) days before the date on which the Lease Contract expires\" (law-26-2007#art14).\n*   **Agreement:** The \"Landlord and Tenant may, prior to the expiry of the Lease Contract, amend any of its terms or reconsider increasing or reducing the Rent\" (law-26-2007#art13). If they cannot agree, the Tribunal may determine the fair rent (law-26-2007#art13).\n*   **Maximum Increase:** According to Decree No. 43 of 2013, the \"maximum percentage of Rent increase\" depends on how the current rent compares to the average rental value of similar units (decree-43-2013#art1):\n    *   \"no Rent increase\" if the rent is \"up to ten percent (10%) less than the average rental value\" (decree-43-2013#art1a).\n    *   \"five percent (5%)\" if the rent is \"eleven percent (11%) to twenty percent (20%) less\" (decree-43-2013#art1b).\n    *   \"ten percent (10%)\" if the rent is \"twenty-one percent (21%) to thirty percent (30%) less\" (decree-43-2013#art1c).\n    *   \"fifteen percent (15%)\" if the rent is \"thirty-one percent (31%) to forty percent (40%) less\" (decree-43-2013#art1d).\n    *   \"twenty percent (20%)\" if the rent is \"more than forty percent (40%) less\" (decree-43-2013#art1e).\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "search_listings",
+     "arguments": {
+      "area": "JLT",
+      "bedrooms": 2,
+      "furnished": true,
+      "property_type": "apartment",
+      "purpose": "rent",
+      "sort": "price_asc"
+     },
+     "ok": true,
+     "result": {
+      "source": "Synthetic sample data (not real listings or sales)",
+      "filters": {
+       "purpose": "rent",
+       "area": "Jumeirah Lake Towers",
+       "property_type": "apartment",
+       "bedrooms": 2,
+       "furnished": true
+      },
+      "price_unit": "AED per year",
+      "total_matches": 3,
+      "results": [
+       {
+        "listing_id": "L0403",
+        "title": "2-bedroom apartment in Jumeirah Lake Towers",
+        "area": "Jumeirah Lake Towers",
+        "property_type": "apartment",
+        "purpose": "rent",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1020,
+        "price_aed": 102000,
+        "furnished": true,
+        "listed_date": "2026-07-23",
+        "price_per_sqft": 100.0
+       },
+       {
+        "listing_id": "L0545",
+        "title": "2-bedroom apartment in Jumeirah Lake Towers",
+        "area": "Jumeirah Lake Towers",
+        "property_type": "apartment",
+        "purpose": "rent",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1180,
+        "price_aed": 117000,
+        "furnished": true,
+        "listed_date": "2026-07-03",
+        "price_per_sqft": 99.2
+       },
+       {
+        "listing_id": "L0198",
+        "title": "2-bedroom apartment in Jumeirah Lake Towers",
+        "area": "Jumeirah Lake Towers",
+        "property_type": "apartment",
+        "purpose": "rent",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1235,
+        "price_aed": 152000,
+        "furnished": true,
+        "listed_date": "2026-08-23",
+        "price_per_sqft": 123.1
+       }
+      ]
+     }
+    },
+    {
+     "tool": "search_rules",
+     "arguments": {
+      "query": "rent increase renewal rules"
+     },
+     "ok": true,
+     "result": {
+      "source": "Official Dubai legislation in data/rules (English versions; Arabic text prevails)",
+      "query": "rent increase renewal rules",
+      "results": [
+       {
+        "passage_id": "law-26-2007#art13",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (13)",
+        "similarity": 0.611,
+        "keyword_score": 6.499,
+        "matched_by": "meaning and keywords",
+        "text": "*Text as superseded by Law No. 33 of 2008.*\n\nFor the purposes of renewing a Lease Contract, the Landlord and Tenant may, prior to the expiry of the Lease Contract, amend any of its terms or reconsider increasing or reducing the Rent. If the Landlord and Tenant fail to reach an agreement in this regard, the Tribunal may determine the fair Rent, taking into account the criteria stipulated in Article (9) of this Law."
+       },
+       {
+        "passage_id": "decree-43-2013#art1",
+        "document": "decree-43-2013.md",
+        "title": "Decree No. 43 of 2013 Determining Rent Increase for Real Property in the Emirate of Dubai",
+        "section": "Article (1) Percentages of Increase",
+        "similarity": 0.566,
+        "keyword_score": 5.908,
+        "matched_by": "meaning",
+        "text": "When renewing Real Property Lease Contracts, the maximum percentage of Rent increase for Real Property in the Emirate of Dubai will be as follows:\n\na. no Rent increase, where the Rent of the Real Property unit is up to ten percent (10%) less than the average rental value of similar units;\n\nb. five percent (5%) of the Rent of the Real Property unit, where the Rent is eleven percent (11%) to twenty percent (20%) less than the average rental value of similar units;\n\nc. ten percent (10%) of the Rent of the Real Property unit, where the Rent is twenty-one percent (21%) to thirty percent (30%) less than the average rental value of similar units;\n\nd. fifteen percent (15%) of the Rent of the Real Property unit, where the Rent is thirty-one percent (31%) to forty percent (40%) less than the average rental value of similar units; or\n\ne. twenty percent (20%) of the Rent of the Real Property Unit, where the Rent is more than forty percent (40%) less than the average rental value of similar units."
+       },
+       {
+        "passage_id": "law-26-2007#art6",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (6)",
+        "similarity": 0.514,
+        "keyword_score": 2.968,
+        "matched_by": "meaning",
+        "text": "Where the term of a Lease Contract expires, but the Tenant continues to occupy the Real Property without any objection by the Landlord, the Lease Contract will be renewed for the same term or for a term of one year, whichever is shorter, and under the same terms as the previous Lease Contract."
+       },
+       {
+        "passage_id": "law-26-2007#art14",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (14)",
+        "similarity": 0.513,
+        "keyword_score": 0,
+        "matched_by": "meaning",
+        "text": "*Text as superseded by Law No. 33 of 2008.*\n\nUnless otherwise agreed by the parties to a Lease Contract, where either party wishes to amend any of its terms pursuant to Article (13) of this Law, that party must notify the other party of this intent no less than ninety (90) days before the date on which the Lease Contract expires."
+       }
+      ],
+      "note": "Found by meaning and keywords, not verified relevance; check each passage answers the question"
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Based on synthetic sample data, the cheapest furnished 2-bedroom apartment for rent in JLT is listing L0403, priced at 102,000 AED per year.\n\nRegarding rent increases upon renewal:\n\n*   **Notification:** \"Unless otherwise agreed by the parties to a Lease Contract\", if \"either party wishes to amend any of its terms\", they \"must notify the other party of this intent no less than ninety (90) days before the date on which the Lease Contract expires\" (law-26-2007#art14).\n*   **Agreement:** The \"Landlord and Tenant may, prior to the expiry of the Lease Contract, amend any of its terms or reconsider increasing or reducing the Rent\" (law-26-2007#art13). If they cannot agree, the Tribunal may determine the fair rent (law-26-2007#art13).\n*   **Maximum Increase:** According to Decree No. 43 of 2013, the \"maximum percentage of Rent increase\" depends on how the current rent compares to the average rental value of similar units (decree-43-2013#art1):\n    *   \"no Rent increase\" if the rent is \"up to ten percent (10%) less than the average rental value\" (decree-43-2013#art1a).\n    *   \"five percent (5%)\" if the rent is \"eleven percent (11%) to twenty percent (20%) less\" (decree-43-2013#art1b).\n    *   \"ten percent (10%)\" if the rent is \"twenty-one percent (21%) to thirty percent (30%) less\" (decree-43-2013#art1c).\n    *   \"fifteen percent (15%)\" if the rent is \"thirty-one percent (31%) to forty percent (40%) less\" (decree-43-2013#art1d).\n    *   \"twenty percent (20%)\" if the rent is \"more than forty percent (40%) less\" (decree-43-2013#art1e).\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 3.0
+  },
+  {
+   "id": "N13",
+   "question": "Find the cheapest townhouse for sale in Dubai Hills and tell me the monthly mortgage at 4.5% with the minimum down payment. I'm an expat buying my first home.",
+   "answer": "The cheapest townhouse for sale in Dubai Hills Estate is a 3-bedroom property priced at 3,665,000 AED (L0027). This is based on synthetic sample data.\n\nFor an expat buying their first home with a 4.5% interest rate and the minimum down payment, the monthly mortgage payment would be 16,297 AED.\n\n**Financial Breakdown:**\n*   **Minimum Down Payment:** 733,000 AED\n*   **Loan Amount:** 2,932,000 AED\n*   **Total Cash Needed at Purchase:** 963,895 AED (includes the down payment and upfront costs such as the DLD transfer fee, mortgage registration fee, and agency commission).\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "search_listings",
+     "arguments": {
+      "area": "Dubai Hills Estate",
+      "property_type": "townhouse",
+      "purpose": "sale",
+      "sort": "price_asc"
+     },
+     "ok": true,
+     "result": {
+      "source": "Synthetic sample data (not real listings or sales)",
+      "filters": {
+       "purpose": "sale",
+       "area": "Dubai Hills Estate",
+       "property_type": "townhouse"
+      },
+      "price_unit": "AED",
+      "total_matches": 3,
+      "results": [
+       {
+        "listing_id": "L0027",
+        "title": "3-bedroom townhouse in Dubai Hills Estate",
+        "area": "Dubai Hills Estate",
+        "property_type": "townhouse",
+        "purpose": "sale",
+        "bedrooms": 3,
+        "bathrooms": 4,
+        "size_sqft": 2015,
+        "price_aed": 3665000,
+        "furnished": false,
+        "listed_date": "2026-08-10",
+        "price_per_sqft": 1818.9
+       },
+       {
+        "listing_id": "L0028",
+        "title": "3-bedroom townhouse in Dubai Hills Estate",
+        "area": "Dubai Hills Estate",
+        "property_type": "townhouse",
+        "purpose": "sale",
+        "bedrooms": 3,
+        "bathrooms": 4,
+        "size_sqft": 2065,
+        "price_aed": 4020000,
+        "furnished": false,
+        "listed_date": "2026-08-24",
+        "price_per_sqft": 1946.7
+       },
+       {
+        "listing_id": "L0390",
+        "title": "3-bedroom townhouse in Dubai Hills Estate",
+        "area": "Dubai Hills Estate",
+        "property_type": "townhouse",
+        "purpose": "sale",
+        "bedrooms": 3,
+        "bathrooms": 4,
+        "size_sqft": 2285,
+        "price_aed": 4580000,
+        "furnished": false,
+        "listed_date": "2026-09-02",
+        "price_per_sqft": 2004.4
+       }
+      ]
+     }
+    },
+    {
+     "tool": "mortgage_calculator",
+     "arguments": {
+      "annual_rate_pct": 4.5,
+      "buyer": "expat",
+      "first_home": true,
+      "property_price": 3665000
+     },
+     "ok": true,
+     "result": {
+      "source": "UAE Central Bank mortgage rules and Dubai Land Department fees, checked October 2026; lenders may apply stricter limits",
+      "monthly payment (AED)": 16297,
+      "loan amount (AED)": 2932000,
+      "down payment (AED)": 733000,
+      "minimum down payment (AED)": 733000,
+      "loan as % of price": 80.0,
+      "maximum loan as % of price": 80.0,
+      "total interest over the term (AED)": 1957102,
+      "upfront costs (AED)": {
+       "DLD transfer fee (4% of price)": 146600,
+       "mortgage registration fee (0.25% of loan)": 7330,
+       "agency commission (2% plus 5% VAT)": 76965
+      },
+      "cash needed at purchase (AED)": 963895,
+      "checks": [
+       "The down payment of AED 733,000 meets the minimum of AED 733,000: banks can lend up to 80% of the price for a first home up to AED 5,000,000 for an expatriate."
+      ],
+      "assumptions": {
+       "interest rate (% a year)": 4.5,
+       "term (years)": 25,
+       "buyer": "expatriate",
+       "first home": true,
+       "off-plan": false,
+       "rate fixed for the whole term": true
+      }
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "The cheapest townhouse for sale in Dubai Hills Estate is a 3-bedroom property priced at 3,665,000 AED (L0027). This is based on synthetic sample data.\n\nFor an expat buying their first home with a 4.5% interest rate and the minimum down payment, the monthly mortgage payment would be 16,297 AED.\n\n**Financial Breakdown:**\n*   **Minimum Down Payment:** 733,000 AED\n*   **Loan Amount:** 2,932,000 AED\n*   **Total Cash Needed at Purchase:** 963,895 AED (includes the down payment and upfront costs such as the DLD transfer fee, mortgage registration fee, and agency commission).\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 2.9
+  },
+  {
+   "id": "O1",
+   "question": "Can you book a viewing of L0435 for Saturday?",
+   "answer": "I cannot book viewings directly. Please contact the listing agent or the agency associated with listing L0435 to arrange a visit for Saturday.\n\nInformation only, not legal or financial advice.",
+   "steps": [],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "I cannot book viewings directly. Please contact the listing agent or the agency associated with listing L0435 to arrange a visit for Saturday.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 0.9
+  },
+  {
+   "id": "O2",
+   "question": "What's the weather like in Dubai today?",
+   "answer": "I am sorry, but I do not have access to real-time weather data. I can only provide information regarding the Dubai property market, such as listings, prices, mortgage calculations, and tenancy rules.\n\nInformation only, not legal or financial advice.",
+   "steps": [],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "I am sorry, but I do not have access to real-time weather data. I can only provide information regarding the Dubai property market, such as listings, prices, mortgage calculations, and tenancy rules.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.1
+  }
+ ],
+ "scores": [
+  {
+   "id": "W1",
+   "category": "warnings",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "W2",
+   "category": "warnings",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "W3",
+   "category": "warnings",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "W4",
+   "category": "warnings",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "W5",
+   "category": "warnings",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "N1",
+   "category": "listings",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "N2",
+   "category": "listings",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "N3",
+   "category": "listings",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "N4",
+   "category": "listings",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "N5",
+   "category": "market",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "N6",
+   "category": "mortgage",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "N7",
+   "category": "mortgage",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "N8",
+   "category": "rules",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "N9",
+   "category": "rules",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "N10",
+   "category": "rules",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "N11",
+   "category": "rules",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "N12",
+   "category": "multi-tool",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "N13",
+   "category": "multi-tool",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "O1",
+   "category": "out-of-scope",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "O2",
+   "category": "out-of-scope",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  }
+ ],
+ "summary": {
+  "cases": 20,
+  "passed": 20,
+  "tool_choice": 20,
+  "correctness": 20,
+  "citations": 20,
+  "grounding": 20,
+  "by_category": {
+   "listings": "4/4",
+   "market": "1/1",
+   "mortgage": "2/2",
+   "multi-tool": "2/2",
+   "out-of-scope": "2/2",
+   "rules": "4/4",
+   "warnings": "5/5"
+  }
+ }
+}

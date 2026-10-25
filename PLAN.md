@@ -69,6 +69,13 @@ Each tool returns JSON with a `source` field so the agent can cite it.
 6. ✅ **Polish**: README rewritten around a demo GIF recorded from the real app
    (`scripts/record_demo.py`) and a Mermaid architecture diagram; release v1.0.0.
 
+## After v1.0.0
+
+- **Model comparison:** gemma4 31B (cloud) 64/64 at 1.6 s per question against
+  qwen3 4B (local) 15/64 at 140 s, on the same agent ([docs/EVALUATION.md](docs/EVALUATION.md#model-comparison)).
+- **Follow-up questions:** conversation memory (last 3 turns), checked on a held-out
+  multi-turn set (cases-v4): 3/12 before, 10/12 after, with v1–v3 unchanged.
+
 ## Ground rules
 
 - Listings are synthetic and labelled as such everywhere they appear.

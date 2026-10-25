@@ -27,10 +27,13 @@ result. Listings are synthetic.*
 - **Hybrid RAG over official law.** Dubai tenancy legislation is split into
   citable articles and searched by meaning (MiniLM embeddings in ChromaDB) plus
   keywords (BM25), added after the evaluation caught a keyword the embeddings missed.
+- **Follow-up questions.** The agent remembers the last 3 turns of a chat, so
+  "What about JLT?" or "Compare the two cheapest" work; earlier tool results count as
+  evidence for the grounding check.
 - **Grounding check.** Each number and listing or law ID in a draft answer must
   appear in a tool result or the question ("AED 2.3 million" matches 2,277,500).
   The model gets one chance to fix anything unsupported; the rest is shown as a warning.
-- **Measured, not assumed.** Three frozen question sets (64 questions), each change
+- **Measured, not assumed.** Four frozen question sets (76 questions, one multi-turn), each change
   checked on a set written before it, every run recorded and re-scored in CI, and
   every failure read by hand, including two bugs found in the scorer itself.
 - **Free to run, model-agnostic.** Local or cloud models through Ollama with no key
@@ -79,17 +82,21 @@ can correct its arguments, and each result carries a `source` so answers can cit
 
 ## Evaluation
 
-Three frozen question sets ([v1](eval/cases-v1.json), [v2](eval/cases-v2.json),
-[v3](eval/cases-v3.json); v2 and v3 written before the changes they test) score each
-answer on tool choice, correctness, citation support and grounding, with
-`gemma4:cloud`. Cases passing all four, per run:
+Four frozen question sets ([v1](eval/cases-v1.json), [v2](eval/cases-v2.json),
+[v3](eval/cases-v3.json), [v4](eval/cases-v4.json); v2–v4 written before the changes
+they test, v4 multi-turn) score each answer on tool choice, correctness, citation
+support and grounding, with `gemma4:cloud`. Cases passing all four, per run:
 
-| Configuration | v1 (30) | v2, held out (20) | v3, held out (14) | Answers showing field names |
-|---|---|---|---|---:|
-| Meaning-only law search | **27** (1 run) | — | — | — |
-| + hybrid law search, quotation rule | **28, 29, 29, 29** | **19, 18** | — | 2 / 160 |
-| + pass on tool warnings | **30, 30** | **19, 18** | **14, 14** | 3 / 128 |
-| + plain-English mortgage checks | **30, 30** | **20, 20** | **14, 14** | **0 / 128** |
+| Configuration | v1 (30) | v2, held out (20) | v3, held out (14) | v4, follow-ups (12) | Answers showing field names |
+|---|---|---|---|---|---:|
+| Meaning-only law search | **27** (1 run) | — | — | — | — |
+| + hybrid law search, quotation rule | **28, 29, 29, 29** | **19, 18** | — | — | 2 / 160 |
+| + pass on tool warnings | **30, 30** | **19, 18** | **14, 14** | — | 3 / 128 |
+| + plain-English mortgage checks | **30, 30** | **20, 20** | **14, 14** | **3, 3** | 0 / 152 |
+| + conversation memory | **30, 30** | **20, 20** | **14, 14** | **10, 10** | **0 / 152** |
+
+The two remaining v4 failures are correct, cited answers that reused an article found
+in the first turn instead of searching again, which the frozen cases did not allow.
 
 Scores use scorer 1.2. Tool choice and grounding are full marks in every run. The
 sets are small and author-written on synthetic data, so they show which behaviours
@@ -189,7 +196,7 @@ BM25 · SQLite · Streamlit · Gradio · pytest · GitHub Actions · Streamlit C
   Settlement Centre (Decree 26 of 2013), are not consolidated.
 - The grounding check verifies numbers and IDs, not meaning; a correct figure can
   still sit in a misleading sentence. The evaluation reads failures by hand for that reason.
-- Each question is answered on its own; the agent does not remember earlier questions.
+- Memory covers the last 3 turns of one chat and is not kept between visits.
 
 How the project was built, milestone by milestone: [PLAN.md](PLAN.md).
 
