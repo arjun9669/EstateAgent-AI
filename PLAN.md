@@ -66,7 +66,8 @@ Each tool returns JSON with a `source` field so the agent can cite it.
    held-out set (cases-v2). Plain-English mortgage checks removed field names from
    answers (3/128 to 0/128) and were checked on a further held-out set (cases-v3):
    v1 30/30, v2 20/20, v3 14/14 in two runs each ([docs/EVALUATION.md](docs/EVALUATION.md)).
-6. **Polish** *(next)*: README with demo GIF, architecture diagram, release tag.
+6. ✅ **Polish**: README rewritten around a demo GIF recorded from the real app
+   (`scripts/record_demo.py`) and a Mermaid architecture diagram; release v1.0.0.
 
 ## Ground rules
 

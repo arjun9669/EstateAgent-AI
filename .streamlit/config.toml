@@ -1,0 +1,6 @@
+[client]
+# Hide the developer menu (Deploy, Rerun...) so recordings and visitors see only the app.
+toolbarMode = "viewer"
+
+[browser]
+gatherUsageStats = false

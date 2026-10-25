@@ -23,6 +23,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=7"]
+# Recording docs/demo.gif (scripts/record_demo.py); also needs Google Chrome.
+demo = ["playwright>=1.63,<2", "pillow>=12"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
