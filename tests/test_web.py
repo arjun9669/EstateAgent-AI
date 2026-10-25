@@ -120,3 +120,17 @@ def test_hosted_secrets_reach_the_model_settings(monkeypatch):
     report = at.error[0].value
     assert "Settings found: OLLAMA_BASE_URL, OLLAMA_MODEL, OLLAMA_API_KEY" in report
     assert "test-key-not-real" not in report  # names only, never values
+
+
+def test_streamlit_follow_up_passes_earlier_turns(use_agent, toolbox):
+    model = ScriptedModel([tool_turn(LISTINGS_CALL), AIMessage("L0002 rents for AED 120,000 a year (synthetic)."),
+                           AIMessage("L0002 is the cheapest, at AED 120,000 a year.")])
+    use_agent(lambda: build_agent(model, toolbox))
+    at = AppTest.from_file(APP, default_timeout=30).run()
+    at.chat_input[0].set_value("2BR in Marina under 130k?").run()
+    at.chat_input[0].set_value("Which is cheapest?").run()
+    assert not at.exception
+    _, messages = model.calls[-1]
+    assert "2BR in Marina under 130k?" in [m.content for m in messages]
+    second = at.session_state["history"][1]
+    assert second["answer"] == "L0002 is the cheapest, at AED 120,000 a year." and not second.get("warning")

@@ -98,8 +98,11 @@ def show_turn(turn: dict) -> None:
             show_answer(turn)
 
 
-def answer(question: str) -> dict:
-    """Run the agent, drawing each step as it arrives; return the turn for the history."""
+def answer(question: str, earlier: list) -> dict:
+    """Run the agent, drawing each step as it arrives; return the turn for the history.
+
+    earlier holds the AgentResults of previous turns, so follow-ups have context.
+    """
     turn = {"question": question, "items": []}
     with st.chat_message("user"):
         st.markdown(question)
@@ -114,7 +117,7 @@ def answer(question: str) -> dict:
                 lock.acquire()
             try:
                 status.caption("🤔 Planning…")
-                for event in stream(agent, question):
+                for event in stream(agent, question, earlier):
                     if isinstance(event, StepEvent):
                         turn["items"].append({"kind": "step", "data": event.step})
                         show_step(event.step)
@@ -123,6 +126,7 @@ def answer(question: str) -> dict:
                         show_check(event.check)
                     else:
                         turn["answer"], turn["warning"] = event.answer, event.warning
+                        turn["result"] = event
                     status.caption("🤔 Working…")
             finally:
                 lock.release()
@@ -157,6 +161,7 @@ def main() -> None:
     )
     question = question or typed
     if question and remaining > 0:
-        history.append(answer(question.strip()))
+        earlier = [turn["result"] for turn in history if "result" in turn]
+        history.append(answer(question.strip(), earlier))
         if len(history) == 1:
             st.rerun()  # hide the example buttons now that the chat has started

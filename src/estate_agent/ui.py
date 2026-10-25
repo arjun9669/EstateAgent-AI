@@ -32,31 +32,34 @@ def make_responder(agent_factory: Callable[[], object]):
     """Chat handler that streams agent steps into the history. Builds the agent on first use."""
     agent = None
 
-    def respond(question: str, history: list) -> Iterator[tuple[str, list]]:
+    def respond(question: str, history: list, turns: list | None = None) -> Iterator[tuple[str, list, list]]:
+        """turns holds this chat's earlier AgentResults (a gr.State), for follow-ups."""
         nonlocal agent
+        turns = list(turns or [])
         question = (question or "").strip()
         if not question:
-            yield "", history
+            yield "", history, turns
             return
         history = history + [gr.ChatMessage(role="user", content=question)]
         working = gr.ChatMessage(content="", metadata={"title": "🤔 Planning…", "status": "pending"})
-        yield "", history + [working]
+        yield "", history + [working], turns
         try:
             if agent is None:
                 agent = agent_factory()
-            for event in stream(agent, question):
+            for event in stream(agent, question, turns):
                 if isinstance(event, StepEvent):
                     history.append(step_message(event.step))
                 elif isinstance(event, CheckEvent):
                     history.append(check_message(event.check))
                 else:
                     history.append(answer_message(event))
-                    yield "", history
+                    turns.append(event)
+                    yield "", history, turns
                     return
-                yield "", history + [working]
+                yield "", history + [working], turns
         except Exception as error:  # show model/network problems in the chat, not a stack trace
             history.append(gr.ChatMessage(content=f"⚠️ The model could not be reached: {error}"))
-            yield "", history
+            yield "", history, turns
 
     return respond
 
@@ -71,6 +74,7 @@ def build_app(agent_factory: Callable[[], object] = default_agent) -> gr.Blocks:
                              autofocus=True, submit_btn=True)
             clear = gr.Button("Clear", scale=1)
         gr.Examples(EXAMPLES, inputs=box, label="Try one")
-        box.submit(respond, [box, chat], [box, chat])
-        clear.click(lambda: ("", []), None, [box, chat])
+        turns = gr.State([])
+        box.submit(respond, [box, chat, turns], [box, chat, turns])
+        clear.click(lambda: ("", [], []), None, [box, chat, turns])
     return app

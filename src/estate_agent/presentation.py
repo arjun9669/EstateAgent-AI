@@ -15,8 +15,8 @@ against those results.
 
 **Listings and sales data are synthetic.** Legislation is the official English text of
 Dubai Law 26/2007 (as amended) and Decree 43/2013. Information only, not legal or
-financial advice. Each question is answered on its own; the agent does not remember
-earlier questions. Questions are sent to the language model's provider.
+financial advice. Follow-up questions work: the agent sees the last 3 questions and
+answers in this chat. Questions are sent to the language model's provider.
 [Source code](https://github.com/arjun9669/EstateAgent-AI)"""
 EXAMPLES = [
     "Find 2-bedroom apartments in Dubai Marina under AED 170k a year",

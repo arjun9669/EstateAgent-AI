@@ -231,3 +231,34 @@ def test_env_file_is_read_without_overriding(clean_env, tmp_path):
     config.load_env(env)
     assert config.provider() == "ollama"
     assert config.model_name() == "some-model"
+
+
+def test_follow_up_sees_earlier_turns_and_can_cite_their_results(toolbox):
+    first_model = ScriptedModel([tool_turn(LISTINGS_CALL), AIMessage("L0002 rents for AED 120,000 a year (synthetic).")])
+    first = ask(build_agent(first_model, toolbox), "2BR in Marina under 130k?")
+    # The follow-up answer reuses L0002 and its price without calling a tool again.
+    model = ScriptedModel([AIMessage("L0002, at AED 120,000 a year, is the only match.")])
+    result = ask(build_agent(model, toolbox), "Which one was cheapest?", history=[first])
+
+    assert result.grounding["ok"], result.grounding
+    _, messages = model.calls[0]
+    assert [type(m).__name__ for m in messages] == ["SystemMessage", "HumanMessage", "AIMessage", "HumanMessage"]
+    assert messages[1].content == "2BR in Marina under 130k?" and messages[2].content == first.answer
+    assert messages[-1].content == "Which one was cheapest?"
+
+
+def test_without_history_the_same_answer_is_flagged(toolbox):
+    model = ScriptedModel([AIMessage("L0002, at AED 120,000 a year, is the only match."),
+                           AIMessage("L0002, at AED 120,000 a year, is the only match.")])
+    result = ask(build_agent(model, toolbox), "Which one was cheapest?")
+    assert result.grounding["unknown_citations"] == ["L0002"]
+
+
+def test_history_is_limited_to_the_last_turns(toolbox):
+    from estate_agent.agent import MAX_HISTORY_TURNS, AgentResult
+    old = [AgentResult(f"question {i}", f"answer {i}", [], {"ok": True}, 0, []) for i in range(5)]
+    model = ScriptedModel([AIMessage("Hello.")])
+    ask(build_agent(model, toolbox), "next", history=old)
+    _, messages = model.calls[0]
+    questions = [m.content for m in messages if type(m).__name__ == "HumanMessage"]
+    assert questions == [f"question {i}" for i in range(5 - MAX_HISTORY_TURNS, 5)] + ["next"]

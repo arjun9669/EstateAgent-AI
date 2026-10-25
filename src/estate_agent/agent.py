@@ -27,6 +27,8 @@ from estate_agent.tools import TOOL_SPECS, Toolbox
 
 MAX_TOOL_ROUNDS = 6
 MAX_REVISIONS = 1
+# Follow-up questions see this many earlier turns of the conversation.
+MAX_HISTORY_TURNS = 3
 
 SYSTEM_PROMPT = """You are EstateAgent AI, an assistant for the Dubai property market.
 
@@ -40,6 +42,7 @@ Rules:
 - Rent prices are per year, in AED.
 - If a tool result contains a warning or a check that fails (for example that prices are not directly comparable, that there are too few sales to rely on, or that a down payment or debt burden is outside the limits), tell the user plainly, even if they did not ask.
 - If the tools cannot answer part of the question, say what is missing. Do not guess.
+- Earlier questions and answers in this conversation are context. Use them to understand follow-ups such as "what about JLT?", "compare the two cheapest" or "what if I were a national?": keep the earlier details (area, bedrooms, budget, price, buyer) unless the user changes them. Call the tools again for the figures in your answer. If the new question is unrelated, ignore the earlier turns.
 - Be concise. End with: Information only, not legal or financial advice."""
 
 TOOL_LIMIT_NOTE = "Tool limit reached; this call was not run."
@@ -62,6 +65,7 @@ class AgentState(TypedDict):
     revisions: int
     grounding: dict
     checks: Annotated[list[dict], operator.add]
+    prior_evidence: list[str]  # earlier turns' tool calls and results
 
 
 @dataclass
@@ -127,7 +131,7 @@ def build_agent(model, toolbox: Toolbox, max_tool_rounds: int = MAX_TOOL_ROUNDS,
 
     def check(state: AgentState) -> dict:
         answer = state["messages"][-1].content
-        report = grounding.check(answer, _evidence(state["messages"]))
+        report = grounding.check(answer, _evidence(state["messages"]) + state.get("prior_evidence", []))
         update = {"grounding": report.as_dict(), "checks": [{"draft": answer, **report.as_dict()}]}
         if not report.ok and state["revisions"] < max_revisions:
             problems = ", ".join(report.ungrounded_numbers + report.unknown_citations)
@@ -171,18 +175,32 @@ class CheckEvent:
     check: dict
 
 
-def stream(graph, question: str):
-    """Yield StepEvent and CheckEvent as the agent works, then the AgentResult."""
+def _history_messages(history: list[AgentResult]) -> list[AnyMessage]:
+    """Earlier turns as question/answer pairs. Their tool output is not replayed;
+    it is used only as evidence for the grounding check."""
+    messages = []
+    for turn in history[-MAX_HISTORY_TURNS:]:
+        messages += [HumanMessage(turn.question), AIMessage(turn.answer)]
+    return messages
+
+
+def stream(graph, question: str, history: list[AgentResult] | None = None):
+    """Yield StepEvent and CheckEvent as the agent works, then the AgentResult.
+
+    history holds earlier AgentResults of the same conversation, oldest first.
+    """
+    history = (history or [])[-MAX_HISTORY_TURNS:]
     state = None
     seen_steps = seen_checks = 0
     for state in graph.stream(
         {
-            "messages": [SystemMessage(SYSTEM_PROMPT), HumanMessage(question)],
+            "messages": [SystemMessage(SYSTEM_PROMPT), *_history_messages(history), HumanMessage(question)],
             "steps": [],
             "tool_rounds": 0,
             "revisions": 0,
             "grounding": {},
             "checks": [],
+            "prior_evidence": [_compact(step) for turn in history for step in turn.steps],
         },
         # Each tool round is two graph steps; leave room for revisions.
         {"recursion_limit": 4 * (MAX_TOOL_ROUNDS + 2) * (MAX_REVISIONS + 1)},
@@ -196,8 +214,8 @@ def stream(graph, question: str):
     yield _result(question, state)
 
 
-def ask(graph, question: str) -> AgentResult:
-    *_, result = stream(graph, question)
+def ask(graph, question: str, history: list[AgentResult] | None = None) -> AgentResult:
+    *_, result = stream(graph, question, history)
     return result
 
 

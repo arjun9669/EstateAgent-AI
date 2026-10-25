@@ -16,13 +16,14 @@ def test_streams_steps_check_and_answer_into_the_chat(toolbox):
     respond = make_responder(lambda: build_agent(model, toolbox))
     updates = list(respond("2BR in Marina under 130k?", []))
 
-    box, final = updates[-1]
+    box, final, turns = updates[-1]
     assert box == ""
     assert final[0].role == "user" and final[0].content == "2BR in Marina under 130k?"
     assert titles(final)[1] == "🏠 search_listings → 1 match (L0002)"
     assert titles(final)[2].startswith("📜 search_rules → rent-law#art1")
     assert titles(final)[3].startswith("✅ Grounding check passed")
     assert final[4].content == GOOD_ANSWER and not final[4].metadata
+    assert [t.answer for t in turns] == [GOOD_ANSWER]
     # While working, a pending "Planning…" message is shown after the latest step.
     assert titles(updates[1][1])[-1] == "🤔 Planning…"
     assert all(titles(u[1])[-1] != "🤔 Planning…" for u in updates[-1:])
@@ -31,7 +32,7 @@ def test_streams_steps_check_and_answer_into_the_chat(toolbox):
 def test_flagged_draft_is_shown_and_warning_appended(toolbox):
     wrong = "L0002 rents for AED 99,000 a year."
     model = ScriptedModel([tool_turn(LISTINGS_CALL), AIMessage(wrong), AIMessage(wrong)])
-    *_, (_, final) = make_responder(lambda: build_agent(model, toolbox))("rent?", [])
+    *_, (_, final, _) = make_responder(lambda: build_agent(model, toolbox))("rent?", [])
 
     flagged = [m for m in final if (m.metadata or {}).get("title", "").startswith("⚠️ Grounding check flagged")]
     assert len(flagged) == 2 and "99,000" in flagged[0].metadata["title"]
@@ -43,12 +44,12 @@ def test_model_errors_are_shown_in_the_chat():
     def broken():
         raise RuntimeError("Ollama is not running.")
 
-    *_, (_, final) = make_responder(broken)("hello", [])
+    *_, (_, final, _) = make_responder(broken)("hello", [])
     assert "Ollama is not running." in final[-1].content
 
 
 def test_empty_question_does_nothing():
-    assert list(make_responder(lambda: None)("   ", [])) == [("", [])]
+    assert list(make_responder(lambda: None)("   ", [])) == [("", [], [])]
 
 
 def test_step_summaries():
@@ -82,3 +83,14 @@ def test_app_builds_without_contacting_a_model():
     calls = []
     app = build_app(lambda: calls.append(1))
     assert isinstance(app, gr.Blocks) and calls == []
+
+
+def test_gradio_follow_up_passes_earlier_turns(toolbox):
+    model = ScriptedModel([tool_turn(LISTINGS_CALL), AIMessage("L0002 rents for AED 120,000 a year (synthetic)."),
+                           AIMessage("L0002 is the cheapest, at AED 120,000 a year.")])
+    respond = make_responder(lambda: build_agent(model, toolbox))
+    *_, (_, history, turns) = respond("2BR in Marina under 130k?", [])
+    *_, (_, history, turns) = respond("Which is cheapest?", history, turns)
+    _, messages = model.calls[-1]
+    assert "2BR in Marina under 130k?" in [m.content for m in messages]
+    assert len(turns) == 2 and "Could not verify" not in history[-1].content
