@@ -84,6 +84,66 @@
    "changed_cases": []
   },
   {
+   "run": "2026-10-25-gemma4-cloud-27079b6-2.json",
+   "cases_file": "cases-v1.json",
+   "cases": 30,
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 30,
+    "citations": 30
+   },
+   "latest": {
+    "passed": 30,
+    "citations": 30
+   },
+   "changed_cases": []
+  },
+  {
+   "run": "2026-10-25-gemma4-cloud-27079b6-v2-2.json",
+   "cases_file": "cases-v2.json",
+   "cases": 20,
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 18,
+    "citations": 20
+   },
+   "latest": {
+    "passed": 18,
+    "citations": 20
+   },
+   "changed_cases": []
+  },
+  {
+   "run": "2026-10-25-gemma4-cloud-27079b6-v2.json",
+   "cases_file": "cases-v2.json",
+   "cases": 20,
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 19,
+    "citations": 20
+   },
+   "latest": {
+    "passed": 19,
+    "citations": 20
+   },
+   "changed_cases": []
+  },
+  {
+   "run": "2026-10-25-gemma4-cloud-27079b6.json",
+   "cases_file": "cases-v1.json",
+   "cases": 30,
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 29,
+    "citations": 29
+   },
+   "latest": {
+    "passed": 29,
+    "citations": 29
+   },
+   "changed_cases": []
+  },
+  {
    "run": "2026-10-25-gemma4-cloud-9d81aaa-v2-2.json",
    "cases_file": "cases-v2.json",
    "cases": 20,

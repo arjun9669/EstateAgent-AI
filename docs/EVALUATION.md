@@ -167,18 +167,80 @@ with scorer 1.1 ([report](../eval/variation-agent-06ba204.json)):
 **Current estimate for this configuration: 28 to 29 of 30**, with one consistent
 failure (C3).
 
+## Passing on tool warnings, checked on a held-out set
+
+### The held-out set: [`eval/cases-v2.json`](../eval/cases-v2.json)
+
+C3 kept failing because the agent left out the comparison tool's warning. A prompt
+fix tuned and judged on C3 alone would just be teaching to the test, so before
+changing the prompt a second set was written and committed (`9d81aaa`): 20 new
+questions on listings, areas and law articles that v1 does not use. Five of them
+(W1–W5) check that a tool's warning reaches the answer: a rent-vs-sale comparison,
+two areas with too few sales, a down payment under the cap, and a debt burden over
+the cap. The rest cover listings, market, mortgage, law, multi-tool and
+out-of-scope questions, as in v1.
+
+| Category | Cases |
+|---|---:|
+| Warnings | 5 |
+| Listings | 4 |
+| Market | 1 |
+| Mortgage | 2 |
+| Rules | 4 |
+| Multi-tool | 2 |
+| Out of scope | 2 |
+
+### The change (commit `27079b6`)
+
+One system-prompt rule: *if a tool result contains a warning or a check that
+fails (for example that prices are not directly comparable, that there are too few
+sales to rely on, or that a down payment or debt burden is outside the limits),
+tell the user plainly, even if they did not ask.*
+
+### Results: two runs before and two after, scorer 1.1
+
+| Set | Before (prompt at `9d81aaa`) | After (prompt at `27079b6`) |
+|---|---|---|
+| **v2, held out** | **18, 18 / 20** | **19, 18 / 20** |
+| v1 | 28, 29, 29, 29 / 30 (runs 2–5) | **29, 30 / 30** |
+
+Tool choice and grounding were full marks in every run.
+Reports: [v2 before](../eval/variation-v2-before-warnings.json),
+[v2 after](../eval/variation-v2-after-warnings.json),
+[v1 after](../eval/variation-v1-after-warnings.json).
+
+| Case | Before | After | Reading |
+|---|---|---|---|
+| W1 (v2), rent vs sale | FAIL, FAIL | PASS, PASS | Now says the two "are not directly comparable as one is for rent and the other is for sale" |
+| C3 (v1), rent vs sale | FAIL in 4/4 | PASS, PASS | Now opens with the warning |
+| W2, W3, W5 (v2) | PASS, PASS | PASS, PASS | These warnings were already passed on before the change |
+| W4 (v2), down payment under cap | PASS, PASS | PASS, FAIL | **False fail.** The failing answer says the AED 200,000 down payment "is outside the limits" and gives the AED 400,000 minimum, which is correct; the frozen phrase list just lacks "outside" |
+| N7 (v2), off-plan down payment | FAIL, FAIL | FAIL, FAIL | **Case asks too much.** Every answer gives the correct AED 600,000; the case also expects the 50% cap, which the question did not ask for |
+| G4 (v1), debt burden | PASS in 4/4 | FAIL, PASS | The model again put a field name in quotes ("within_debt_burden_cap") in one run, despite the quotation rule |
+
+**Conclusion:** the rule fixed the comparison warning on the held-out question as
+well as the one it was written for, with no new real failures in four runs.
+Counting W4's false fail as a pass, the held-out set is 19/20 in both runs after
+the change, against 18/20 before; the remaining miss (N7) is a case-design issue.
+v1 reached 30/30 for the first time.
+
 ## What to do next
 
-1. **C3:** ask the model to pass on warnings a tool returns, such as "not directly
-   comparable". Check the change on new cases (cases-v2) it was not written for, so
-   it does not just teach to this test.
-2. **Repeat runs by default:** report the spread over several runs for every change,
-   as above, rather than a single score.
+1. **cases-v3 for the case-design issues:** accept "outside the limits" in W4 and
+   drop the unasked-for 50% from N7. Add new questions rather than editing v2, and
+   report v2 scores unchanged.
+2. **Field names in quotes (G4):** the prompt rule alone does not stop it every
+   time. A cheaper fix is in the tools: give the agent plain-language warnings
+   ("within the 50% debt burden limit") instead of boolean field names.
+3. Keep running every change at least twice on both sets.
 
 ## Limits
 
-- 30 author-written questions on synthetic data; passing them says little about
+- 50 author-written questions on synthetic data; passing them says little about
   real listings or questions phrased very differently.
 - Phrase checks (for example "either party", "rough") can miss a correct answer
-  worded another way; each failure above was read by hand.
-- Four runs is a small sample; it shows which cases are stable, not precise rates.
+  worded another way (W4 above); each failure was read by hand.
+- Two to four runs per configuration is a small sample; it shows which cases are
+  stable, not precise rates.
+- cases-v2 was written by the same person who wrote the prompt change, so it is
+  held out from the change, not independent of the author.

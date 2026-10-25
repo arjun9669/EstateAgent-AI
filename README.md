@@ -64,20 +64,22 @@ question ─▶ agent ──tool calls──▶ tools ──results──▶ age
 
 ## Evaluation
 
-A frozen set of 30 questions ([`eval/cases-v1.json`](eval/cases-v1.json)) scores
-each answer on tool choice, correctness, citation support and grounding, with
-`gemma4:cloud`:
+Frozen question sets ([v1](eval/cases-v1.json), 30 questions; [v2](eval/cases-v2.json),
+20 held-out questions) score each answer on tool choice, correctness, citation
+support and grounding, with `gemma4:cloud` (cases passing all four, per run):
 
-| Configuration | Runs | All four dimensions (scorer 1.1) |
-|---|---:|---|
-| Meaning-only law search | 1 | **27/30** |
-| Hybrid law search + quotation rule | 4 | **28, 29, 29, 29 /30** |
+| Configuration | v1 (30 questions) | v2, held out (20 questions) |
+|---|---|---|
+| Meaning-only law search | **27** (1 run) | — |
+| + hybrid law search, quotation rule | **28, 29, 29, 29** | **18, 18** |
+| + pass on tool warnings | **29, 30** | **19, 18** |
 
-Tool choice and grounding are 30/30 in every run. The hybrid search and quotation
-rule fixed all three first-run failures (a law-search miss and two loose
-quotations); one comparison answer now consistently leaves out a "not comparable"
-warning. Every run is recorded, including a scorer bug found and fixed along the
-way: [docs/EVALUATION.md](docs/EVALUATION.md).
+Tool choice and grounding are full marks in every run. Each fix was checked on
+a held-out set written before the change: passing on tool warnings fixed the
+comparison warning there too (W1), and the remaining held-out misses are a phrase
+the scorer didn't list and a case that asks for more than its question does.
+Every run is recorded and explained, including a scorer bug found and fixed along
+the way: [docs/EVALUATION.md](docs/EVALUATION.md).
 
 ## Try the tools
 

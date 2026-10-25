@@ -61,8 +61,9 @@ Each tool returns JSON with a `source` field so the agent can cite it.
 5. ✅ **Evaluation**: 30 frozen questions scored on tool choice, correctness,
    citation support and grounding; recorded runs are re-scored in CI. First run
    with gemma4:cloud: 27/30. Hybrid law search and a quotation rule fixed all three
-   failures; four runs of that version score 28-29/30 (scorer 1.1), with one
-   consistent failure ([docs/EVALUATION.md](docs/EVALUATION.md)).
+   failures; four runs of that version score 28-29/30 (scorer 1.1). A rule to pass
+   on tool warnings fixed the last consistent failure and was checked on a
+   held-out set (cases-v2): v1 29-30/30, v2 18-19/20 ([docs/EVALUATION.md](docs/EVALUATION.md)).
 6. **Polish** *(next)*: README with demo GIF, architecture diagram, release tag.
 
 ## Ground rules
