@@ -13,18 +13,22 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from estate_agent.evaluation import DIMENSIONS, LATEST_SCORER, load_cases, score_run  # noqa: E402
+from estate_agent.evaluation import DIMENSIONS, LATEST_SCORER, cases_for_run, score_run  # noqa: E402
 
 
 def variation(paths: list[Path]) -> dict:
-    cases = load_cases(ROOT / "eval" / "cases-v1.json")
     runs = [json.loads(p.read_text()) for p in paths]
+    case_files = {run.get("cases_file", "cases-v1.json") for run in runs}
+    if len(case_files) != 1:
+        raise SystemExit(f"Runs use different case sets: {sorted(case_files)}")
+    cases = cases_for_run(runs[0])
     scored = [score_run(cases, run, LATEST_SCORER) for run in runs]
     totals = {key: [summary[key] for _, summary in scored] for key in ("passed", *DIMENSIONS)}
     passes = {c["id"]: [next(s for s in scores if s["id"] == c["id"])["passed"] for scores, _ in scored]
               for c in cases}
     return {
         "scorer_version": LATEST_SCORER,
+        "cases_file": case_files.pop(),
         "runs": [p.name for p in paths],
         "commits": sorted({run.get("git_commit", "?")[:7] for run in runs}),
         "totals": {key: {"values": v, "min": min(v), "max": max(v)} for key, v in totals.items()},

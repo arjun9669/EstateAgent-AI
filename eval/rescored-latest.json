@@ -3,6 +3,8 @@
  "runs": [
   {
    "run": "2026-10-24-gemma4-cloud-06ba204.json",
+   "cases_file": "cases-v1.json",
+   "cases": 30,
    "original_scorer": "1.0",
    "original": {
     "passed": 27,
@@ -23,6 +25,8 @@
   },
   {
    "run": "2026-10-24-gemma4-cloud-e3d7bde-2.json",
+   "cases_file": "cases-v1.json",
+   "cases": 30,
    "original_scorer": "1.1",
    "original": {
     "passed": 29,
@@ -36,6 +40,8 @@
   },
   {
    "run": "2026-10-24-gemma4-cloud-e3d7bde-3.json",
+   "cases_file": "cases-v1.json",
+   "cases": 30,
    "original_scorer": "1.1",
    "original": {
     "passed": 29,
@@ -49,6 +55,8 @@
   },
   {
    "run": "2026-10-24-gemma4-cloud-e3d7bde.json",
+   "cases_file": "cases-v1.json",
+   "cases": 30,
    "original_scorer": "1.1",
    "original": {
     "passed": 29,
@@ -62,6 +70,8 @@
   },
   {
    "run": "2026-10-24-gemma4-cloud.json",
+   "cases_file": "cases-v1.json",
+   "cases": 30,
    "original_scorer": "1.0",
    "original": {
     "passed": 27,

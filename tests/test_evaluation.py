@@ -5,15 +5,14 @@ from pathlib import Path
 import pytest
 
 from estate_agent.data import connect
-from estate_agent.evaluation import load_cases, quotations, score_case, score_run, summarize
+from estate_agent.evaluation import cases_for_run, load_cases, quotations, score_case, score_run, summarize
 from estate_agent.tools.listings import compare_properties, search_listings
 from estate_agent.tools.market import area_price_stats
 from estate_agent.tools.mortgage import mortgage_calculator
 
 ROOT = Path(__file__).resolve().parents[1]
 CASES_FILE = ROOT / "eval" / "cases-v1.json"
-# Changing the frozen set must be deliberate: add cases-v2.json instead.
-CASES_SHA256 = (ROOT / "eval" / "cases-v1.sha256").read_text().split()[0]
+CASE_SETS = sorted((ROOT / "eval").glob("cases-v*.json"))
 
 CASE = {
     "id": "T1", "category": "listings", "question": "2BR in Marina under 170k?",
@@ -30,16 +29,26 @@ def record(answer, steps=(STEP,), grounding=OK):
     return {"answer": answer, "steps": list(steps), "grounding": grounding}
 
 
-def test_frozen_cases_are_unchanged():
-    assert hashlib.sha256(CASES_FILE.read_bytes()).hexdigest() == CASES_SHA256
+@pytest.mark.parametrize("path", CASE_SETS, ids=lambda p: p.name)
+def test_frozen_cases_are_unchanged(path):
+    """Changing a frozen set must be deliberate: add a new version instead."""
+    pinned = path.with_suffix(".sha256").read_text().split()[0]
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == pinned
 
 
-def test_case_ids_are_unique_and_well_formed():
-    cases = load_cases(CASES_FILE)
-    assert len({c["id"] for c in cases}) == len(cases) == 30
+@pytest.mark.parametrize("path, expected_count", [(ROOT / "eval" / "cases-v1.json", 30),
+                                                  (ROOT / "eval" / "cases-v2.json", 20)])
+def test_case_ids_are_unique_and_well_formed(path, expected_count):
+    cases = load_cases(path)
+    assert len({c["id"] for c in cases}) == len(cases) == expected_count
     for case in cases:
         assert case["question"] and case["category"]
         assert case.get("facts"), case["id"]
+
+
+def test_v2_questions_are_new():
+    v1 = {c["question"] for c in load_cases(ROOT / "eval" / "cases-v1.json")}
+    assert not v1 & {c["question"] for c in load_cases(ROOT / "eval" / "cases-v2.json")}
 
 
 def test_passing_answer():
@@ -113,13 +122,36 @@ def test_expected_values_match_the_tools():
 
 
 def test_recorded_runs_rescore_identically():
-    """Recorded runs are re-scored in CI; the stored summary must match today's scorer."""
-    cases = load_cases(CASES_FILE)
+    """Recorded runs are re-scored in CI with their own case set and scorer version."""
     runs = sorted((ROOT / "eval" / "runs").glob("*.json"))
     for path in runs:
         run = json.loads(path.read_text())
-        _, summary = score_run(cases, run)
+        _, summary = score_run(cases_for_run(run), run)
         assert summary == run["summary"], path.name
+
+
+def test_v2_expected_values_match_the_tools():
+    conn = connect()
+    assert "warning" in compare_properties(conn, ["L0521", "L0583"])
+    downtown = area_price_stats(conn, "Downtown Dubai", property_type="apartment", bedrooms=0)
+    assert downtown["price_per_sqft_change_pct"] == 8.0 and "warning" in downtown
+    jbr = area_price_stats(conn, "JBR", property_type="apartment", bedrooms=3)
+    assert jbr["price_per_sqft_change_pct"] == 8.8 and "warning" in jbr
+    low = mortgage_calculator(property_price=2_000_000, annual_rate_pct=4.5, down_payment=200_000)
+    assert low["meets_ltv_cap"] is False and low["minimum_down_payment"] == 400_000
+    stretched = mortgage_calculator(property_price=2_500_000, annual_rate_pct=4.5, monthly_income=15_000)
+    assert stretched["debt_burden_pct"] == 74.1 and stretched["within_debt_burden_cap"] is False
+    assert [r["listing_id"] for r in search_listings(conn, purpose="rent", area="Mirdif",
+                                                     property_type="villa", limit=3)["results"]] == ["L0361", "L0473", "L0187"]
+    jlt = search_listings(conn, purpose="rent", area="JLT", bedrooms=2, furnished=True)
+    assert [r["price_aed"] for r in jlt["results"]] == [102000, 117000, 152000]
+    assert area_price_stats(conn, "Deira")["price_per_sqft_change_pct"] == 7.4
+    assert mortgage_calculator(property_price=3_000_000, annual_rate_pct=4, buyer="national",
+                               first_home=False)["monthly_payment"] == 10293
+    assert mortgage_calculator(property_price=1_200_000, annual_rate_pct=4.25, off_plan=True)["minimum_down_payment"] == 600_000
+    hills = search_listings(conn, purpose="sale", area="Dubai Hills", property_type="townhouse", limit=1)["results"][0]
+    assert (hills["listing_id"], hills["price_aed"]) == ("L0027", 3665000)
+    assert mortgage_calculator(property_price=3_665_000, annual_rate_pct=4.5)["monthly_payment"] == 16297
 
 
 def test_scorer_1_1_pairs_quotation_marks_in_order():

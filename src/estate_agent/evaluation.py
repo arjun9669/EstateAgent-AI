@@ -1,4 +1,4 @@
-"""Score recorded agent answers against the frozen evaluation set (eval/cases-v1.json).
+"""Score recorded agent answers against a frozen evaluation set (eval/cases-v*.json).
 
 Each case is scored on four dimensions; a case passes only if all four pass.
 
@@ -139,8 +139,16 @@ def summarize(scores: list[dict]) -> dict:
     }
 
 
+EVAL_DIR = Path(__file__).resolve().parents[2] / "eval"
+
+
 def load_cases(path: Path) -> list[dict]:
     return json.loads(path.read_text())["cases"]
+
+
+def cases_for_run(run: dict) -> list[dict]:
+    """The case set a recorded run was made with (runs before v2 did not say: v1)."""
+    return load_cases(EVAL_DIR / run.get("cases_file", "cases-v1.json"))
 
 
 def score_run(cases: list[dict], run: dict, scorer: str | None = None) -> tuple[list[dict], dict]:

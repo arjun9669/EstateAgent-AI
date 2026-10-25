@@ -13,18 +13,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from estate_agent.evaluation import LATEST_SCORER, load_cases, score_run  # noqa: E402
+from estate_agent.evaluation import LATEST_SCORER, cases_for_run, score_run  # noqa: E402
 
-CASES = ROOT / "eval" / "cases-v1.json"
 RUNS = ROOT / "eval" / "runs"
 OUTPUT = ROOT / "eval" / "rescored-latest.json"
 
 
 def rescore() -> dict:
-    cases = load_cases(CASES)
     report = {"scorer_version": LATEST_SCORER, "runs": []}
     for path in sorted(RUNS.glob("*.json")):
         run = json.loads(path.read_text())
+        cases = cases_for_run(run)
         original_version = run.get("scorer_version", "1.0")
         original_scores, original = score_run(cases, run)
         new_scores, new = score_run(cases, run, LATEST_SCORER)
@@ -35,6 +34,8 @@ def rescore() -> dict:
         ]
         report["runs"].append({
             "run": path.name,
+            "cases_file": run.get("cases_file", "cases-v1.json"),
+            "cases": len(cases),
             "original_scorer": original_version,
             "original": {"passed": original["passed"], "citations": original["citations"]},
             "latest": {"passed": new["passed"], "citations": new["citations"]},
@@ -47,8 +48,9 @@ def main() -> int:
     report = rescore()
     OUTPUT.write_text(json.dumps(report, indent=1) + "\n")
     for run in report["runs"]:
-        print(f"{run['run']}: scorer {run['original_scorer']} {run['original']['passed']}/30 -> "
-              f"{report['scorer_version']} {run['latest']['passed']}/30  "
+        n = run["cases"]
+        print(f"{run['run']}: scorer {run['original_scorer']} {run['original']['passed']}/{n} -> "
+              f"{report['scorer_version']} {run['latest']['passed']}/{n}  "
               + ", ".join(f"{c['id']} {c['was']}->{c['now']}" for c in run["changed_cases"]))
     print(f"Wrote {OUTPUT.relative_to(ROOT)}")
     return 0

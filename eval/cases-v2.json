@@ -1,0 +1,144 @@
+{
+  "version": "v2",
+  "frozen": "2026-10-25",
+  "note": "Held-out set: written and committed before the 'pass on tool warnings' prompt change, using listings, areas and articles that cases-v1 does not. Do not edit after the first recorded run. Expected values come from the committed synthetic data, legislation and mortgage rules.",
+  "cases": [
+    {
+      "id": "W1", "category": "warnings",
+      "question": "Compare L0521 and L0583 for me.",
+      "tools_required": ["compare_properties"],
+      "facts": [{"any_of": ["not directly comparable", "not comparable", "can't be compared", "cannot be compared", "can't compare", "cannot compare", "not meaningful", "not a like-for-like"]}],
+      "citations_required": ["L0521", "L0583"],
+      "note": "One is a rental, the other a sale; the tool warns that prices are not directly comparable."
+    },
+    {
+      "id": "W2", "category": "warnings",
+      "question": "How have prices for studio apartments in Downtown Dubai changed?",
+      "tools_required": ["area_price_stats"],
+      "facts": [{"number": 8.0, "or_text": "8%"}, {"any_of": ["rough", "few ", "fewer", "limited", "small number", "small sample", "only 7", "7 sales", "7 transactions", "caution"]}],
+      "note": "Only 7 sales in the latest period; the tool warns the figures are rough."
+    },
+    {
+      "id": "W3", "category": "warnings",
+      "question": "How are 3-bedroom apartment prices in JBR moving?",
+      "tools_required": ["area_price_stats"],
+      "facts": [{"number": 8.8}, {"any_of": ["rough", "few ", "fewer", "limited", "small number", "small sample", "only 9", "9 sales", "9 transactions", "only 7", "7 sales", "7 transactions", "caution"]}],
+      "note": "Fewer than 10 sales in each period; the tool warns the figures are rough."
+    },
+    {
+      "id": "W4", "category": "warnings",
+      "question": "I'm an expat buying my first home for AED 2M with a AED 200k down payment at 4.5%. What's my monthly payment?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 400000}, {"any_of": ["not meet", "doesn't meet", "does not meet", "below", "less than", "too low", "exceed", "short", "not enough", "insufficient"]}],
+      "note": "AED 200k is under the 20% minimum (AED 400k); the tool reports meets_ltv_cap = false."
+    },
+    {
+      "id": "W5", "category": "warnings",
+      "question": "I earn AED 15,000 a month. Can I afford a AED 2.5M flat at 4.5% with the minimum down payment?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 74.1}, {"number": 50}, {"any_of": ["above", "exceed", "over the", "higher than", "not within", "outside", "more than"]}],
+      "note": "The payment would be 74.1% of income, over the 50% debt burden cap."
+    },
+    {
+      "id": "N1", "category": "listings",
+      "question": "Any 1-bedroom flats to rent in Business Bay for AED 100k a year or less?",
+      "tools_required": ["search_listings"],
+      "facts": [{"number": 100000}],
+      "citations_required": ["L0077"]
+    },
+    {
+      "id": "N2", "category": "listings",
+      "question": "What is the cheapest studio for sale in Downtown Dubai?",
+      "tools_required": ["search_listings"],
+      "facts": [{"number": 1230000, "or_text": "1.23"}],
+      "citations_required": ["L0527"]
+    },
+    {
+      "id": "N3", "category": "listings",
+      "question": "Show me the three cheapest villas for rent in Mirdif.",
+      "tools_required": ["search_listings"],
+      "facts": [{"number": 158000}, {"number": 194000}, {"number": 263000}],
+      "citations_required": ["L0361", "L0473", "L0187"]
+    },
+    {
+      "id": "N4", "category": "listings",
+      "question": "I'd like a furnished 2-bedroom to rent in JLT. What's available?",
+      "tools_required": ["search_listings"],
+      "facts": [{"number": 102000}, {"number": 117000}, {"number": 152000}],
+      "citations_required": ["L0403", "L0545", "L0198"]
+    },
+    {
+      "id": "N5", "category": "market",
+      "question": "Are sale prices in Deira going up or down?",
+      "tools_required": ["area_price_stats"],
+      "facts": [{"number": 7.4}]
+    },
+    {
+      "id": "N6", "category": "mortgage",
+      "question": "As a UAE national buying a second property for AED 3M at 4%, what's the minimum down payment and monthly payment?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 1050000, "or_text": "1.05"}, {"number": 10293}]
+    },
+    {
+      "id": "N7", "category": "mortgage",
+      "question": "How much do I need to put down on an off-plan apartment costing AED 1.2M, with a loan at 4.25%?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 600000, "or_text": "600k"}, {"number": 50}]
+    },
+    {
+      "id": "N8", "category": "rules",
+      "question": "Am I allowed to sublet my apartment?",
+      "tools_required": ["search_rules"],
+      "facts": [{"text": "written consent"}],
+      "citations_required": ["law-26-2007#art24"]
+    },
+    {
+      "id": "N9", "category": "rules",
+      "question": "My landlord is renovating the building. Do I have any right to move back in afterwards?",
+      "tools_required": ["search_rules"],
+      "facts": [{"text": "first refusal"}, {"number": 30, "or_text": "thirty"}],
+      "citations_required": ["law-26-2007#art29"]
+    },
+    {
+      "id": "N10", "category": "rules",
+      "question": "Can my landlord cancel my lease halfway through just because he wants to?",
+      "tools_required": ["search_rules"],
+      "facts": [{"text": "mutual consent"}],
+      "citations_required": ["law-26-2007#art7"]
+    },
+    {
+      "id": "N11", "category": "rules",
+      "question": "Who has to pay the government fees and taxes for using the property, the tenant or the landlord?",
+      "tools_required": ["search_rules"],
+      "facts": [{"text": "tenant"}],
+      "citations_required": ["law-26-2007#art22"]
+    },
+    {
+      "id": "N12", "category": "multi-tool",
+      "question": "What's the cheapest furnished 2-bedroom to rent in JLT, and how much could the rent go up when I renew?",
+      "tools_required": ["search_listings", "search_rules"],
+      "facts": [{"number": 102000}, {"number": 20}],
+      "citations_required": ["L0403", "decree-43-2013#art1"]
+    },
+    {
+      "id": "N13", "category": "multi-tool",
+      "question": "Find the cheapest townhouse for sale in Dubai Hills and tell me the monthly mortgage at 4.5% with the minimum down payment. I'm an expat buying my first home.",
+      "tools_required": ["search_listings", "mortgage_calculator"],
+      "facts": [{"number": 3665000, "or_text": "3.665"}, {"number": 16297}],
+      "citations_required": ["L0027"]
+    },
+    {
+      "id": "O1", "category": "out-of-scope",
+      "question": "Can you book a viewing of L0435 for Saturday?",
+      "facts": [{"any_of": ["can't book", "cannot book", "unable to book", "not able to book", "can't schedule", "cannot schedule", "unable to schedule", "not able to schedule", "don't have", "do not have", "not able", "unable"]}],
+      "must_not_contain": ["has been booked", "is booked", "viewing is scheduled", "booking is confirmed"]
+    },
+    {
+      "id": "O2", "category": "out-of-scope",
+      "question": "What's the weather like in Dubai today?",
+      "tools_forbidden": ["search_listings", "compare_properties", "area_price_stats", "mortgage_calculator"],
+      "facts": [{"any_of": ["don't have", "do not have", "can't", "cannot", "not able", "unable", "outside", "only", "specialized", "specialised"]}],
+      "no_citations": true
+    }
+  ]
+}

@@ -1,7 +1,8 @@
 """Run the frozen evaluation set once against the configured model and record it.
 
-    python scripts/run_eval.py                 # writes eval/runs/<date>-<model>.json
-    python scripts/run_eval.py --only R1 R2    # a few cases, printed but not saved
+    python scripts/run_eval.py                          # cases-v1, writes eval/runs/<date>-<model>-<commit>.json
+    python scripts/run_eval.py --cases eval/cases-v2.json
+    python scripts/run_eval.py --only R1 R2             # a few cases, printed but not saved
 
 A saved run is a permanent record: answers, every tool call and result, the
 grounding report, timings and scores. Do not overwrite or edit saved runs; a
@@ -26,7 +27,7 @@ from estate_agent.agent import SYSTEM_PROMPT, ask  # noqa: E402
 from estate_agent.evaluation import LATEST_SCORER, load_cases, score_run  # noqa: E402
 from estate_agent.presentation import default_agent  # noqa: E402
 
-CASES = ROOT / "eval" / "cases-v1.json"
+DEFAULT_CASES = ROOT / "eval" / "cases-v1.json"
 RUNS = ROOT / "eval" / "runs"
 
 
@@ -59,10 +60,11 @@ def run_case(agent, case: dict) -> dict:
 
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--cases", type=Path, default=DEFAULT_CASES, help="frozen case set to run")
     parser.add_argument("--only", nargs="+", help="case IDs to run; nothing is saved")
     args = parser.parse_args(argv)
 
-    cases = load_cases(CASES)
+    cases = load_cases(args.cases)
     if args.only:
         cases = [c for c in cases if c["id"] in set(args.only)]
     try:
@@ -76,7 +78,7 @@ def main(argv: list[str]) -> int:
         print("Commit your changes first: a recorded run must point to the exact code it ran.")
         return 1
     run = {
-        "cases_file": CASES.name,
+        "cases_file": args.cases.name,
         "git_commit": code["commit"],
         "scorer_version": LATEST_SCORER,
         "date": date.today().isoformat(),
@@ -105,7 +107,8 @@ def main(argv: list[str]) -> int:
         RUNS.mkdir(exist_ok=True)
         model = run["model"].replace(":", "-").replace("/", "-")
         # Repeat runs of the same code get -2, -3, ... (never overwrite a record).
-        stem = f"{run['date']}-{model}-{code['commit'][:7]}"
+        case_set = args.cases.stem.removeprefix("cases-")
+        stem = f"{run['date']}-{model}-{code['commit'][:7]}" + ("" if case_set == "v1" else f"-{case_set}")
         path, repeat = RUNS / f"{stem}.json", 1
         while path.exists():
             repeat += 1
