@@ -10,6 +10,7 @@ new run gets a new file. CI re-scores saved runs (tests/test_evaluation.py).
 """
 
 import argparse
+import inspect
 import json
 import platform
 import subprocess
@@ -39,23 +40,37 @@ def git_state() -> dict:
     return {"commit": git("rev-parse", "HEAD"), "uncommitted_changes": bool(changes)}
 
 
+# Multi-turn cases list earlier questions under "context". They are asked first,
+# in order, in the same conversation; the case is scored on the final answer. An
+# agent without conversation memory answers each question on its own.
+AGENT_HAS_MEMORY = "history" in inspect.signature(ask).parameters
+
+
+def _turn(result, question: str, seconds: float) -> dict:
+    return {"question": question, "answer": result.answer, "steps": result.steps,
+            "grounding": result.grounding, "checks": result.checks, "revisions": result.revisions,
+            "seconds": round(seconds, 1)}
+
+
 def run_case(agent, case: dict) -> dict:
     start = time.time()
+    questions = case.get("context", []) + [case["question"]]
+    turns, history = [], []
     try:
-        result = ask(agent, case["question"])
+        for question in questions:
+            turn_start = time.time()
+            result = ask(agent, question, history=history) if AGENT_HAS_MEMORY else ask(agent, question)
+            history.append(result)
+            turns.append(_turn(result, question, time.time() - turn_start))
     except Exception as error:  # record the failure; it scores as a fail
         return {"id": case["id"], "question": case["question"], "answer": "", "steps": [],
-                "grounding": {}, "checks": [], "error": str(error), "seconds": round(time.time() - start, 1)}
-    return {
-        "id": case["id"],
-        "question": case["question"],
-        "answer": result.answer,
-        "steps": result.steps,
-        "grounding": result.grounding,
-        "checks": result.checks,
-        "revisions": result.revisions,
-        "seconds": round(time.time() - start, 1),
-    }
+                "grounding": {}, "checks": [], "error": str(error), "seconds": round(time.time() - start, 1),
+                **({"turns": turns} if case.get("context") else {})}
+    record = {"id": case["id"], **turns[-1], "seconds": round(time.time() - start, 1)}
+    if case.get("context"):
+        record["turns"] = turns
+        record["memory"] = AGENT_HAS_MEMORY
+    return record
 
 
 def main(argv: list[str]) -> int:

@@ -122,8 +122,10 @@ def score_case(case: dict, record: dict, scorer: str = LATEST_SCORER) -> dict:
         problems["citations"].append(f"cites {', '.join(sorted(cited))} where nothing should be cited")
     for citation in record["grounding"].get("unknown_citations", []):
         problems["citations"].append(f"cites {citation}, which no tool returned")
-    evidence = _norm(" ".join([record.get("question", case["question"])]
-                              + [s for step in steps if step["ok"]
+    # In a multi-turn case, earlier questions and tool results are evidence too.
+    turns = record.get("turns") or [record]
+    evidence = _norm(" ".join([record.get("question", case["question"]), *case.get("context", [])]
+                              + [s for turn in turns for step in turn["steps"] if step["ok"]
                                  for s in _strings(step["result"], keys=scorer >= "1.2")]))
     for quote in quotations(answer, scorer):
         if _norm(quote).strip(" .,;:") not in evidence:

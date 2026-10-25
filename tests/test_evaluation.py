@@ -38,7 +38,8 @@ def test_frozen_cases_are_unchanged(path):
 
 @pytest.mark.parametrize("path, expected_count", [(ROOT / "eval" / "cases-v1.json", 30),
                                                   (ROOT / "eval" / "cases-v2.json", 20),
-                                                  (ROOT / "eval" / "cases-v3.json", 14)])
+                                                  (ROOT / "eval" / "cases-v3.json", 14),
+                                                  (ROOT / "eval" / "cases-v4.json", 12)])
 def test_case_ids_are_unique_and_well_formed(path, expected_count):
     cases = load_cases(path)
     assert len({c["id"] for c in cases}) == len(cases) == expected_count
@@ -49,7 +50,7 @@ def test_case_ids_are_unique_and_well_formed(path, expected_count):
 
 def test_later_sets_ask_new_questions():
     seen = set()
-    for name in ("cases-v1.json", "cases-v2.json", "cases-v3.json"):
+    for name in ("cases-v1.json", "cases-v2.json", "cases-v3.json", "cases-v4.json"):
         questions = {c["question"] for c in load_cases(ROOT / "eval" / name)}
         assert not seen & questions, name
         seen |= questions
@@ -227,3 +228,35 @@ def test_model_comparison_matches_the_recorded_runs():
 
     committed = json.loads((ROOT / "eval" / "model-comparison.json").read_text())
     assert committed == json.loads(json.dumps(compare_models.compare()))
+
+
+def test_multi_turn_cases_take_evidence_from_earlier_turns():
+    case = {"id": "T5", "category": "follow-up", "context": ["2BR in Marina?"], "question": "Compare the first two.",
+            "tools_required": ["compare_properties"], "facts": [{"number": 143.7}], "citations_required": ["L0435"]}
+    first = {"question": "2BR in Marina?", "steps": [STEP], "answer": "L0435 ..."}
+    compare = {"tool": "compare_properties", "ok": True, "arguments": {}, "result": {"price_per_sqft": 143.7}}
+    final = {"question": case["question"], "answer": 'L0435 is "A quiet flat near the marina walk" at 143.7 per sq ft.',
+             "steps": [compare], "grounding": OK, "turns": [first, {"steps": [compare]}]}
+    score = score_case(case, final)
+    assert score["passed"], score["problems"]  # the quote comes from the first turn's tool result
+    single = dict(final, turns=None)
+    assert not score_case(case, single)["citations"]  # without earlier turns it is not evidence
+
+
+def test_v4_expected_values_match_the_tools():
+    conn = connect()
+    jlt = search_listings(conn, purpose="rent", area="JLT", bedrooms=2, max_price=170000)
+    assert [r["listing_id"] for r in jlt["results"][:2]] == ["L0566", "L0403"]
+    assert compare_properties(conn, ["L0435", "L0503"])["lowest_price_per_sqft"] == "L0435"
+    assert area_price_stats(conn, "Deira")["price_per_sqft_change_pct"] == 7.4
+    afford = mortgage_calculator(property_price=1_800_000, annual_rate_pct=4.5, monthly_income=20_000)
+    assert (afford["debt_burden_pct"], afford["within_debt_burden_cap"]) == (40.0, True)
+    best = compare_properties(conn, ["L0403", "L0545", "L0198"])
+    assert best["lowest_price_per_sqft"] == "L0545"
+    deira = search_listings(conn, purpose="rent", area="Deira", bedrooms=0, limit=1)["results"][0]
+    assert deira["listing_id"] == "L0576"
+    pair = {x["listing_id"]: x["price_per_sqft"] for x in compare_properties(conn, ["L0562", "L0576"])["listings"]}
+    assert pair == {"L0562": 59.3, "L0576": 52.4}
+    national = mortgage_calculator(property_price=2_500_000, annual_rate_pct=4.5, buyer="national")
+    assert (national["minimum_down_payment"], national["monthly_payment"]) == (375_000, 11811)
+    assert area_price_stats(conn, "Palm Jumeirah", property_type="villa")["price_per_sqft_change_pct"] == 11.0
