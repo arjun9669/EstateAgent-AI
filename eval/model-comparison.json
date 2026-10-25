@@ -1,0 +1,150 @@
+{
+ "scorer_version": "1.2",
+ "agent_commits": [
+  "9e71263",
+  "c8a8d8b"
+ ],
+ "models": {
+  "ollama:gemma4:cloud": {
+   "sets": {
+    "cases-v1.json": {
+     "cases": 30,
+     "runs": [
+      30,
+      30
+     ],
+     "tool_choice": [
+      30,
+      30
+     ],
+     "correctness": [
+      30,
+      30
+     ],
+     "citations": [
+      30,
+      30
+     ],
+     "grounding": [
+      30,
+      30
+     ]
+    },
+    "cases-v2.json": {
+     "cases": 20,
+     "runs": [
+      20,
+      20
+     ],
+     "tool_choice": [
+      20,
+      20
+     ],
+     "correctness": [
+      20,
+      20
+     ],
+     "citations": [
+      20,
+      20
+     ],
+     "grounding": [
+      20,
+      20
+     ]
+    },
+    "cases-v3.json": {
+     "cases": 14,
+     "runs": [
+      14,
+      14
+     ],
+     "tool_choice": [
+      14,
+      14
+     ],
+     "correctness": [
+      14,
+      14
+     ],
+     "citations": [
+      14,
+      14
+     ],
+     "grounding": [
+      14,
+      14
+     ]
+    }
+   },
+   "answers_with_field_names": 0,
+   "answers": 128,
+   "errors": 0,
+   "median_seconds_per_question": 1.6,
+   "max_seconds_per_question": 10.0
+  },
+  "ollama:qwen3:4b": {
+   "sets": {
+    "cases-v2.json": {
+     "cases": 20,
+     "runs": [
+      4
+     ],
+     "tool_choice": [
+      20
+     ],
+     "correctness": [
+      19
+     ],
+     "citations": [
+      4
+     ],
+     "grounding": [
+      12
+     ]
+    },
+    "cases-v3.json": {
+     "cases": 14,
+     "runs": [
+      3
+     ],
+     "tool_choice": [
+      14
+     ],
+     "correctness": [
+      13
+     ],
+     "citations": [
+      3
+     ],
+     "grounding": [
+      7
+     ]
+    },
+    "cases-v1.json": {
+     "cases": 30,
+     "runs": [
+      8
+     ],
+     "tool_choice": [
+      29
+     ],
+     "correctness": [
+      24
+     ],
+     "citations": [
+      10
+     ],
+     "grounding": [
+      23
+     ]
+    }
+   },
+   "answers_with_field_names": 52,
+   "answers": 64,
+   "errors": 0,
+   "median_seconds_per_question": 140.4,
+   "max_seconds_per_question": 619.3
+  }
+ }
+}

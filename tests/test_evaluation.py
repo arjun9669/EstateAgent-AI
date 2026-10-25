@@ -218,3 +218,12 @@ def test_scorer_1_2_finds_quotes_in_field_names():
     answer = 'The "DLD transfer fee (4% of price)" is AED 60,000.'
     assert not score_case(case, record(answer, [step]), "1.1")["citations"]
     assert score_case(case, record(answer, [step]), "1.2")["citations"]
+
+
+def test_model_comparison_matches_the_recorded_runs():
+    import sys
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import compare_models
+
+    committed = json.loads((ROOT / "eval" / "model-comparison.json").read_text())
+    assert committed == json.loads(json.dumps(compare_models.compare()))

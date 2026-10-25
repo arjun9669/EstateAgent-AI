@@ -33,8 +33,9 @@ result. Listings are synthetic.*
 - **Measured, not assumed.** Three frozen question sets (64 questions), each change
   checked on a set written before it, every run recorded and re-scored in CI, and
   every failure read by hand, including two bugs found in the scorer itself.
-- **Free to run.** Local or cloud models through Ollama with no key in the project,
-  or Groq's free API; hosted on Streamlit Community Cloud.
+- **Free to run, model-agnostic.** Local or cloud models through Ollama with no key
+  in the project, or Groq's free API; hosted on Streamlit Community Cloud. The same
+  evaluation compares models (gemma4 31B in the cloud against qwen3 4B on an 8 GB desktop).
 - **Tested.** 150+ tests, offline in CI with a scripted model and a stand-in embedder.
 
 ## Architecture
@@ -95,6 +96,20 @@ sets are small and author-written on synthetic data, so they show which behaviou
 are stable, not real-world accuracy. Protocol, every failure and its reading, and
 the scorer fixes: [docs/EVALUATION.md](docs/EVALUATION.md).
 
+### Models
+
+Same agent, prompt, tools and 64 questions; only the model changes:
+
+| Model | Runs on | Cases passing all four checks | Median time per question |
+|---|---|---:|---:|
+| `gemma4:cloud` (31B) | Ollama cloud, free plan | **64 / 64** (two runs) | **1.6 s** |
+| `qwen3:4b` | Locally, M1 iMac, 8 GB | **15 / 64** (one run) | **140 s** |
+
+qwen3:4b chose the right tools in 63 of 64 cases and had the right facts in 56, but
+wrote its reasoning and the grounding check's feedback into its answers, which broke
+citations. Groq's Llama 70B is planned; the account was restricted during testing.
+[Details](docs/EVALUATION.md#model-comparison).
+
 ## Run it yourself
 
 Requires Python 3.11+.
@@ -142,11 +157,11 @@ src/estate_agent/
   config.py         Model settings: Ollama (local or cloud) or Groq
   evaluation.py     Scores recorded answers on the four dimensions
   data.py, areas.py, dld.py   Data loading, Dubai areas, DLD transactions loader
-scripts/            ask, run_eval, compare_runs, variation, rescore_runs, record_demo,
+scripts/            ask, run_eval, compare_runs, compare_models, variation, rescore_runs, record_demo,
                     fetch_rules, generate_sample_data, load_dld_transactions
 data/sample/        Synthetic listings and transactions (reproducible from a seed)
 data/rules/         Dubai tenancy legislation, one section per article
-eval/               Frozen question sets, recorded runs, variation reports
+eval/               Frozen question sets, recorded runs, variation and model reports
 docs/               EVALUATION, DATA_SOURCES, HOSTING, SAMPLE_RUN
 ```
 

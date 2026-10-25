@@ -299,12 +299,55 @@ Reports: [v3 before](../eval/variation-v3-before-mortgage-checks.json),
   correct; v3, written to avoid those phrase problems, is 14/14 both before and after.
 - Tool choice and grounding were full marks in every run.
 
+## Model comparison
+
+Same agent code, prompt, tools and question sets; only the model changes
+(scorer 1.2, report: [`eval/model-comparison.json`](../eval/model-comparison.json),
+script: `scripts/compare_models.py`).
+
+| Model | Where it runs | v1 (30) | v2 (20) | v3 (14) | All 64 | Median time per question | Answers showing field names |
+|---|---|---|---|---|---:|---:|---:|
+| `gemma4:cloud` (31B) | Ollama cloud, free plan | 30, 30 | 20, 20 | 14, 14 | **100%** | **1.6 s** | 0 / 128 |
+| `qwen3:4b` | Locally, Apple M1, 8 GB | 8 | 4 | 3 | **23%** | **140 s** (max 619 s) | 52 / 64 |
+
+gemma4 has two runs per set; qwen3:4b one, which took 3 h 37 min. Groq's
+`llama-3.3-70b-versatile` was planned but could not be tested: the Groq account
+returned "organization_restricted" on every request.
+
+Per dimension for qwen3:4b (of 64): tool choice **63**, correctness **56**,
+grounding 42, citations **17**.
+
+**Reading the qwen3:4b answers:**
+
+- **It picks the right tools and usually finds the right facts.** Tool choice
+  failed once and the expected facts were present in 56 of 64 answers, so the tools
+  and prompts work with a much smaller model.
+- **It writes its reasoning into the answer.** Answers often start "Okay, let me
+  process this…" and walk through the tool output by its field names, even with
+  thinking mode turned off. That is the 52 field-name answers.
+- **It treats a revision request as a chat message.** In 23 answers it echoes the
+  agent's instructions or the grounding check's feedback ("They said my previous
+  answer had figures… not in the tool results"). Those echoes are quoted text that no
+  tool returned, which is why citations pass only 17 times: 46 of the 47 citation
+  failures are quotes that are not word for word from a tool.
+- **The grounding check works on the weaker model.** It caught figures qwen worked
+  out itself, for example a 7.3% total-price change when the tool reported only the
+  8.0% change in price per square foot.
+
+**Takeaway:** the agent design carries over to a small local model for choosing tools
+and finding facts, but a 4B model on an 8 GB Apple M1 is too slow (about 150× slower)
+and too loose with its answer format for this use. Running gemma4 on Ollama's cloud
+is the right default; a local model would need a stricter final-answer step (for
+example, a separate call that only rewrites the checked facts) rather than more prompting.
+
 ## What to do next
 
-1. Milestone 6: README polish with a demo GIF, an architecture diagram and a
-   release tag.
-2. When the agent changes again, keep the same routine: write the next held-out
-   set first, run twice before and twice after, and read every failure by hand.
+1. If the Groq account is unblocked, add `llama-3.3-70b-versatile` to the model
+   comparison (`LLM_PROVIDER=groq`, then `scripts/compare_models.py`).
+2. Follow-up questions (conversation memory), with a held-out set of multi-turn
+   questions written before the change.
+3. For local models: a final-answer step that rewrites only checked facts, measured
+   on qwen3:4b against this run.
 
 ## Limits
 

@@ -326,6 +326,51 @@
     "citations": 14
    },
    "changed_cases": []
+  },
+  {
+   "run": "2026-10-25-qwen3-4b-c8a8d8b-v2.json",
+   "cases_file": "cases-v2.json",
+   "cases": 20,
+   "original_scorer": "1.2",
+   "original": {
+    "passed": 4,
+    "citations": 4
+   },
+   "latest": {
+    "passed": 4,
+    "citations": 4
+   },
+   "changed_cases": []
+  },
+  {
+   "run": "2026-10-25-qwen3-4b-c8a8d8b-v3.json",
+   "cases_file": "cases-v3.json",
+   "cases": 14,
+   "original_scorer": "1.2",
+   "original": {
+    "passed": 3,
+    "citations": 3
+   },
+   "latest": {
+    "passed": 3,
+    "citations": 3
+   },
+   "changed_cases": []
+  },
+  {
+   "run": "2026-10-25-qwen3-4b-c8a8d8b.json",
+   "cases_file": "cases-v1.json",
+   "cases": 30,
+   "original_scorer": "1.2",
+   "original": {
+    "passed": 8,
+    "citations": 10
+   },
+   "latest": {
+    "passed": 8,
+    "citations": 10
+   },
+   "changed_cases": []
   }
  ]
 }
