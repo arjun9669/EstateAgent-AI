@@ -1,5 +1,5 @@
 {
- "scorer_version": "1.1",
+ "scorer_version": "1.2",
  "runs": [
   {
    "run": "2026-10-24-gemma4-cloud-06ba204.json",
@@ -138,10 +138,17 @@
     "citations": 29
    },
    "latest": {
-    "passed": 29,
-    "citations": 29
+    "passed": 30,
+    "citations": 30
    },
-   "changed_cases": []
+   "changed_cases": [
+    {
+     "id": "G4",
+     "was": "FAIL",
+     "now": "PASS",
+     "problems_now": []
+    }
+   ]
   },
   {
    "run": "2026-10-25-gemma4-cloud-9d81aaa-v2-2.json",
@@ -168,10 +175,127 @@
     "citations": 19
    },
    "latest": {
-    "passed": 18,
-    "citations": 19
+    "passed": 19,
+    "citations": 20
+   },
+   "changed_cases": [
+    {
+     "id": "N7",
+     "was": "FAIL",
+     "now": "PASS",
+     "problems_now": []
+    }
+   ]
+  },
+  {
+   "run": "2026-10-25-gemma4-cloud-9e71263-2.json",
+   "cases_file": "cases-v1.json",
+   "cases": 30,
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 28,
+    "citations": 28
+   },
+   "latest": {
+    "passed": 30,
+    "citations": 30
+   },
+   "changed_cases": [
+    {
+     "id": "G5",
+     "was": "FAIL",
+     "now": "PASS",
+     "problems_now": []
+    },
+    {
+     "id": "X3",
+     "was": "FAIL",
+     "now": "PASS",
+     "problems_now": []
+    }
+   ]
+  },
+  {
+   "run": "2026-10-25-gemma4-cloud-9e71263-v2-2.json",
+   "cases_file": "cases-v2.json",
+   "cases": 20,
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 20,
+    "citations": 20
+   },
+   "latest": {
+    "passed": 20,
+    "citations": 20
    },
    "changed_cases": []
+  },
+  {
+   "run": "2026-10-25-gemma4-cloud-9e71263-v2.json",
+   "cases_file": "cases-v2.json",
+   "cases": 20,
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 20,
+    "citations": 20
+   },
+   "latest": {
+    "passed": 20,
+    "citations": 20
+   },
+   "changed_cases": []
+  },
+  {
+   "run": "2026-10-25-gemma4-cloud-9e71263-v3-2.json",
+   "cases_file": "cases-v3.json",
+   "cases": 14,
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 14,
+    "citations": 14
+   },
+   "latest": {
+    "passed": 14,
+    "citations": 14
+   },
+   "changed_cases": []
+  },
+  {
+   "run": "2026-10-25-gemma4-cloud-9e71263-v3.json",
+   "cases_file": "cases-v3.json",
+   "cases": 14,
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 14,
+    "citations": 14
+   },
+   "latest": {
+    "passed": 14,
+    "citations": 14
+   },
+   "changed_cases": []
+  },
+  {
+   "run": "2026-10-25-gemma4-cloud-9e71263.json",
+   "cases_file": "cases-v1.json",
+   "cases": 30,
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 29,
+    "citations": 29
+   },
+   "latest": {
+    "passed": 30,
+    "citations": 30
+   },
+   "changed_cases": [
+    {
+     "id": "X3",
+     "was": "FAIL",
+     "now": "PASS",
+     "problems_now": []
+    }
+   ]
   },
   {
    "run": "2026-10-25-gemma4-cloud-e570f60-v3-2.json",

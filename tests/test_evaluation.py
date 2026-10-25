@@ -209,3 +209,12 @@ def test_field_name_leaks():
     assert field_name_leaks('It is "within_debt_burden_cap"; dld_transfer_fee AED 4, ok.') == [
         "dld_transfer_fee", "within_debt_burden_cap"]
     assert field_name_leaks("The DLD transfer fee is AED 72,000.") == []
+
+
+def test_scorer_1_2_finds_quotes_in_field_names():
+    case = {"id": "T4", "category": "mortgage", "question": "q", "facts": [{"number": 60000}]}
+    step = {"tool": "mortgage_calculator", "ok": True, "arguments": {},
+            "result": {"upfront costs (AED)": {"DLD transfer fee (4% of price)": 60000}}}
+    answer = 'The "DLD transfer fee (4% of price)" is AED 60,000.'
+    assert not score_case(case, record(answer, [step]), "1.1")["citations"]
+    assert score_case(case, record(answer, [step]), "1.2")["citations"]

@@ -1,0 +1,75 @@
+{
+ "scorer_version": "1.2",
+ "cases_file": "cases-v3.json",
+ "runs": [
+  "2026-10-25-gemma4-cloud-e570f60-v3.json",
+  "2026-10-25-gemma4-cloud-e570f60-v3-2.json"
+ ],
+ "commits": [
+  "e570f60"
+ ],
+ "totals": {
+  "passed": {
+   "values": [
+    14,
+    14
+   ],
+   "min": 14,
+   "max": 14
+  },
+  "tool_choice": {
+   "values": [
+    14,
+    14
+   ],
+   "min": 14,
+   "max": 14
+  },
+  "correctness": {
+   "values": [
+    14,
+    14
+   ],
+   "min": 14,
+   "max": 14
+  },
+  "citations": {
+   "values": [
+    14,
+    14
+   ],
+   "min": 14,
+   "max": 14
+  },
+  "grounding": {
+   "values": [
+    14,
+    14
+   ],
+   "min": 14,
+   "max": 14
+  }
+ },
+ "always_pass": 14,
+ "never_pass": [],
+ "unstable": {},
+ "answers_with_field_names": {
+  "count": 2,
+  "of": 28,
+  "where": {
+   "2026-10-25-gemma4-cloud-e570f60-v3.json:D3": [
+    "agency_commission_incl_vat",
+    "dld_transfer_fee",
+    "mortgage_registration_fee"
+   ],
+   "2026-10-25-gemma4-cloud-e570f60-v3-2.json:D3": [
+    "agency_commission_incl_vat",
+    "cash_needed_at_purchase",
+    "debt_burden_pct",
+    "dld_transfer_fee",
+    "monthly_payment",
+    "mortgage_registration_fee"
+   ]
+  }
+ }
+}

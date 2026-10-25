@@ -1,5 +1,5 @@
 {
- "scorer_version": "1.1",
+ "scorer_version": "1.2",
  "cases_file": "cases-v2.json",
  "runs": [
   "2026-10-25-gemma4-cloud-27079b6-v2.json",
@@ -56,5 +56,10 @@
  ],
  "unstable": {
   "W4": "PF"
+ },
+ "answers_with_field_names": {
+  "count": 0,
+  "of": 40,
+  "where": {}
  }
 }

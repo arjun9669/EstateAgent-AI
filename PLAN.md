@@ -63,7 +63,9 @@ Each tool returns JSON with a `source` field so the agent can cite it.
    with gemma4:cloud: 27/30. Hybrid law search and a quotation rule fixed all three
    failures; four runs of that version score 28-29/30 (scorer 1.1). A rule to pass
    on tool warnings fixed the last consistent failure and was checked on a
-   held-out set (cases-v2): v1 29-30/30, v2 18-19/20 ([docs/EVALUATION.md](docs/EVALUATION.md)).
+   held-out set (cases-v2). Plain-English mortgage checks removed field names from
+   answers (3/128 to 0/128) and were checked on a further held-out set (cases-v3):
+   v1 30/30, v2 20/20, v3 14/14 in two runs each ([docs/EVALUATION.md](docs/EVALUATION.md)).
 6. **Polish** *(next)*: README with demo GIF, architecture diagram, release tag.
 
 ## Ground rules

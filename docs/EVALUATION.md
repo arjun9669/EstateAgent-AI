@@ -197,7 +197,7 @@ fails (for example that prices are not directly comparable, that there are too f
 sales to rely on, or that a down payment or debt burden is outside the limits),
 tell the user plainly, even if they did not ask.*
 
-### Results: two runs before and two after, scorer 1.1
+### Results: two runs before and two after, scorer 1.1 (re-scored with 1.2 in the next section)
 
 | Set | Before (prompt at `9d81aaa`) | After (prompt at `27079b6`) |
 |---|---|---|
@@ -224,23 +224,98 @@ Counting W4's false fail as a pass, the held-out set is 19/20 in both runs after
 the change, against 18/20 before; the remaining miss (N7) is a case-design issue.
 v1 reached 30/30 for the first time.
 
+## Plain-language mortgage checks, checked on a second held-out set
+
+### What was still wrong
+
+- **Field names in answers.** Answers sometimes showed the mortgage tool's raw
+  field names, such as `within_debt_burden_cap` or `dld_transfer_fee`. Quoted, that
+  failed v1 G4; unquoted, the scorer did not notice at all. Counted over every
+  answer at the warnings-rule code (`27079b6`): **3 of 128** answers showed one.
+- **Two v2 cases asked for the wrong thing** (see above): W4's phrase list lacked
+  "outside", and N7 expected a 50% figure its question did not ask for.
+
+### The held-out set: [`eval/cases-v3.json`](../eval/cases-v3.json)
+
+Written and committed (`e570f60`) before the tool change and before any run: 14
+new questions. Seven are mortgage checks: down payments under the cap for an
+expatriate and a national, debt burden over and within the limit, off-plan, and
+second homes. The rest cover listings, comparison, market, law and out-of-scope.
+The two v2 case-design issues are corrected with new questions, not by editing
+v2: the down-payment cases accept "outside", and separate off-plan questions ask
+for the amount (D5) and the percentage (D6).
+
+### The change (commit `9e71263`)
+
+`mortgage_calculator`, the tool the agent sees, now:
+
+- names its figures in plain English ("monthly payment (AED)", "DLD transfer fee
+  (4% of price)");
+- states each check as a sentence, for example *"The monthly payment is 59.3% of
+  monthly income, above the 50% debt burden limit. The limit covers all debt
+  repayments; this counts only this mortgage."*
+
+The maths moved unchanged to `calculate_mortgage`, which keeps code-style keys for
+code and tests. No prompt change.
+
+### Scorer 1.2
+
+After the change, two v1 answers put the new plain-English labels in quotation
+marks ("DLD transfer fee (4% of price)"). Those quotes are word for word from the
+tool result, but scorer 1.1 only searched the result's values, not its field
+names, so it failed them. **Scorer 1.2** also searches field names. Recorded
+runs keep their original scores; every run re-scored with 1.2 is in
+[`eval/rescored-latest.json`](../eval/rescored-latest.json).
+
+One side effect: a quoted raw field name such as "within_debt_burden_cap" now
+passes the citation check, since it is word for word in the tool result. That is
+a style problem rather than a faithfulness one, so it is now counted separately as
+"answers showing code-style field names" ([`field_name_leaks`](../src/estate_agent/evaluation.py)),
+reported next to the scores and not part of pass/fail.
+
+### Results: two runs of each set before and after, scorer 1.2
+
+| Set | Before (`27079b6` / `e570f60`) | After (`9e71263`) |
+|---|---|---|
+| v3, held out (14) | 14, 14 | **14, 14** |
+| v2, held out (20) | 19, 18 | **20, 20** |
+| v1 (30) | 30, 30 | **30, 30** |
+| Answers showing code-style field names | **3 / 128** | **0 / 128** |
+
+Reports: [v3 before](../eval/variation-v3-before-mortgage-checks.json),
+[v3 after](../eval/variation-v3-after-mortgage-checks.json),
+[v2 after](../eval/variation-v2-after-mortgage-checks.json),
+[v1 after](../eval/variation-v1-after-mortgage-checks.json).
+
+**Reading the result:**
+
+- The corrected v3 cases passed before the change too, which confirms that v2's
+  W4 and N7 failures were case-design issues, not agent errors.
+- The clear effect of the change is the field-name count: 3 of 128 answers before,
+  none after.
+- v2 rising to 20/20 is partly a wording effect. The new check sentences say
+  "below the minimum" and "banks can lend at most 50%", which match the phrases
+  v2's frozen W4 and N7 cases look for. It does not show the agent became more
+  correct; v3, written to avoid those phrase problems, is 14/14 both before and after.
+- Tool choice and grounding were full marks in every run.
+
 ## What to do next
 
-1. **cases-v3 for the case-design issues:** accept "outside the limits" in W4 and
-   drop the unasked-for 50% from N7. Add new questions rather than editing v2, and
-   report v2 scores unchanged.
-2. **Field names in quotes (G4):** the prompt rule alone does not stop it every
-   time. A cheaper fix is in the tools: give the agent plain-language warnings
-   ("within the 50% debt burden limit") instead of boolean field names.
-3. Keep running every change at least twice on both sets.
+1. Milestone 6: README polish with a demo GIF, an architecture diagram and a
+   release tag.
+2. When the agent changes again, keep the same routine: write the next held-out
+   set first, run twice before and twice after, and read every failure by hand.
 
 ## Limits
 
-- 50 author-written questions on synthetic data; passing them says little about
+- 64 author-written questions on synthetic data; passing them says little about
   real listings or questions phrased very differently.
 - Phrase checks (for example "either party", "rough") can miss a correct answer
-  worded another way (W4 above); each failure was read by hand.
+  worded another way, or reward a tool's wording (v2 above); each failure was read
+  by hand.
 - Two to four runs per configuration is a small sample; it shows which cases are
   stable, not precise rates.
-- cases-v2 was written by the same person who wrote the prompt change, so it is
-  held out from the change, not independent of the author.
+- The held-out sets were written by the same person who made the changes, so they
+  are held out from each change, not independent of the author.
+- The scorer was corrected twice after seeing results (1.1, 1.2). Each time the
+  original scores were kept and the re-scored ones shown alongside.

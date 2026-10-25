@@ -1,0 +1,61 @@
+{
+ "scorer_version": "1.2",
+ "cases_file": "cases-v1.json",
+ "runs": [
+  "2026-10-25-gemma4-cloud-9e71263.json",
+  "2026-10-25-gemma4-cloud-9e71263-2.json"
+ ],
+ "commits": [
+  "9e71263"
+ ],
+ "totals": {
+  "passed": {
+   "values": [
+    30,
+    30
+   ],
+   "min": 30,
+   "max": 30
+  },
+  "tool_choice": {
+   "values": [
+    30,
+    30
+   ],
+   "min": 30,
+   "max": 30
+  },
+  "correctness": {
+   "values": [
+    30,
+    30
+   ],
+   "min": 30,
+   "max": 30
+  },
+  "citations": {
+   "values": [
+    30,
+    30
+   ],
+   "min": 30,
+   "max": 30
+  },
+  "grounding": {
+   "values": [
+    30,
+    30
+   ],
+   "min": 30,
+   "max": 30
+  }
+ },
+ "always_pass": 30,
+ "never_pass": [],
+ "unstable": {},
+ "answers_with_field_names": {
+  "count": 0,
+  "of": 60,
+  "where": {}
+ }
+}

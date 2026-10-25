@@ -64,22 +64,22 @@ question ─▶ agent ──tool calls──▶ tools ──results──▶ age
 
 ## Evaluation
 
-Frozen question sets ([v1](eval/cases-v1.json), 30 questions; [v2](eval/cases-v2.json),
-20 held-out questions) score each answer on tool choice, correctness, citation
-support and grounding, with `gemma4:cloud` (cases passing all four, per run):
+Three frozen question sets ([v1](eval/cases-v1.json), [v2](eval/cases-v2.json) and
+[v3](eval/cases-v3.json); v2 and v3 written before the changes they test) score each
+answer on tool choice, correctness, citation support and grounding, with
+`gemma4:cloud` (cases passing all four, per run):
 
-| Configuration | v1 (30 questions) | v2, held out (20 questions) |
-|---|---|---|
-| Meaning-only law search | **27** (1 run) | — |
-| + hybrid law search, quotation rule | **28, 29, 29, 29** | **18, 18** |
-| + pass on tool warnings | **29, 30** | **19, 18** |
+| Configuration | v1 (30) | v2, held out (20) | v3, held out (14) | Answers showing field names |
+|---|---|---|---|---:|
+| Meaning-only law search | **27** (1 run) | — | — | — |
+| + hybrid law search, quotation rule | **28, 29, 29, 29** | **19, 18** | — | 2 / 160 |
+| + pass on tool warnings | **30, 30** | **19, 18** | **14, 14** | 3 / 128 |
+| + plain-English mortgage checks | **30, 30** | **20, 20** | **14, 14** | **0 / 128** |
 
-Tool choice and grounding are full marks in every run. Each fix was checked on
-a held-out set written before the change: passing on tool warnings fixed the
-comparison warning there too (W1), and the remaining held-out misses are a phrase
-the scorer didn't list and a case that asks for more than its question does.
-Every run is recorded and explained, including a scorer bug found and fixed along
-the way: [docs/EVALUATION.md](docs/EVALUATION.md).
+Scores use scorer 1.2. Tool choice and grounding are full marks in every run.
+Each change was checked on a held-out set written before it, and every failure
+was read by hand. Two scorer bugs were found and fixed along the way; original
+scores are kept next to the re-scored ones: [docs/EVALUATION.md](docs/EVALUATION.md).
 
 ## Try the tools
 

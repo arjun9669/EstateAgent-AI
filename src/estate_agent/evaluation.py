@@ -18,6 +18,10 @@ stored results can always be reproduced; newer versions are reported alongside.
        characters was skipped and the search restarted at its closing mark, so
        the text *between* two quotes ("2138.9" AED. This is a "5.3") was checked
        as if it were a quote.
+  1.2  quotations are also found in the names of tool result fields, not only
+       their values. Once the mortgage tool used plain-English names, the model
+       quoted them ("DLD transfer fee (4% of price)") and 1.1 failed those
+       accurate quotes.
 """
 
 import json
@@ -28,8 +32,8 @@ from pathlib import Path
 from estate_agent.grounding import LISTING_ID, PASSAGE_ID, _matches, numbers_in
 
 DIMENSIONS = ("tool_choice", "correctness", "citations", "grounding")
-SCORER_VERSIONS = ("1.0", "1.1")
-LATEST_SCORER = "1.1"
+SCORER_VERSIONS = ("1.0", "1.1", "1.2")
+LATEST_SCORER = "1.2"
 MIN_QUOTE_CHARS = 12
 _QUOTE_1_0 = re.compile(r"[\"“]([^\"”]{12,})[\"”]")
 _QUOTE_PAIR = re.compile(r"[\"“]([^\"”]*)[\"”]")
@@ -55,14 +59,14 @@ def _norm(text: str) -> str:
     return " ".join(text.lower().split())
 
 
-def _strings(value) -> list[str]:
-    """All string values inside a JSON-like structure."""
+def _strings(value, keys: bool = False) -> list[str]:
+    """All string values inside a JSON-like structure, and its keys if keys=True."""
     if isinstance(value, str):
         return [value]
     if isinstance(value, dict):
-        return [s for v in value.values() for s in _strings(v)]
+        return [s for k, v in value.items() for s in ([k] if keys else []) + _strings(v, keys)]
     if isinstance(value, list):
-        return [s for v in value for s in _strings(v)]
+        return [s for v in value for s in _strings(v, keys)]
     return []
 
 
@@ -119,7 +123,8 @@ def score_case(case: dict, record: dict, scorer: str = LATEST_SCORER) -> dict:
     for citation in record["grounding"].get("unknown_citations", []):
         problems["citations"].append(f"cites {citation}, which no tool returned")
     evidence = _norm(" ".join([record.get("question", case["question"])]
-                              + [s for step in steps if step["ok"] for s in _strings(step["result"])]))
+                              + [s for step in steps if step["ok"]
+                                 for s in _strings(step["result"], keys=scorer >= "1.2")]))
     for quote in quotations(answer, scorer):
         if _norm(quote).strip(" .,;:") not in evidence:
             problems["citations"].append(f"quote not found word for word: \"{quote[:60]}\"")

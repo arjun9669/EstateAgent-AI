@@ -1,5 +1,6 @@
 {
- "scorer_version": "1.1",
+ "scorer_version": "1.2",
+ "cases_file": "cases-v1.json",
  "runs": [
   "2026-10-24-gemma4-cloud-06ba204.json",
   "2026-10-24-gemma4-cloud-e3d7bde.json",
@@ -68,5 +69,10 @@
  ],
  "unstable": {
   "G1": "FPPP"
+ },
+ "answers_with_field_names": {
+  "count": 0,
+  "of": 120,
+  "where": {}
  }
 }
