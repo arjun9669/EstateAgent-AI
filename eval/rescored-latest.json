@@ -172,6 +172,36 @@
     "citations": 19
    },
    "changed_cases": []
+  },
+  {
+   "run": "2026-10-25-gemma4-cloud-e570f60-v3-2.json",
+   "cases_file": "cases-v3.json",
+   "cases": 14,
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 14,
+    "citations": 14
+   },
+   "latest": {
+    "passed": 14,
+    "citations": 14
+   },
+   "changed_cases": []
+  },
+  {
+   "run": "2026-10-25-gemma4-cloud-e570f60-v3.json",
+   "cases_file": "cases-v3.json",
+   "cases": 14,
+   "original_scorer": "1.1",
+   "original": {
+    "passed": 14,
+    "citations": 14
+   },
+   "latest": {
+    "passed": 14,
+    "citations": 14
+   },
+   "changed_cases": []
   }
  ]
 }

@@ -1,0 +1,1192 @@
+{
+ "cases_file": "cases-v3.json",
+ "git_commit": "e570f601d2b9c82860c35d84116fdf2e69a4b64a",
+ "scorer_version": "1.1",
+ "date": "2026-10-25",
+ "provider": "ollama",
+ "model": "gemma4:cloud",
+ "temperature": 0,
+ "system_prompt": "You are EstateAgent AI, an assistant for the Dubai property market.\n\nRules:\n- Use the tools for every fact: listings, prices, market statistics, mortgage figures and rules. Never state a number or rule that is not in a tool result or the user's question.\n- Call as many tools as the question needs, one after another. If a tool returns an error, read it, fix the arguments and try again.\n- Cite the listing IDs (like L0435) and rule passage IDs (like law-26-2007#art14) behind each fact.\n- When you state a legal rule, keep the law's own wording for who must act (\"either party\", \"the Landlord\", \"the Tenant\"), and for its conditions and exceptions (\"unless otherwise agreed\"). Quote the key phrase. Do not narrow a rule to fit the question: if the user asks what the landlord must do and the law says either party, say either party.\n- Put quotation marks only around text copied word for word from a tool result. Never shorten a quote with \"...\"; quote a shorter exact phrase instead. Never put tool field names (like within_debt_burden_cap) in quotation marks; describe them in plain words.\n- Listings, and sales data unless a tool says otherwise, are synthetic sample data. Say so when you use them.\n- Rent prices are per year, in AED.\n- If a tool result contains a warning or a check that fails (for example that prices are not directly comparable, that there are too few sales to rely on, or that a down payment or debt burden is outside the limits), tell the user plainly, even if they did not ask.\n- If the tools cannot answer part of the question, say what is missing. Do not guess.\n- Be concise. End with: Information only, not legal or financial advice.",
+ "versions": {
+  "langgraph": "1.2.14",
+  "langchain-core": "1.6.9",
+  "langchain-ollama": "1.1.0",
+  "chromadb": "1.5.9",
+  "python": "3.12.2"
+ },
+ "results": [
+  {
+   "id": "D1",
+   "question": "I'm an expat buying my first flat for AED 1.5M and can put down AED 150,000. What would I pay each month at 4%?",
+   "answer": "Based on the figures provided, your monthly payment would be 7,126 AED.\n\nHowever, please be aware that your down payment of 150,000 AED is below the required limit. The loan-to-value ratio is 90.0%, but the maximum loan-to-value is 80.0%, meaning the minimum down payment required is 300,000 AED.\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "mortgage_calculator",
+     "arguments": {
+      "annual_rate_pct": 4,
+      "buyer": "expat",
+      "down_payment": 150000,
+      "first_home": true,
+      "property_price": 1500000
+     },
+     "ok": true,
+     "result": {
+      "source": "UAE Central Bank mortgage rules and Dubai Land Department fees, checked October 2026; lenders may apply stricter limits",
+      "loan_amount": 1350000,
+      "down_payment": 150000,
+      "loan_to_value_pct": 90.0,
+      "max_loan_to_value_pct": 80.0,
+      "meets_ltv_cap": false,
+      "minimum_down_payment": 300000,
+      "monthly_payment": 7126,
+      "total_interest": 787739,
+      "upfront_costs": {
+       "dld_transfer_fee": 60000,
+       "mortgage_registration_fee": 3375,
+       "agency_commission_incl_vat": 31500
+      },
+      "cash_needed_at_purchase": 244875,
+      "assumptions": {
+       "annual_rate_pct": 4,
+       "years": 25,
+       "buyer": "expat",
+       "first_home": true,
+       "off_plan": false,
+       "fixed_rate_for_whole_term": true
+      }
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Based on the figures provided, your monthly payment would be 7,126 AED.\n\nHowever, please be aware that your down payment of 150,000 AED is below the required limit. The loan-to-value ratio is 90.0%, but the maximum loan-to-value is 80.0%, meaning the minimum down payment required is 300,000 AED.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 2.6
+  },
+  {
+   "id": "D2",
+   "question": "I'm a UAE national buying my first home for AED 4M with a 10% deposit, at 4.5%. Is that enough?",
+   "answer": "No, a 10% deposit (AED 400,000) is not enough.\n\nAccording to the mortgage calculation:\n*   **Down Payment:** Your proposed 10% results in a loan-to-value of 90.0%, but the maximum loan-to-value is 85.0%. The minimum down payment required is \"600,000\".\n*   **Total Cash Needed:** To complete the purchase, you would need a total of \"653,000\" in cash. This includes the minimum down payment and the following upfront costs:\n    *   DLD transfer fee: \"160,000\"\n    *   Agency commission (incl. VAT): \"84,000\"\n    *   Mortgage registration fee: \"9,000\"\n\nIf you meet the minimum requirements, your estimated monthly payment would be \"20,010\" based on a 25-year term.\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "mortgage_calculator",
+     "arguments": {
+      "annual_rate_pct": 4.5,
+      "buyer": "national",
+      "down_payment": 400000,
+      "first_home": true,
+      "property_price": 4000000
+     },
+     "ok": true,
+     "result": {
+      "source": "UAE Central Bank mortgage rules and Dubai Land Department fees, checked October 2026; lenders may apply stricter limits",
+      "loan_amount": 3600000,
+      "down_payment": 400000,
+      "loan_to_value_pct": 90.0,
+      "max_loan_to_value_pct": 85.0,
+      "meets_ltv_cap": false,
+      "minimum_down_payment": 600000,
+      "monthly_payment": 20010,
+      "total_interest": 2402991,
+      "upfront_costs": {
+       "dld_transfer_fee": 160000,
+       "mortgage_registration_fee": 9000,
+       "agency_commission_incl_vat": 84000
+      },
+      "cash_needed_at_purchase": 653000,
+      "assumptions": {
+       "annual_rate_pct": 4.5,
+       "years": 25,
+       "buyer": "national",
+       "first_home": true,
+       "off_plan": false,
+       "fixed_rate_for_whole_term": true
+      }
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "No, a 10% deposit (AED 400,000) is not enough.\n\nAccording to the mortgage calculation:\n*   **Down Payment:** Your proposed 10% results in a loan-to-value of 90.0%, but the maximum loan-to-value is 85.0%. The minimum down payment required is \"600,000\".\n*   **Total Cash Needed:** To complete the purchase, you would need a total of \"653,000\" in cash. This includes the minimum down payment and the following upfront costs:\n    *   DLD transfer fee: \"160,000\"\n    *   Agency commission (incl. VAT): \"84,000\"\n    *   Mortgage registration fee: \"9,000\"\n\nIf you meet the minimum requirements, your estimated monthly payment would be \"20,010\" based on a 25-year term.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 3.8
+  },
+  {
+   "id": "D3",
+   "question": "My salary is AED 12,000 a month. Could I manage a AED 1.6M apartment at 4.5% with the smallest down payment allowed?",
+   "answer": "Based on the calculations for a AED 1.6M apartment at 4.5% interest:\n\n*   **Down Payment:** The minimum down payment required is 320,000 AED.\n*   **Upfront Costs:** You would need the following fees: a dld_transfer_fee of 64,000 AED, a mortgage_registration_fee of 3,200 AED, and an agency_commission_incl_vat of 33,600 AED. This brings the total cash needed at purchase to 420,800 AED.\n*   **Monthly Payment:** The estimated monthly mortgage payment is 7,115 AED.\n\n**Warning:** This property is likely unaffordable based on your monthly income of 12,000 AED. The debt burden is 59.3%, which is not within the debt burden cap, as the cap is \"50% of income across all debt repayments\".\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "mortgage_calculator",
+     "arguments": {
+      "annual_rate_pct": 4.5,
+      "buyer": "expat",
+      "monthly_income": 12000,
+      "property_price": 1600000
+     },
+     "ok": true,
+     "result": {
+      "source": "UAE Central Bank mortgage rules and Dubai Land Department fees, checked October 2026; lenders may apply stricter limits",
+      "loan_amount": 1280000,
+      "down_payment": 320000,
+      "loan_to_value_pct": 80.0,
+      "max_loan_to_value_pct": 80.0,
+      "meets_ltv_cap": true,
+      "minimum_down_payment": 320000,
+      "monthly_payment": 7115,
+      "total_interest": 854397,
+      "upfront_costs": {
+       "dld_transfer_fee": 64000,
+       "mortgage_registration_fee": 3200,
+       "agency_commission_incl_vat": 33600
+      },
+      "cash_needed_at_purchase": 420800,
+      "assumptions": {
+       "annual_rate_pct": 4.5,
+       "years": 25,
+       "buyer": "expat",
+       "first_home": true,
+       "off_plan": false,
+       "fixed_rate_for_whole_term": true
+      },
+      "debt_burden_pct": 59.3,
+      "within_debt_burden_cap": false,
+      "debt_burden_note": "The cap is 50% of income across all debt repayments; this counts only this mortgage"
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Based on the calculations for a AED 1.6M apartment at 4.5% interest:\n\n*   **Down Payment:** The minimum down payment required is 320,000 AED.\n*   **Upfront Costs:** In addition to the down payment, you would need 100,800 AED for fees (DLD transfer fee, mortgage registration, and agency commission), bringing the total cash needed at purchase to 420,800 AED.\n*   **Monthly Payment:** The estimated monthly mortgage payment is 7,115 AED.\n\n**Warning:** This property is likely unaffordable based on your monthly income of 12,000 AED. The debt burden is 59.3%, which is not within the debt burden cap, as the cap is \"50% of income across all debt repayments\".\n\nInformation only, not legal or financial advice.",
+     "ok": false,
+     "ungrounded_numbers": [
+      "100,800"
+     ],
+     "unknown_citations": []
+    },
+    {
+     "draft": "Based on the calculations for a AED 1.6M apartment at 4.5% interest:\n\n*   **Down Payment:** The minimum down payment required is 320,000 AED.\n*   **Upfront Costs:** You would need the following fees: a dld_transfer_fee of 64,000 AED, a mortgage_registration_fee of 3,200 AED, and an agency_commission_incl_vat of 33,600 AED. This brings the total cash needed at purchase to 420,800 AED.\n*   **Monthly Payment:** The estimated monthly mortgage payment is 7,115 AED.\n\n**Warning:** This property is likely unaffordable based on your monthly income of 12,000 AED. The debt burden is 59.3%, which is not within the debt burden cap, as the cap is \"50% of income across all debt repayments\".\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 1,
+   "seconds": 4.4
+  },
+  {
+   "id": "D4",
+   "question": "On AED 40,000 a month, is a AED 3M home at 4% affordable with the minimum down payment?",
+   "answer": "Based on the provided figures, a AED 3,000,000 home at a 4% interest rate is affordable on a monthly income of AED 40,000.\n\n**Financial Breakdown:**\n*   **Monthly Payment:** AED 12,668.\n*   **Debt Burden:** The debt burden is 31.7%, which is within the debt burden cap of 50% of income across all debt repayments.\n*   **Minimum Down Payment:** AED 600,000 (80% loan-to-value).\n*   **Total Cash Needed at Purchase:** AED 789,000. This includes the down payment, a DLD transfer fee of AED 120,000, a mortgage registration fee of AED 6,000, and agency commission (including VAT) of AED 63,000.\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "mortgage_calculator",
+     "arguments": {
+      "annual_rate_pct": 4,
+      "monthly_income": 40000,
+      "property_price": 3000000
+     },
+     "ok": true,
+     "result": {
+      "source": "UAE Central Bank mortgage rules and Dubai Land Department fees, checked October 2026; lenders may apply stricter limits",
+      "loan_amount": 2400000,
+      "down_payment": 600000,
+      "loan_to_value_pct": 80.0,
+      "max_loan_to_value_pct": 80.0,
+      "meets_ltv_cap": true,
+      "minimum_down_payment": 600000,
+      "monthly_payment": 12668,
+      "total_interest": 1400425,
+      "upfront_costs": {
+       "dld_transfer_fee": 120000,
+       "mortgage_registration_fee": 6000,
+       "agency_commission_incl_vat": 63000
+      },
+      "cash_needed_at_purchase": 789000,
+      "assumptions": {
+       "annual_rate_pct": 4,
+       "years": 25,
+       "buyer": "expat",
+       "first_home": true,
+       "off_plan": false,
+       "fixed_rate_for_whole_term": true
+      },
+      "debt_burden_pct": 31.7,
+      "within_debt_burden_cap": true,
+      "debt_burden_note": "The cap is 50% of income across all debt repayments; this counts only this mortgage"
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Based on the provided figures, a AED 3,000,000 home at a 4% interest rate is affordable on a monthly income of AED 40,000.\n\n**Financial Breakdown:**\n*   **Monthly Payment:** AED 12,668.\n*   **Debt Burden:** The debt burden is 31.7%, which is within the debt burden cap of 50% of income across all debt repayments.\n*   **Minimum Down Payment:** AED 600,000 (80% loan-to-value).\n*   **Total Cash Needed at Purchase:** AED 789,000. This includes the down payment, a DLD transfer fee of AED 120,000, a mortgage registration fee of AED 6,000, and agency commission (including VAT) of AED 63,000.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.7
+  },
+  {
+   "id": "D5",
+   "question": "What's the minimum down payment on an off-plan flat priced at AED 900,000?",
+   "answer": "The minimum down payment for an off-plan flat priced at AED 900,000 is 450,000.\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "mortgage_calculator",
+     "arguments": {
+      "annual_rate_pct": 4.5,
+      "off_plan": true,
+      "property_price": 900000
+     },
+     "ok": true,
+     "result": {
+      "source": "UAE Central Bank mortgage rules and Dubai Land Department fees, checked October 2026; lenders may apply stricter limits",
+      "loan_amount": 450000,
+      "down_payment": 450000,
+      "loan_to_value_pct": 50.0,
+      "max_loan_to_value_pct": 50.0,
+      "meets_ltv_cap": true,
+      "minimum_down_payment": 450000,
+      "monthly_payment": 2501,
+      "total_interest": 300374,
+      "upfront_costs": {
+       "dld_transfer_fee": 36000,
+       "mortgage_registration_fee": 1125,
+       "agency_commission_incl_vat": 18900
+      },
+      "cash_needed_at_purchase": 506025,
+      "assumptions": {
+       "annual_rate_pct": 4.5,
+       "years": 25,
+       "buyer": "expat",
+       "first_home": true,
+       "off_plan": true,
+       "fixed_rate_for_whole_term": true
+      }
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "The minimum down payment for an off-plan flat priced at AED 900,000 is 450,000.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 2.0
+  },
+  {
+   "id": "D6",
+   "question": "What share of the price can I borrow for an off-plan property costing AED 2M, at 4.5%?",
+   "answer": "For an off-plan property costing AED 2,000,000, you can borrow 50.0% of the price, which is a loan amount of AED 1,000,000.\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "mortgage_calculator",
+     "arguments": {
+      "annual_rate_pct": 4.5,
+      "off_plan": true,
+      "property_price": 2000000
+     },
+     "ok": true,
+     "result": {
+      "source": "UAE Central Bank mortgage rules and Dubai Land Department fees, checked October 2026; lenders may apply stricter limits",
+      "loan_amount": 1000000,
+      "down_payment": 1000000,
+      "loan_to_value_pct": 50.0,
+      "max_loan_to_value_pct": 50.0,
+      "meets_ltv_cap": true,
+      "minimum_down_payment": 1000000,
+      "monthly_payment": 5558,
+      "total_interest": 667497,
+      "upfront_costs": {
+       "dld_transfer_fee": 80000,
+       "mortgage_registration_fee": 2500,
+       "agency_commission_incl_vat": 42000
+      },
+      "cash_needed_at_purchase": 1124500,
+      "assumptions": {
+       "annual_rate_pct": 4.5,
+       "years": 25,
+       "buyer": "expat",
+       "first_home": true,
+       "off_plan": true,
+       "fixed_rate_for_whole_term": true
+      }
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "For an off-plan property costing AED 2,000,000, you can borrow 50.0% of the price, which is a loan amount of AED 1,000,000.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.4
+  },
+  {
+   "id": "D7",
+   "question": "As an expat buying a second home for AED 1.8M at 4.25%, how much must I put down and what's the monthly payment?",
+   "answer": "For an expat buying a second home for AED 1,800,000 at 4.25%, the financial requirements are as follows:\n\n*   **Down Payment:** You must put down a minimum of \"720,000\" AED.\n*   **Monthly Payment:** The monthly payment is \"5,851\" AED.\n\nAdditionally, the total cash needed at purchase is \"832,500\" AED, which includes the down payment and upfront costs such as the DLD transfer fee (\"72,000\" AED), mortgage registration fee (\"2,700\" AED), and agency commission including VAT (\"37,800\" AED).\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "mortgage_calculator",
+     "arguments": {
+      "annual_rate_pct": 4.25,
+      "buyer": "expat",
+      "first_home": false,
+      "property_price": 1800000
+     },
+     "ok": true,
+     "result": {
+      "source": "UAE Central Bank mortgage rules and Dubai Land Department fees, checked October 2026; lenders may apply stricter limits",
+      "loan_amount": 1080000,
+      "down_payment": 720000,
+      "loan_to_value_pct": 60.0,
+      "max_loan_to_value_pct": 60.0,
+      "meets_ltv_cap": true,
+      "minimum_down_payment": 720000,
+      "monthly_payment": 5851,
+      "total_interest": 675231,
+      "upfront_costs": {
+       "dld_transfer_fee": 72000,
+       "mortgage_registration_fee": 2700,
+       "agency_commission_incl_vat": 37800
+      },
+      "cash_needed_at_purchase": 832500,
+      "assumptions": {
+       "annual_rate_pct": 4.25,
+       "years": 25,
+       "buyer": "expat",
+       "first_home": false,
+       "off_plan": false,
+       "fixed_rate_for_whole_term": true
+      }
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "For an expat buying a second home for AED 1,800,000 at 4.25%, the financial requirements are as follows:\n\n*   **Down Payment:** You must put down a minimum of \"720,000\" AED.\n*   **Monthly Payment:** The monthly payment is \"5,851\" AED.\n\nAdditionally, the total cash needed at purchase is \"832,500\" AED, which includes the down payment and upfront costs such as the DLD transfer fee (\"72,000\" AED), mortgage registration fee (\"2,700\" AED), and agency commission including VAT (\"37,800\" AED).\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.7
+  },
+  {
+   "id": "E1",
+   "question": "What's the cheapest 2-bedroom for sale in Dubai Silicon Oasis?",
+   "answer": "Based on synthetic sample data, the cheapest 2-bedroom apartment for sale in Dubai Silicon Oasis is listing L0063, priced at 935,000 AED.\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "search_listings",
+     "arguments": {
+      "area": "Dubai Silicon Oasis",
+      "bedrooms": 2,
+      "property_type": "apartment",
+      "purpose": "sale",
+      "sort": "price_asc"
+     },
+     "ok": true,
+     "result": {
+      "source": "Synthetic sample data (not real listings or sales)",
+      "filters": {
+       "purpose": "sale",
+       "area": "Dubai Silicon Oasis",
+       "property_type": "apartment",
+       "bedrooms": 2
+      },
+      "price_unit": "AED",
+      "total_matches": 6,
+      "results": [
+       {
+        "listing_id": "L0063",
+        "title": "2-bedroom apartment in Dubai Silicon Oasis",
+        "area": "Dubai Silicon Oasis",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1150,
+        "price_aed": 935000,
+        "furnished": false,
+        "listed_date": "2026-08-15",
+        "price_per_sqft": 813.0
+       },
+       {
+        "listing_id": "L0068",
+        "title": "2-bedroom apartment in Dubai Silicon Oasis",
+        "area": "Dubai Silicon Oasis",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1085,
+        "price_aed": 975000,
+        "furnished": true,
+        "listed_date": "2026-09-18",
+        "price_per_sqft": 898.6
+       },
+       {
+        "listing_id": "L0191",
+        "title": "2-bedroom apartment in Dubai Silicon Oasis",
+        "area": "Dubai Silicon Oasis",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1160,
+        "price_aed": 1065000,
+        "furnished": false,
+        "listed_date": "2026-09-25",
+        "price_per_sqft": 918.1
+       },
+       {
+        "listing_id": "L0343",
+        "title": "2-bedroom apartment in Dubai Silicon Oasis",
+        "area": "Dubai Silicon Oasis",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1295,
+        "price_aed": 1205000,
+        "furnished": true,
+        "listed_date": "2026-10-04",
+        "price_per_sqft": 930.5
+       },
+       {
+        "listing_id": "L0272",
+        "title": "2-bedroom apartment in Dubai Silicon Oasis",
+        "area": "Dubai Silicon Oasis",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1425,
+        "price_aed": 1315000,
+        "furnished": false,
+        "listed_date": "2026-07-18",
+        "price_per_sqft": 922.8
+       },
+       {
+        "listing_id": "L0225",
+        "title": "2-bedroom apartment in Dubai Silicon Oasis",
+        "area": "Dubai Silicon Oasis",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1260,
+        "price_aed": 1325000,
+        "furnished": false,
+        "listed_date": "2026-09-09",
+        "price_per_sqft": 1051.6
+       }
+      ]
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Based on synthetic sample data, the cheapest 2-bedroom apartment for sale in Dubai Silicon Oasis is listing L0063, priced at 935,000 AED.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.4
+  },
+  {
+   "id": "E2",
+   "question": "Which is better value per square foot, L0130 or L0143?",
+   "answer": "Based on synthetic sample data, L0130 is the better value per square foot.\n\n*   **L0130**: price per sqft is 78.5 (L0130)\n*   **L0143**: price per sqft is 82.4 (L0143)\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "compare_properties",
+     "arguments": {
+      "listing_ids": [
+       "L0130",
+       "L0143"
+      ]
+     },
+     "ok": true,
+     "result": {
+      "source": "Synthetic sample data (not real listings or sales)",
+      "listings": [
+       {
+        "listing_id": "L0130",
+        "title": "1-bedroom apartment in Dubai Sports City",
+        "area": "Dubai Sports City",
+        "property_type": "apartment",
+        "purpose": "rent",
+        "bedrooms": 1,
+        "bathrooms": 1,
+        "size_sqft": 675,
+        "price_aed": 53000,
+        "furnished": false,
+        "listed_date": "2026-08-22",
+        "price_per_sqft": 78.5,
+        "peer_count": 21,
+        "peer_median_price_per_sqft": 76.9,
+        "vs_peers_pct": 2.1
+       },
+       {
+        "listing_id": "L0143",
+        "title": "1-bedroom apartment in Dubai Sports City",
+        "area": "Dubai Sports City",
+        "property_type": "apartment",
+        "purpose": "rent",
+        "bedrooms": 1,
+        "bathrooms": 1,
+        "size_sqft": 680,
+        "price_aed": 56000,
+        "furnished": false,
+        "listed_date": "2026-09-28",
+        "price_per_sqft": 82.4,
+        "peer_count": 21,
+        "peer_median_price_per_sqft": 76.9,
+        "vs_peers_pct": 7.1
+       }
+      ],
+      "lowest_price_per_sqft": "L0130"
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Based on synthetic sample data, L0130 is the better value per square foot.\n\n*   **L0130**: price per sqft is 78.5 (L0130)\n*   **L0143**: price per sqft is 82.4 (L0143)\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.5
+  },
+  {
+   "id": "E3",
+   "question": "How much have Al Barsha villa prices risen over the last year?",
+   "answer": "Based on synthetic sample data, the median price per sqft for villas in Al Barsha has risen by 13.6% over the last year.\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "area_price_stats",
+     "arguments": {
+      "area": "Al Barsha",
+      "months": 12,
+      "property_type": "villa"
+     },
+     "ok": true,
+     "result": {
+      "source": "Synthetic sample data (not real listings or sales)",
+      "filters": {
+       "area": "Al Barsha",
+       "property_type": "villa"
+      },
+      "data_as_of": "2026-09-30",
+      "current_period": {
+       "from": "2025-09-30",
+       "to": "2026-09-30",
+       "transactions": 32,
+       "median_price_aed": 4724500,
+       "median_price_per_sqft": 1296.7
+      },
+      "previous_period": {
+       "from": "2024-09-30",
+       "to": "2025-09-30",
+       "transactions": 30,
+       "median_price_aed": 4166000,
+       "median_price_per_sqft": 1141.1
+      },
+      "price_per_sqft_change_pct": 13.6
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "Based on synthetic sample data, the median price per sqft for villas in Al Barsha has risen by 13.6% over the last year.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 2.1
+  },
+  {
+   "id": "E4",
+   "question": "Can my landlord keep my security deposit when I move out?",
+   "answer": "According to Law No. 26 of 2007, the security deposit is intended \"to ensure maintenance of the Real Property upon the expiry of the Lease Contract\" (law-26-2007#art20).\n\nThe law provides the following regarding the return of the deposit and the condition of the property:\n\n*   **Refund Obligation:** The \"Landlord undertakes to refund such deposit or remainder thereof to the Tenant upon the expiry of the Lease Contract\" (law-26-2007#art20).\n*   **Property Condition:** Upon expiry, the Tenant must return the property \"in the same condition in which the Tenant received it at the time of entering into the Lease Contract except for ordinary wear and tear or for damage due to reasons beyond the Tenant's control\" (law-26-2007#art21).\n*   **Disputes:** If there is a \"dispute between the two parties\" regarding the condition or the deposit, \"the matter must be referred to the Tribunal to issue an award in this regard\" (law-26-2007#art21).\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "search_rules",
+     "arguments": {
+      "query": "security deposit return move out"
+     },
+     "ok": true,
+     "result": {
+      "source": "Official Dubai legislation in data/rules (English versions; Arabic text prevails)",
+      "query": "security deposit return move out",
+      "results": [
+       {
+        "passage_id": "law-26-2007#art20",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (20)",
+        "similarity": 0.537,
+        "keyword_score": 9.286,
+        "matched_by": "meaning and keywords",
+        "text": "When entering into a Lease Contract, the Landlord may obtain from the Tenant a security deposit to ensure maintenance of the Real Property upon the expiry of the Lease Contract, provided that the Landlord undertakes to refund such deposit or remainder thereof to the Tenant upon the expiry of the Lease Contract."
+       },
+       {
+        "passage_id": "law-26-2007#art23",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (23)",
+        "similarity": 0.307,
+        "keyword_score": 0,
+        "matched_by": "meaning",
+        "text": "Unless otherwise agreed by the parties, upon vacating and surrendering possession of the Real Property, the Tenant may not remove any leasehold improvements made by the Tenant."
+       },
+       {
+        "passage_id": "law-26-2007#art29",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (29)",
+        "similarity": 0.297,
+        "keyword_score": 2.751,
+        "matched_by": "meaning",
+        "text": "*Text as superseded by Law No. 33 of 2008.*\n\n1. A Tenant will have the right of first refusal to return to the Real Property where it is demolished and reconstructed, or renovated and restored, by the Landlord, in which case the Rent must be determined in accordance with the provisions of Article (9) of this Law.\n\n2. The Tenant must exercise the right of first refusal referred to in the preceding paragraph within a period not exceeding thirty (30) days from the date on which the Tenant is notified of the same by the Landlord."
+       },
+       {
+        "passage_id": "law-26-2007#art21",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (21)",
+        "similarity": 0.269,
+        "keyword_score": 0,
+        "matched_by": "meaning",
+        "text": "Upon the expiry of the term of the Lease Contract, the Tenant will must surrender possession of the Real Property to the Landlord in the same condition in which the Tenant received it at the time of entering into the Lease Contract except for ordinary wear and tear or for damage due to reasons beyond the Tenant's control. In the event of dispute between the two parties, the matter must be referred to the Tribunal to issue an award in this regard."
+       }
+      ],
+      "note": "Found by meaning and keywords, not verified relevance; check each passage answers the question"
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "According to Law No. 26 of 2007, the security deposit is intended \"to ensure maintenance of the Real Property upon the expiry of the Lease Contract\" (law-26-2007#art20).\n\nThe law provides the following regarding the return of the deposit and the condition of the property:\n\n*   **Refund Obligation:** The \"Landlord undertakes to refund such deposit or remainder thereof to the Tenant upon the expiry of the Lease Contract\" (law-26-2007#art20).\n*   **Property Condition:** Upon expiry, the Tenant must return the property \"in the same condition in which the Tenant received it at the time of entering into the Lease Contract except for ordinary wear and tear or for damage due to reasons beyond the Tenant's control\" (law-26-2007#art21).\n*   **Disputes:** If there is a \"dispute between the two parties\" regarding the condition or the deposit, \"the matter must be referred to the Tribunal to issue an award in this regard\" (law-26-2007#art21).\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 2.1
+  },
+  {
+   "id": "E5",
+   "question": "Does my rent include using the building's pool and gym?",
+   "answer": "\"Unless otherwise agreed\", the rent will cover the use of amenities such as \"swimming pools\" and \"gymnasiums\" (law-26-2007#art11).\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "search_rules",
+     "arguments": {
+      "query": "does rent include building facilities pool gym"
+     },
+     "ok": true,
+     "result": {
+      "source": "Official Dubai legislation in data/rules (English versions; Arabic text prevails)",
+      "query": "does rent include building facilities pool gym",
+      "results": [
+       {
+        "passage_id": "law-26-2007#art11",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (11)",
+        "similarity": 0.666,
+        "keyword_score": 1.25,
+        "matched_by": "meaning",
+        "text": "Unless otherwise agreed, the Rent will cover use of the Real Property amenities such as swimming pools, playgrounds, gymnasiums, health clubs, car parks, and other amenities."
+       },
+       {
+        "passage_id": "law-26-2007#art9",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (9) The Rent",
+        "similarity": 0.361,
+        "keyword_score": 1.757,
+        "matched_by": "meaning",
+        "text": "*Text as superseded by Law No. 33 of 2008.*\n\n1. Landlords and Tenants must specify Rent in Lease Contracts. Where the parties fail to specify the Rent and it is impossible to prove the Rent agreed upon by them, the Rent will be the rental value of similar Real Property.\n\n2. The Tribunal will determine the rental value of similar Real Property taking into account the criteria for determining the percentage of Rent increase prescribed by RERA; the prevailing economic situation in the Emirate; the condition of the Real Property; the prevailing rental value of similar Real Property in other similar Real Property markets within the same area; the provisions of any legislation in force in the Emirate regulating Real Property Rent, and any other factors which the Tribunal deems appropriate."
+       },
+       {
+        "passage_id": "law-26-2007#art3",
+        "document": "law-26-2007.md",
+        "title": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
+        "section": "Article (3)",
+        "similarity": 0.345,
+        "keyword_score": 1.153,
+        "matched_by": "meaning",
+        "text": "*Text as superseded by Law No. 33 of 2008.*\n\nThe provisions of this Law will apply to land and Real Property leased out in the Emirate, excluding Real Property provided free of Rent by natural or legal persons as accommodation for their employees."
+       },
+       {
+        "passage_id": "decree-43-2013#art1",
+        "document": "decree-43-2013.md",
+        "title": "Decree No. 43 of 2013 Determining Rent Increase for Real Property in the Emirate of Dubai",
+        "section": "Article (1) Percentages of Increase",
+        "similarity": 0.343,
+        "keyword_score": 1.798,
+        "matched_by": "meaning",
+        "text": "When renewing Real Property Lease Contracts, the maximum percentage of Rent increase for Real Property in the Emirate of Dubai will be as follows:\n\na. no Rent increase, where the Rent of the Real Property unit is up to ten percent (10%) less than the average rental value of similar units;\n\nb. five percent (5%) of the Rent of the Real Property unit, where the Rent is eleven percent (11%) to twenty percent (20%) less than the average rental value of similar units;\n\nc. ten percent (10%) of the Rent of the Real Property unit, where the Rent is twenty-one percent (21%) to thirty percent (30%) less than the average rental value of similar units;\n\nd. fifteen percent (15%) of the Rent of the Real Property unit, where the Rent is thirty-one percent (31%) to forty percent (40%) less than the average rental value of similar units; or\n\ne. twenty percent (20%) of the Rent of the Real Property Unit, where the Rent is more than forty percent (40%) less than the average rental value of similar units."
+       },
+       {
+        "passage_id": "decree-43-2013#art2",
+        "document": "decree-43-2013.md",
+        "title": "Decree No. 43 of 2013 Determining Rent Increase for Real Property in the Emirate of Dubai",
+        "section": "Article (2) Scope of Application",
+        "similarity": 0.285,
+        "keyword_score": 3.209,
+        "matched_by": "keywords",
+        "text": "This Decree will apply to Landlords, whether private or public entities, in the Emirate of Dubai, including those in Special Development zones and free zones such as the Dubai International Financial Centre."
+       }
+      ],
+      "note": "Found by meaning and keywords, not verified relevance; check each passage answers the question"
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "\"Unless otherwise agreed\", the rent will cover the use of amenities such as \"swimming pools\" and \"gymnasiums\" (law-26-2007#art11).\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 1.6
+  },
+  {
+   "id": "E6",
+   "question": "Find the cheapest 2-bedroom for sale in Dubai Silicon Oasis and the monthly payment at 4.5% with the minimum down payment, as an expat first-time buyer.",
+   "answer": "The cheapest 2-bedroom for sale in Dubai Silicon Oasis is a 1,150 sqft unfurnished apartment priced at 935,000 AED (L0063). Please note that this is synthetic sample data.\n\nFor an expat first-time buyer with a 4.5% annual rate and the minimum down payment, the monthly payment would be 4,158 AED.\n\nInformation only, not legal or financial advice.",
+   "steps": [
+    {
+     "tool": "search_listings",
+     "arguments": {
+      "area": "Dubai Silicon Oasis",
+      "bedrooms": 2,
+      "purpose": "sale",
+      "sort": "price_asc"
+     },
+     "ok": true,
+     "result": {
+      "source": "Synthetic sample data (not real listings or sales)",
+      "filters": {
+       "purpose": "sale",
+       "area": "Dubai Silicon Oasis",
+       "bedrooms": 2
+      },
+      "price_unit": "AED",
+      "total_matches": 6,
+      "results": [
+       {
+        "listing_id": "L0063",
+        "title": "2-bedroom apartment in Dubai Silicon Oasis",
+        "area": "Dubai Silicon Oasis",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1150,
+        "price_aed": 935000,
+        "furnished": false,
+        "listed_date": "2026-08-15",
+        "price_per_sqft": 813.0
+       },
+       {
+        "listing_id": "L0068",
+        "title": "2-bedroom apartment in Dubai Silicon Oasis",
+        "area": "Dubai Silicon Oasis",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1085,
+        "price_aed": 975000,
+        "furnished": true,
+        "listed_date": "2026-09-18",
+        "price_per_sqft": 898.6
+       },
+       {
+        "listing_id": "L0191",
+        "title": "2-bedroom apartment in Dubai Silicon Oasis",
+        "area": "Dubai Silicon Oasis",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1160,
+        "price_aed": 1065000,
+        "furnished": false,
+        "listed_date": "2026-09-25",
+        "price_per_sqft": 918.1
+       },
+       {
+        "listing_id": "L0343",
+        "title": "2-bedroom apartment in Dubai Silicon Oasis",
+        "area": "Dubai Silicon Oasis",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1295,
+        "price_aed": 1205000,
+        "furnished": true,
+        "listed_date": "2026-10-04",
+        "price_per_sqft": 930.5
+       },
+       {
+        "listing_id": "L0272",
+        "title": "2-bedroom apartment in Dubai Silicon Oasis",
+        "area": "Dubai Silicon Oasis",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1425,
+        "price_aed": 1315000,
+        "furnished": false,
+        "listed_date": "2026-07-18",
+        "price_per_sqft": 922.8
+       },
+       {
+        "listing_id": "L0225",
+        "title": "2-bedroom apartment in Dubai Silicon Oasis",
+        "area": "Dubai Silicon Oasis",
+        "property_type": "apartment",
+        "purpose": "sale",
+        "bedrooms": 2,
+        "bathrooms": 3,
+        "size_sqft": 1260,
+        "price_aed": 1325000,
+        "furnished": false,
+        "listed_date": "2026-09-09",
+        "price_per_sqft": 1051.6
+       }
+      ]
+     }
+    },
+    {
+     "tool": "mortgage_calculator",
+     "arguments": {
+      "annual_rate_pct": 4.5,
+      "buyer": "expat",
+      "first_home": true,
+      "property_price": 935000
+     },
+     "ok": true,
+     "result": {
+      "source": "UAE Central Bank mortgage rules and Dubai Land Department fees, checked October 2026; lenders may apply stricter limits",
+      "loan_amount": 748000,
+      "down_payment": 187000,
+      "loan_to_value_pct": 80.0,
+      "max_loan_to_value_pct": 80.0,
+      "meets_ltv_cap": true,
+      "minimum_down_payment": 187000,
+      "monthly_payment": 4158,
+      "total_interest": 499288,
+      "upfront_costs": {
+       "dld_transfer_fee": 37400,
+       "mortgage_registration_fee": 1870,
+       "agency_commission_incl_vat": 19635
+      },
+      "cash_needed_at_purchase": 245905,
+      "assumptions": {
+       "annual_rate_pct": 4.5,
+       "years": 25,
+       "buyer": "expat",
+       "first_home": true,
+       "off_plan": false,
+       "fixed_rate_for_whole_term": true
+      }
+     }
+    }
+   ],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "The cheapest 2-bedroom for sale in Dubai Silicon Oasis is a 1,150 sqft unfurnished apartment priced at 935,000 AED (L0063). Please note that this is synthetic sample data.\n\nFor an expat first-time buyer with a 4.5% annual rate and the minimum down payment, the monthly payment would be 4,158 AED.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 2.2
+  },
+  {
+   "id": "E7",
+   "question": "Which school is best near Dubai Marina?",
+   "answer": "I do not have access to a tool that provides information on schools or educational ratings. I can only provide information regarding property listings, market statistics, mortgage calculations, and tenancy laws in Dubai.\n\nInformation only, not legal or financial advice.",
+   "steps": [],
+   "grounding": {
+    "ok": true,
+    "ungrounded_numbers": [],
+    "unknown_citations": []
+   },
+   "checks": [
+    {
+     "draft": "I do not have access to a tool that provides information on schools or educational ratings. I can only provide information regarding property listings, market statistics, mortgage calculations, and tenancy laws in Dubai.\n\nInformation only, not legal or financial advice.",
+     "ok": true,
+     "ungrounded_numbers": [],
+     "unknown_citations": []
+    }
+   ],
+   "revisions": 0,
+   "seconds": 0.7
+  }
+ ],
+ "scores": [
+  {
+   "id": "D1",
+   "category": "mortgage-checks",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "D2",
+   "category": "mortgage-checks",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "D3",
+   "category": "mortgage-checks",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "D4",
+   "category": "mortgage-checks",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "D5",
+   "category": "mortgage-checks",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "D6",
+   "category": "mortgage-checks",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "D7",
+   "category": "mortgage-checks",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "E1",
+   "category": "listings",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "E2",
+   "category": "compare",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "E3",
+   "category": "market",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "E4",
+   "category": "rules",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "E5",
+   "category": "rules",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "E6",
+   "category": "multi-tool",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  },
+  {
+   "id": "E7",
+   "category": "out-of-scope",
+   "passed": true,
+   "tool_choice": true,
+   "correctness": true,
+   "citations": true,
+   "grounding": true,
+   "problems": []
+  }
+ ],
+ "summary": {
+  "cases": 14,
+  "passed": 14,
+  "tool_choice": 14,
+  "correctness": 14,
+  "citations": 14,
+  "grounding": 14,
+  "by_category": {
+   "compare": "1/1",
+   "listings": "1/1",
+   "market": "1/1",
+   "mortgage-checks": "7/7",
+   "multi-tool": "1/1",
+   "out-of-scope": "1/1",
+   "rules": "2/2"
+  }
+ }
+}
