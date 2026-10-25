@@ -40,26 +40,27 @@ result. Listings are synthetic.*
 ## Architecture
 
 ```mermaid
-flowchart LR
-    Q["Question"] --> UI["Streamlit chat<br/>streamlit_app.py"]
+flowchart TB
+    Q["Question"] --> UI["Streamlit chat · streamlit_app.py"]
     UI --> P
 
     subgraph AG["LangGraph agent · agent.py"]
-        P["Plan: model picks tools"] -- "tool calls" --> T["Run tools"]
+        direction TB
+        P["Plan: the model picks tools"] -- "tool calls" --> T["Run tools"]
         T -- "JSON results" --> P
-        P -- "draft answer" --> G{"Grounding check:<br/>every number and ID<br/>in the evidence?"}
-        G -- "no (one revision)" --> P
+        P -- "draft answer" --> G{"Grounding check:<br/>is every number and ID<br/>in the evidence?"}
+        G -- "no: one revision" --> P
     end
 
-    G -- "answer + steps + warnings" --> UI
-    P <--> LLM[("gemma4 via Ollama<br/>or Llama via Groq")]
+    P <-. "chat + tool schemas" .-> LLM[("gemma4 via Ollama, or Llama via Groq")]
+    G -- "answer, steps, warnings" --> UI
 
-    T --> SL["search_listings<br/>compare_properties<br/>area_price_stats"]
-    SL --> DB[("SQLite<br/>synthetic listings and sales")]
+    T --> SL["search_listings · compare_properties · area_price_stats"]
     T --> MC["mortgage_calculator<br/>UAE loan-to-value caps, DLD fees"]
     T --> SR["search_rules"]
-    SR --> IX[("ChromaDB + MiniLM<br/>and BM25 keywords")]
-    IX --> LAW["Dubai tenancy law<br/>official text, by article"]
+    SL --> DB[("SQLite: synthetic listings and sales")]
+    SR --> IX[("ChromaDB + MiniLM, and BM25 keywords")]
+    IX --> LAW["Dubai tenancy law, official text by article"]
 ```
 
 The model only plans and writes. The five tools are plain Python with JSON
