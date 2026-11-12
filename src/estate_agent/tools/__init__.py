@@ -88,7 +88,8 @@ TOOL_SPECS = [
         "name": "search_rules",
         "description": (
             "Semantic search over official Dubai tenancy legislation (Law 26 of 2007 as amended, "
-            "Decree 43 of 2013 on rent increases). Cite passage_id and section."
+            "Decree 43 of 2013 on rent increases, Decree 26 of 2013 on the Rent Disputes Settlement "
+            "Centre). Cite passage_id and section."
         ),
         "parameters": {
             "type": "object",

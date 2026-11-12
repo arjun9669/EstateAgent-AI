@@ -78,7 +78,7 @@ can correct its arguments, and each result carries a `source` so answers can cit
 | `compare_properties` | "Compare L0435 and L0503" | Price per sq ft against similar listings |
 | `area_price_stats` | "Are Dubai Marina prices rising?" | Median sale prices, this year vs. last, with a warning when sales are few |
 | `mortgage_calculator` | "Can I afford AED 1.6M on 12k a month?" | UAE Central Bank loan-to-value caps, DLD fees, 50% debt burden and 7x/8x income limits, checks stated as sentences |
-| `search_rules` | "How much can my landlord raise the rent?" | Hybrid search over Law 26/2007 (as amended) and Decree 43/2013 |
+| `search_rules` | "How much can my landlord raise the rent?" | Hybrid search over Law 26/2007 (as amended), Decree 43/2013 and Decree 26/2013 |
 
 ## Evaluation
 
@@ -177,8 +177,9 @@ docs/               EVALUATION, DATA_SOURCES, HOSTING, SAMPLE_RUN
 
 ## Data
 
-- **Legislation:** Law No. 26 of 2007 (consolidated with Law No. 33 of 2008) and
-  Decree No. 43 of 2013, from the official Dubai Legislation Portal.
+- **Legislation:** Law No. 26 of 2007 (consolidated with Law No. 33 of 2008), Decree
+  No. 43 of 2013 (rent increases) and Decree No. 26 of 2013 (the Rent Disputes Settlement
+  Centre), from the official Dubai Legislation Portal.
 - **Listings:** synthetic. Area names are real; every listing, price and ID is invented.
 - **Sales transactions:** synthetic by default. A loader converts the Dubai Land
   Department open dataset if you download it yourself; it is not redistributed
@@ -195,8 +196,8 @@ BM25 · SQLite · Streamlit · Gradio · pytest · GitHub Actions · Streamlit C
 
 - Listings and default sales data are synthetic; this is a portfolio project, not a
   property service.
-- The legislation is not fully up to date: later changes, such as the Rental Disputes
-  Settlement Centre (Decree 26 of 2013), are not consolidated.
+- The legislation is not fully up to date: Decree 26 of 2013 is indexed beside Law 26
+  rather than merged into it, and later amendments are not included.
 - The grounding check verifies numbers and IDs, not meaning; a correct figure can
   still sit in a misleading sentence. The evaluation reads failures by hand for that reason.
 - Memory covers the last 3 turns of one chat and is not kept between visits.

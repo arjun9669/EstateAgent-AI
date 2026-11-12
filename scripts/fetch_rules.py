@@ -26,12 +26,14 @@ SOURCES = {
     "law-26-2007": PORTAL + "2007/Law%20No.%20(26)%20of%202007%20Regarding%20regulation%20between%20the%20lessor%20and%20the%20lessee.html",
     "law-33-2008": PORTAL + "2009/Law%20No.%20(33)%20of%202008%20Amending%20Law%20No.%20(26)%20of%202007.html",
     "decree-43-2013": PORTAL + "2013/Decree%20No.%20(43)%20of%202013%20Determining%20Rent%20Increase%20for%20Real%20Property.html",
+    "decree-26-2013": PORTAL + "2013/Decree%2026%20of%202013.html",
 }
 TITLES = {
     "law-26-2007": "Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants in the Emirate of Dubai (as amended by Law No. 33 of 2008)",
     "decree-43-2013": "Decree No. 43 of 2013 Determining Rent Increase for Real Property in the Emirate of Dubai",
+    "decree-26-2013": "Decree No. 26 of 2013 Concerning the Rent Disputes Settlement Centre in the Emirate of Dubai",
 }
-RETRIEVED = "2026-10-24"
+RETRIEVED = {"law-26-2007": "2026-10-24", "decree-43-2013": "2026-10-24", "decree-26-2013": "2026-11-13"}
 BLOCK_TAGS = {"p", "div", "li", "td", "h1", "h2", "h3", "h4", "h5", "h6", "br"}
 ARTICLE = re.compile(r"^\W*Article \((\d+)\)\s*(.*)$", re.S)
 
@@ -86,21 +88,25 @@ def articles(blocks: list[str]) -> list[dict]:
     """Split the operative text into articles: number, optional heading, paragraphs.
 
     The text runs from the first Article (1) up to the Ruler's signature. A short
-    block directly before an article number is that article's heading.
+    block directly before an article number is that article's heading: up to six
+    words, or up to twelve when the very next block is the article number (Decree
+    26/2013 has headings like "Appeals from Judgments of the First Instance Division").
     """
     start = next(i for i, b in enumerate(blocks) if ARTICLE.match(b) and ARTICLE.match(b)[1] == "1")
     result, heading = [], None
-    for block in blocks[start - 1:]:
+    text = blocks[start - 1:]
+    for i, block in enumerate(text):
         if block.startswith("Mohammed bin Rashid"):
             break
         match = ARTICLE.match(block)
+        before_article = i + 1 < len(text) and ARTICLE.match(text[i + 1])
         if match:
             result.append({"number": int(match[1]), "heading": heading, "paragraphs": []})
             heading = None
             if match[2]:
                 result[-1]["paragraphs"].append(match[2])
-        elif result and not heading and len(block.split()) <= 6 and not block.endswith((".", ";", ":")) \
-                and result[-1]["paragraphs"]:
+        elif result and not heading and len(block.split()) <= (12 if before_article else 6) \
+                and not block.endswith((".", ";", ":")) and result[-1]["paragraphs"]:
             # Candidate heading for the next article; keep it if no article follows.
             heading = block
         elif heading:
@@ -145,7 +151,7 @@ def write(name: str, items: list[dict], sources: list[str]) -> None:
     lines = [f"# {TITLES[name]}", ""]
     lines += [f"Source: {url}" for url in sources]
     lines += [
-        f"Retrieved: {RETRIEVED}",
+        f"Retrieved: {RETRIEVED[name]}",
         "",
         "Official English version from the Dubai Legislation Portal. The Arabic text "
         "prevails in case of conflict. Laws are not protected by copyright under UAE "
@@ -162,7 +168,8 @@ def write(name: str, items: list[dict], sources: list[str]) -> None:
             lines += ["*Text as superseded by Law No. 33 of 2008.*", ""]
         for paragraph in article["paragraphs"]:
             lines += [paragraph, ""]
-    (OUT / f"{name}.md").write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+    # LF on every platform, so the committed files are reproduced exactly on Windows too.
+    (OUT / f"{name}.md").write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8", newline="\n")
     print(f"Wrote data/rules/{name}.md ({len(items)} articles)")
 
 
@@ -170,8 +177,10 @@ def main():
     law26 = articles(fetch("law-26-2007"))
     law33 = articles(fetch("law-33-2008"))
     decree43 = articles(fetch("decree-43-2013"))
+    decree26 = articles(fetch("decree-26-2013"))
     write("law-26-2007", consolidate(law26, law33), [SOURCES["law-26-2007"], SOURCES["law-33-2008"]])
     write("decree-43-2013", decree43, [SOURCES["decree-43-2013"]])
+    write("decree-26-2013", decree26, [SOURCES["decree-26-2013"]])
 
 
 if __name__ == "__main__":

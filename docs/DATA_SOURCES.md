@@ -59,6 +59,7 @@ To use it locally:
 |---|---|---|
 | `data/rules/law-26-2007.md` | Law No. 26 of 2007 Regulating the Relationship between Landlords and Tenants, consolidated with Law No. 33 of 2008 | Dubai Legislation Portal: [Law 26/2007](https://dlp.dubai.gov.ae/Legislation%20Reference/2007/Law%20No.%20(26)%20of%202007%20Regarding%20regulation%20between%20the%20lessor%20and%20the%20lessee.html), [Law 33/2008](https://dlp.dubai.gov.ae/Legislation%20Reference/2009/Law%20No.%20(33)%20of%202008%20Amending%20Law%20No.%20(26)%20of%202007.html) |
 | `data/rules/decree-43-2013.md` | Decree No. 43 of 2013 Determining Rent Increase for Real Property | [Dubai Legislation Portal](https://dlp.dubai.gov.ae/Legislation%20Reference/2013/Decree%20No.%20(43)%20of%202013%20Determining%20Rent%20Increase%20for%20Real%20Property.html) |
+| `data/rules/decree-26-2013.md` | Decree No. 26 of 2013 Concerning the Rent Disputes Settlement Centre (retrieved 13 Nov 2026) | [Dubai Legislation Portal](https://dlp.dubai.gov.ae/Legislation%20Reference/2013/Decree%2026%20of%202013.html) |
 
 `scripts/fetch_rules.py` downloads the official English pages, keeps only the
 article text, and writes one `## Article (N)` section per article. Law No. 33
@@ -73,9 +74,13 @@ raw pages are present and fails if the committed text would change.
 - UAE Federal Decree-Law No. 38 of 2021 (Article 3(2)) excludes laws and other
   official documents, including translations, from copyright protection, so the
   article text is committed with its source links.
-- Later legislation is **not** consolidated. For example, Decree No. 26 of 2013
-  moved rental disputes to the Rental Disputes Settlement Centre, while Law 26
-  still refers to the "Tribunal".
+- Decree No. 26 of 2013 renamed the "Tribunal" that Law 26 refers to as the Rent
+  Disputes Settlement Centre (Article 4) and sets its jurisdiction, time limits and
+  appeals. It is indexed as its own document; Law 26's text is not rewritten, so an
+  answer about disputes may need passages from both.
+- Other later legislation is **not** consolidated, for example later amendments to
+  the Centre's procedures or fees, and explanatory notes issued in 2026 on Article 34
+  of Law 26.
 - UAE Central Bank mortgage rules are not included: the rulebook site blocks
   automated downloads, and `mortgage_calculator` already encodes the limits.
 - Secondary summaries (property portals, blogs) are not used; several contain errors.

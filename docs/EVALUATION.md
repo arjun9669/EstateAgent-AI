@@ -435,7 +435,9 @@ python scripts/variation.py eval/runs/<run 1>.json eval/runs/<run 2>.json > eval
 1. Run cases-v5 twice on `gemma4:cloud` (above) and record the results here.
    Also re-run v1–v3: since the November 2026 rules check the mortgage tool adds a third check
    (loan as a multiple of income) and a note on who pays the transfer fee, which
-   changes what the model reads in every mortgage case with an income.
+   changes what the model reads in every mortgage case with an income. And
+   `search_rules` now also searches Decree 26 of 2013 (31 more passages), which can
+   change which articles a law question retrieves.
 2. If the Groq account is unblocked, add `llama-3.3-70b-versatile` to the model
    comparison (`LLM_PROVIDER=groq`, then `scripts/compare_models.py`).
 3. For local models: a final-answer step that rewrites only checked facts, measured

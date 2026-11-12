@@ -160,6 +160,20 @@ def test_committed_legislation_is_consolidated_and_complete():
     assert text.count("*Text as superseded by Law No. 33 of 2008.*") == 11
     decree = {p.section for p in split_document(RULES_DIR / "decree-43-2013.md")}
     assert "Article (1) Percentages of Increase" in decree
+    disputes = {p.section for p in split_document(RULES_DIR / "decree-26-2013.md")}
+    assert {s.split(")")[0] + ")" for s in disputes} == {f"Article ({n})" for n in range(1, 32)}
+    # Headings longer than six words belong to the next article, not the previous one's text.
+    assert "Article (17) Appeals from Judgments of the First Instance Division" in disputes
+    assert "Appeals from Judgments" not in (RULES_DIR / "decree-26-2013.md").read_text().split(
+        "## Article (17)")[0].split("## Article (16)")[1]
+
+
+def test_long_heading_directly_before_an_article_is_its_heading():
+    blocks = ["Title", "Article (1)", "First text.", "Appeals from Judgments of the First Instance Division",
+              "Article (2)", "Second text.", "Mohammed bin Rashid Al Maktoum"]
+    first, second = fetch_rules.articles(blocks)
+    assert first["paragraphs"] == ["First text."]
+    assert second["heading"] == "Appeals from Judgments of the First Instance Division"
 
 
 def test_superseded_list_parsing():
@@ -196,6 +210,10 @@ def real_index():
     ("registration of tenancy contract Ejari", "law-26-2007#art4"),
     ("Does a tenancy contract have to be registered?", "law-26-2007#art4"),
     ("when is rent due if not specified in the lease", "law-26-2007#art12"),
+    # Decree 26/2013, added November 2026:
+    ("Where do I file a rent dispute with my landlord?", "decree-26-2013#art6"),
+    ("How long do I have to appeal a rent dispute judgment?", "decree-26-2013#art18"),
+    ("Can I appeal a rent dispute judgment for a claim under AED 100,000?", "decree-26-2013#art17"),
 ])
 def test_real_model_retrieves_expected_article(real_index, question, expected):
     ids = [r["passage_id"] for r in search_rules(real_index, question, k=4)["results"]]
