@@ -78,10 +78,42 @@ def check_title(check: dict) -> str:
     return "⚠️ Grounding check flagged: " + ", ".join(check["ungrounded_numbers"] + check["unknown_citations"])
 
 
+class SetupError(RuntimeError):
+    """The model is not configured; the message says what to fix."""
+
+
 def default_agent():
-    """Agent on the configured model; raises RuntimeError saying what is missing."""
+    """Agent on the configured model; raises SetupError saying what is missing."""
     config.load_env()
     problem = config.check_ollama() if config.provider() == "ollama" else None
     if problem:
-        raise RuntimeError(problem)
-    return build_agent(config.make_model(), Toolbox.load())
+        raise SetupError(problem)
+    try:
+        model = config.make_model()
+    except RuntimeError as error:
+        raise SetupError(str(error)) from error
+    return build_agent(model, Toolbox.load())
+
+
+RUN_IT_YOURSELF = "https://github.com/arjun9669/EstateAgent-AI#run-it-yourself"
+QUOTA_STATUS_CODES = (402, 429)
+QUOTA_PHRASES = ("usage credits", "rate limit", "quota", "too many requests")
+
+
+def is_quota_error(error: Exception) -> bool:
+    """The model provider refused because the free allowance or rate limit is used up."""
+    if getattr(error, "status_code", None) in QUOTA_STATUS_CODES:
+        return True
+    return any(phrase in str(error).lower() for phrase in QUOTA_PHRASES)
+
+
+def model_error_message(error: Exception) -> str:
+    """What a visitor sees when a question fails. Setup problems are ours to explain;
+    a provider's own error text (often an upsell or internal detail) is not shown."""
+    if isinstance(error, SetupError):
+        return f"The model is not set up: {error}"
+    if is_quota_error(error):
+        return ("This demo has used up its free model allowance for now, so it can't answer "
+                "questions until the allowance resets. You can run EstateAgent AI on your own "
+                f"computer with a free local or cloud model: [instructions]({RUN_IT_YOURSELF}).")
+    return "The model could not be reached just now. Please try again in a few minutes."

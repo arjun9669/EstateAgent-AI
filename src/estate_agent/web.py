@@ -4,6 +4,7 @@ Shows each tool call as an expandable step while the agent works, then the
 grounding check and the answer. Run locally with `streamlit run streamlit_app.py`.
 """
 
+import logging
 import os
 import threading
 
@@ -11,6 +12,8 @@ import streamlit as st
 
 from estate_agent import presentation
 from estate_agent.agent import CheckEvent, StepEvent, stream
+
+log = logging.getLogger(__name__)
 
 # The free Ollama cloud plan serves one request at a time, so questions from all
 # visitors run one after another, and each visitor gets a limited number.
@@ -134,7 +137,11 @@ def answer(question: str, earlier: list) -> dict:
             show_answer(turn)
         except Exception as error:  # model or network problem: show it, keep the page working
             status.empty()
-            turn["error"] = f"The model could not be reached: {error}\n\n{settings_report()}"
+            # The full error goes to the server log (Streamlit Cloud: Manage app → logs).
+            log.exception("Question failed: %s", question)
+            turn["error"] = presentation.model_error_message(error)
+            if isinstance(error, presentation.SetupError):
+                turn["error"] += f"\n\n{settings_report()}"  # names only, to debug hosted settings
             st.error(turn["error"])
     return turn
 

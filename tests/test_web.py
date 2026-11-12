@@ -6,7 +6,7 @@ import streamlit as st
 from langchain_core.messages import AIMessage
 from streamlit.testing.v1 import AppTest
 
-from estate_agent import web
+from estate_agent import presentation, web
 from estate_agent.agent import build_agent
 from test_agent import GOOD_ANSWER, LISTINGS_CALL, RULES_CALL, ScriptedModel, tool_turn, toolbox  # noqa: F401
 
@@ -64,7 +64,7 @@ def test_example_button_asks_that_question(use_agent, toolbox):
 
 def test_model_errors_are_shown_and_the_page_keeps_working(use_agent):
     def broken():
-        raise RuntimeError("OLLAMA_API_KEY is not set.")
+        raise presentation.SetupError("OLLAMA_API_KEY is not set.")
 
     use_agent(broken)
     at = AppTest.from_file(APP).run()
@@ -103,7 +103,7 @@ def test_hosted_secrets_reach_the_model_settings(monkeypatch):
 
     def fake_default_agent():
         seen.update({k: os.environ.get(k) for k in ("OLLAMA_BASE_URL", "OLLAMA_MODEL", "OLLAMA_API_KEY")})
-        raise RuntimeError("stop here")
+        raise presentation.SetupError("stop here")
 
     st.cache_resource.clear()
     monkeypatch.setattr(web.presentation, "default_agent", fake_default_agent)
@@ -134,3 +134,46 @@ def test_streamlit_follow_up_passes_earlier_turns(use_agent, toolbox):
     assert "2BR in Marina under 130k?" in [m.content for m in messages]
     second = at.session_state["history"][1]
     assert second["answer"] == "L0002 is the cheapest, at AED 120,000 a year." and not second.get("warning")
+
+
+class ProviderError(Exception):
+    """Like ollama.ResponseError: the provider's own text and an HTTP status."""
+
+    def __init__(self, text, status_code):
+        super().__init__(text)
+        self.status_code = status_code
+
+
+class FailingModel:
+    def __init__(self, error):
+        self.error = error
+
+    def bind_tools(self, tools, **kwargs):
+        return self
+
+    def invoke(self, messages):
+        raise self.error
+
+    stream = invoke
+
+
+@pytest.mark.parametrize("error, shown", [
+    (ProviderError("Add usage credits or subscribe and save up to 66%: https://ollama.com/plans", 402),
+     "used up its free model allowance"),
+    (ProviderError("Rate limit reached for model", 429), "used up its free model allowance"),
+    (ProviderError("upstream connect error, internal ref 7f3a", 503), "try again in a few minutes"),
+])
+def test_provider_errors_are_explained_without_their_raw_text(use_agent, toolbox, error, shown):
+    use_agent(lambda: build_agent(FailingModel(error), toolbox))
+    at = AppTest.from_file(APP, default_timeout=30).run()
+    at.chat_input[0].set_value("hello").run()
+    assert not at.exception
+    message = at.error[0].value
+    assert shown in message
+    assert str(error) not in message and "Settings found" not in message  # no upsell, no setting names
+
+
+def test_quota_errors_are_recognised():
+    assert presentation.is_quota_error(ProviderError("anything", 402))
+    assert presentation.is_quota_error(RuntimeError("You have exceeded your quota"))
+    assert not presentation.is_quota_error(ProviderError("Bad gateway", 502))

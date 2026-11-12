@@ -11,7 +11,8 @@ sources. Every number in the answer is checked against what the tools returned.
 
 **[▶ Try the live demo](https://appapppy-hadkfldjgvu3gw24nfdysg.streamlit.app/)**: free
 hosting, so the first visit after a quiet period takes a moment to wake up; 10
-questions per visitor.
+questions per visitor. The model runs on a free plan with a monthly allowance; if it is
+used up, the demo says so, and you can [run it yourself](#run-it-yourself).
 
 ![The agent answering a two-part question: it searches listings, searches the tenancy law, passes the grounding check, answers with citations, and one step is opened to show the raw tool result](docs/demo.gif)
 
