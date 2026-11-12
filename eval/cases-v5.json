@@ -1,0 +1,105 @@
+{
+  "version": "v5",
+  "frozen": "2026-11-12",
+  "note": "Held-out multi-turn set: written and committed before any run on it. Context questions are asked first, in the same conversation; the case is scored on the answer to 'question'. 'tools_required_in_conversation' accepts the tool in any turn, so an answer that reuses an earlier tool result is judged on its content (the v4 F5/F9 point). 'tools_required' still means the final turn, for follow-ups that change a parameter, where reusing the old result would be wrong. Do not edit after the first recorded run.",
+  "cases": [
+    {
+      "id": "R1", "category": "reuse-rules",
+      "context": ["Can my landlord evict me if I'm late paying the rent?"],
+      "question": "How does he have to serve that notice?",
+      "tools_required_in_conversation": ["search_rules"],
+      "facts": [{"text": "notary public"}, {"text": "registered mail"}],
+      "citations_required": ["law-26-2007#art25"]
+    },
+    {
+      "id": "R2", "category": "reuse-rules",
+      "context": ["Can my landlord make me leave at the end of my lease because he wants to demolish and rebuild?"],
+      "question": "Once it's rebuilt, do I get to move back in?",
+      "tools_required_in_conversation": ["search_rules"],
+      "facts": [{"text": "first refusal"}, {"number": 30, "or_text": "thirty"}],
+      "citations_required": ["law-26-2007#art29"]
+    },
+    {
+      "id": "R3", "category": "reuse-rules",
+      "context": ["Does my rent cover the building's pool and gym?"],
+      "question": "Can my contract say otherwise?",
+      "tools_required_in_conversation": ["search_rules"],
+      "facts": [{"text": "unless otherwise agreed"}],
+      "citations_required": ["law-26-2007#art11"]
+    },
+    {
+      "id": "R4", "category": "reuse-rules",
+      "context": ["My lease doesn't say when the rent is due. When do I have to pay?"],
+      "question": "Is that paid in advance or at the end of each period?",
+      "tools_required_in_conversation": ["search_rules"],
+      "facts": [{"text": "in advance"}, {"number": 4, "or_text": "four"}],
+      "citations_required": ["law-26-2007#art12"]
+    },
+    {
+      "id": "R5", "category": "reuse-rules",
+      "context": ["My rent is 25% below the average for similar flats. How much can my landlord raise it when I renew?"],
+      "question": "And if it were only 5% below the average?",
+      "tools_required_in_conversation": ["search_rules"],
+      "facts": [{"any_of": ["no rent increase", "no increase", "cannot increase", "can't increase", "cannot be increased", "can't be increased", "cannot raise", "can't raise", "0%"]}],
+      "citations_required": ["decree-43-2013#art1"],
+      "note": "Band (a): up to 10% below average, no increase. The first turn's answer is 10% (band c)."
+    },
+    {
+      "id": "D1", "category": "reuse-data",
+      "context": ["Show me 2-bedroom flats to rent in JVC under AED 150k a year."],
+      "question": "Which of those are furnished?",
+      "tools_required_in_conversation": ["search_listings"],
+      "facts": [{"number": 121000}, {"number": 142000}],
+      "citations_required": ["L0001", "L0265"],
+      "note": "The first search returns L0333, L0024, L0001 and L0265; only L0001 and L0265 are furnished."
+    },
+    {
+      "id": "D2", "category": "reuse-data",
+      "context": ["What's the monthly payment on a AED 1.2M apartment at 4.5% with the minimum down payment? I'm an expat buying my first home."],
+      "question": "How much is the DLD transfer fee on that?",
+      "tools_required_in_conversation": ["mortgage_calculator"],
+      "facts": [{"number": 48000, "or_text": "48k"}]
+    },
+    {
+      "id": "D3", "category": "reuse-data",
+      "context": ["Are apartment prices in Dubai Hills going up?"],
+      "question": "How many sales is that based on?",
+      "tools_required_in_conversation": ["area_price_stats"],
+      "facts": [{"number": 21}],
+      "note": "21 sales in the latest 12 months (25 in the 12 before)."
+    },
+    {
+      "id": "C1", "category": "changed-parameter",
+      "context": ["Find 1-bedroom flats to rent in Business Bay under AED 110k a year."],
+      "question": "What about 2 bedrooms, up to AED 135k?",
+      "tools_required": ["search_listings"],
+      "facts": [{"number": 129000}, {"number": 134000}],
+      "citations_required": ["L0133", "L0424"],
+      "note": "Bedrooms and budget change, so the first search cannot answer it."
+    },
+    {
+      "id": "C2", "category": "changed-parameter",
+      "context": ["What's the monthly mortgage payment on a AED 1.2M apartment at 4.5% over 25 years with the minimum down payment? I'm an expat buying my first home."],
+      "question": "What if I take the loan over 15 years instead?",
+      "tools_required": ["mortgage_calculator"],
+      "facts": [{"number": 7344}],
+      "note": "AED 5,336 over 25 years; the term changes, so it must be recalculated."
+    },
+    {
+      "id": "T1", "category": "topic-change",
+      "context": ["Show me 2-bedroom flats to rent in JVC under AED 150k a year."],
+      "question": "Can you recommend a good restaurant near there?",
+      "tools_forbidden": ["search_listings", "compare_properties", "area_price_stats", "mortgage_calculator"],
+      "facts": [{"any_of": ["don't have", "do not have", "can't", "cannot", "not able", "unable", "outside", "only", "specialized", "specialised"]}],
+      "no_citations": true,
+      "note": "An out-of-scope follow-up must not drag in the earlier listings."
+    },
+    {
+      "id": "S1", "category": "single-turn",
+      "question": "Are villa prices in Arabian Ranches rising?",
+      "tools_required": ["area_price_stats"],
+      "facts": [{"number": 8.3, "or_text": "8.3%"}],
+      "note": "Single-turn control in the same set."
+    }
+  ]
+}
