@@ -396,10 +396,43 @@ code-style field name (0 / 152). Reports: [v4 before](../eval/variation-v4-befor
   first turn had already retrieved that article; the frozen cases require a new
   `search_rules` call in the final turn. Read by hand, all 12 follow-ups are right.
 
+## Reusing earlier tool results: held-out set v5 (frozen, not yet run)
+
+### The scorer field (commit `6c43893`)
+
+A case can now list tools under `tools_required_in_conversation`: they pass if they
+ran successfully in **any** turn of the conversation, so a follow-up answered from an
+earlier tool result is judged on its content. `tools_required` keeps its meaning
+(the final turn). No earlier set uses the new field, so every recorded score is
+unchanged, and the scorer version stays 1.2.
+
+### The set: [`eval/cases-v5.json`](../eval/cases-v5.json) (commit `365d444`)
+
+Written and committed, with its hash, before any run and with no change to the agent:
+
+| Cases | What they test | Tool rule |
+|---|---|---|
+| R1–R5 | Law follow-ups whose answer is in the article the first turn found: how an eviction notice is served, the right to return after a rebuild, amenities "unless otherwise agreed", rent paid in advance, the 0% band of the rent-increase decree | in any turn |
+| D1–D3 | Data follow-ups answered by the first result: which listings are furnished, the DLD fee on a priced mortgage, how many sales a statistic rests on | in any turn |
+| C1–C2 | Follow-ups that change a parameter (bedrooms and budget; loan term), where reusing the old result would be wrong | final turn |
+| T1, S1 | An out-of-scope follow-up, and a single-turn control | — |
+
+The tests check every expected figure against the tools and every expected law
+phrase against the article the case must cite.
+
+**Status:** the runs are still to come. The first attempt (13 November 2026) got
+HTTP 402 from Ollama's cloud: the free plan's usage for the month was used up. To
+keep v5 comparable with v1–v4 it waits for the same model rather than switching.
+When usage is back:
+
+```bash
+python scripts/run_eval.py --cases eval/cases-v5.json    # twice
+python scripts/variation.py eval/runs/<run 1>.json eval/runs/<run 2>.json > eval/variation-v5.json
+```
+
 ## What to do next
 
-1. A held-out set where reusing an earlier tool result is allowed, so the F5/F9
-   kind of answer is judged on content rather than on calling a tool again.
+1. Run cases-v5 twice on `gemma4:cloud` (above) and record the results here.
 2. If the Groq account is unblocked, add `llama-3.3-70b-versatile` to the model
    comparison (`LLM_PROVIDER=groq`, then `scripts/compare_models.py`).
 3. For local models: a final-answer step that rewrites only checked facts, measured

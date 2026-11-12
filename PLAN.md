@@ -75,6 +75,10 @@ Each tool returns JSON with a `source` field so the agent can cite it.
   qwen3 4B (local) 15/64 at 140 s, on the same agent ([docs/EVALUATION.md](docs/EVALUATION.md#model-comparison)).
 - **Follow-up questions:** conversation memory (last 3 turns), checked on a held-out
   multi-turn set (cases-v4): 3/12 before, 10/12 after, with v1–v3 unchanged.
+- **Reusing earlier results:** the scorer can accept a tool from any turn
+  (`tools_required_in_conversation`), and a new held-out multi-turn set (cases-v5, 12
+  cases) is frozen to judge answers that reuse an earlier result on content. Its runs
+  wait for Ollama cloud usage to reset ([docs/EVALUATION.md](docs/EVALUATION.md#reusing-earlier-tool-results-held-out-set-v5-frozen-not-yet-run)).
 
 ## Ground rules
 

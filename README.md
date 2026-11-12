@@ -96,7 +96,10 @@ support and grounding, with `gemma4:cloud`. Cases passing all four, per run:
 | + conversation memory | **30, 30** | **20, 20** | **14, 14** | **10, 10** | **0 / 152** |
 
 The two remaining v4 failures are correct, cited answers that reused an article found
-in the first turn instead of searching again, which the frozen cases did not allow.
+in the first turn instead of searching again, which the frozen cases did not allow. A
+fifth held-out set ([v5](eval/cases-v5.json), 12 multi-turn cases) now judges that kind of
+answer on content, while still requiring a new tool call when a follow-up changes a
+parameter; it is frozen and its runs are still to come.
 
 Scores use scorer 1.2. Tool choice and grounding are full marks in every run. The
 sets are small and author-written on synthetic data, so they show which behaviours
