@@ -13,7 +13,7 @@ them before relying on results; lenders may apply stricter limits.
 from estate_agent.tools.base import ToolError, require_choice
 
 SOURCE = (
-    "UAE Central Bank mortgage rules and Dubai Land Department fees, checked October 2026; "
+    "UAE Central Bank mortgage rules and Dubai Land Department fees, checked November 2026; "
     "lenders may apply stricter limits"
 )
 BUYERS = ("expat", "national")
@@ -29,6 +29,8 @@ MAX_LTV_LATER_HOME = {"expat": 0.60, "national": 0.65}
 MAX_LTV_OFF_PLAN = 0.50
 MAX_YEARS = 25
 MAX_DEBT_BURDEN = 0.50
+# Largest loan as a multiple of annual income (CBUAE mortgage regulations, Art. 3(4)).
+MAX_INCOME_MULTIPLE = {"expat": 7, "national": 8}
 DLD_TRANSFER_FEE = 0.04
 MORTGAGE_REGISTRATION_FEE = 0.0025
 AGENCY_COMMISSION = 0.02
@@ -120,6 +122,8 @@ def calculate_mortgage(
             f"The cap is {MAX_DEBT_BURDEN:.0%} of income across all debt repayments; "
             "this counts only this mortgage"
         )
+        result["max_loan_from_income"] = round(monthly_income * 12 * MAX_INCOME_MULTIPLE[buyer])
+        result["within_income_multiple"] = round(loan) <= result["max_loan_from_income"]
     return result
 
 
@@ -180,6 +184,12 @@ def mortgage_calculator(
         checks.append(f"The monthly payment is {m['debt_burden_pct']:g}% of monthly income, {position} "
                       f"the {MAX_DEBT_BURDEN:.0%} debt burden limit. The limit covers all debt "
                       "repayments; this counts only this mortgage.")
+        multiple = MAX_INCOME_MULTIPLE[a["buyer"]]
+        who = "an expatriate" if a["buyer"] == "expat" else "a UAE national"
+        position = "within" if m["within_income_multiple"] else "above"
+        result["largest loan for this income (AED)"] = m["max_loan_from_income"]
+        checks.append(f"The loan of AED {m['loan_amount']:,} is {position} the largest loan allowed for this "
+                      f"income: {multiple} times annual income for {who}, AED {m['max_loan_from_income']:,}.")
     result["checks"] = checks
     result["assumptions"] = {
         "interest rate (% a year)": a["annual_rate_pct"],
@@ -188,5 +198,7 @@ def mortgage_calculator(
         "first home": a["first_home"],
         "off-plan": a["off_plan"],
         "rate fixed for the whole term": True,
+        "DLD transfer fee": ("counted in full for the buyer, as is common; by law it is shared "
+                             "equally with the seller unless agreed otherwise"),
     }
     return result

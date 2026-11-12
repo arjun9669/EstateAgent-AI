@@ -89,11 +89,25 @@ raw pages are present and fails if the committed text would change.
 | Max loan-to-value, UAE national, first home ≤ AED 5M / > AED 5M | 85% / 75% | CBUAE Rulebook | Oct 2026 |
 | Max loan-to-value, second or later home, expatriate / national | 60% / 65% | CBUAE Rulebook | Oct 2026 |
 | Max loan-to-value, off-plan | 50% | CBUAE Rulebook | Oct 2026 |
-| Max term | 25 years | CBUAE mortgage regulations | Not yet |
-| Max debt burden ratio | 50% of monthly income | CBUAE regulations | Not yet |
-| DLD transfer fee | 4% of price | Dubai Land Department | Not yet |
-| Mortgage registration fee | 0.25% of loan | Dubai Land Department | Not yet |
+| Max term | 25 years | [CBUAE Regulations Regarding Mortgage Loans](https://rulebook.centralbank.ae/en/rulebook/regulations-regarding-mortgage-loans) (Circular 31/2013, consolidated 8 Apr 2020), Art. 3(3) | Nov 2026 |
+| Max debt burden ratio | 50% of gross monthly income | Same regulations, Art. 3(1) | Nov 2026 |
+| Largest loan, expatriate / national | 7 / 8 times annual income | Same regulations, Art. 3(4) | Nov 2026 |
+| DLD transfer fee | 4% of price | [Executive Council Resolution No. 30 of 2013](https://dubailand.gov.ae/media/zrrd4qw4/en-legislation.pdf), table item 1 | Nov 2026 |
+| Mortgage registration fee | 0.25% of loan | Same resolution, item 10; [DLD service page](https://dubailand.gov.ae/en/eservices/request-for-mortgage-registration/) | Nov 2026 |
 | Agency commission | 2% + 5% VAT | Common market practice, not a law | — |
+
+Notes from the November 2026 check:
+
+- **Who pays the transfer fee.** Article 3(1) of Resolution 30/2013 says that, unless
+  agreed otherwise, the 4% is shared equally by seller and buyer. In practice buyers
+  usually pay all of it, so the tool counts it in full in the buyer's cash needed and
+  says so in its assumptions.
+- **Smaller fixed fees are left out:** DLD's AED 250 title deed fee and small per-drawing
+  fees, and the registration trustee's AED 4,000 (+ VAT) service fee for a mortgage.
+- **The income multiple was missing** from the calculator before this check; it is now a
+  third affordability check when a monthly income is given.
+- The 60% debt burden and 85% loan-to-value allowed under government housing programmes
+  (Art. 5) are not modelled.
 
 Lenders may apply stricter limits. Re-check before relying on these; they live
 in one place (`src/estate_agent/tools/mortgage.py`) so they are easy to update.

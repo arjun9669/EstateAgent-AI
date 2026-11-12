@@ -50,6 +50,17 @@ def test_debt_burden_check():
     assert result["within_debt_burden_cap"] is False
 
 
+@pytest.mark.parametrize("buyer, income, largest, within", [
+    ("expat", 20_000, 1_680_000, True),      # 7 x 240,000; loan 1,600,000
+    ("expat", 19_000, 1_596_000, False),
+    ("national", 17_000, 1_632_000, True),   # 8 x 204,000; loan 1,600,000 (80% of 2M)
+])
+def test_income_multiple_check(buyer, income, largest, within):
+    result = calculate_mortgage(property_price=2_000_000, annual_rate_pct=4.5, buyer=buyer,
+                                down_payment=400_000, monthly_income=income)
+    assert (result["max_loan_from_income"], result["within_income_multiple"]) == (largest, within)
+
+
 def test_cash_purchase_has_no_loan():
     result = calculate_mortgage(property_price=1_000_000, annual_rate_pct=5, down_payment=1_000_000)
     assert result["loan_amount"] == 0 and result["monthly_payment"] == 0
@@ -75,18 +86,23 @@ def test_tool_output_uses_plain_english_names_and_sentences():
     keys = list(result) + list(result["upfront costs (AED)"]) + list(result["assumptions"])
     assert not [k for k in keys if "_" in k], "no code-style field names in what the agent sees"
     assert result["minimum down payment (AED)"] == 400_000
-    ltv, debt = result["checks"]
+    ltv, debt, multiple = result["checks"]
     assert ltv.startswith("The down payment of AED 200,000 is below the minimum of AED 400,000")
     assert "at most 80% of the price for a first home up to AED 5,000,000 for an expatriate" in ltv
     assert "and this loan would be 90%" in ltv
     assert debt.startswith("The monthly payment is 66.7% of monthly income, above the 50% debt burden limit")
+    assert multiple == ("The loan of AED 1,800,000 is above the largest loan allowed for this income: "
+                        "7 times annual income for an expatriate, AED 1,260,000.")
+    assert result["largest loan for this income (AED)"] == 1_260_000
+    assert "shared equally with the seller" in result["assumptions"]["DLD transfer fee"]
 
 
 def test_tool_checks_when_limits_are_met():
     result = mortgage_calculator(property_price=1_200_000, annual_rate_pct=4.25, off_plan=True, monthly_income=40_000)
-    ltv, debt = result["checks"]
+    ltv, debt, multiple = result["checks"]
     assert "meets the minimum of AED 600,000" in ltv and "50% of the price for an off-plan property" in ltv
     assert "within the 50% debt burden limit" in debt
+    assert "is within the largest loan allowed for this income" in multiple
 
 
 def test_tool_without_income_has_one_check():

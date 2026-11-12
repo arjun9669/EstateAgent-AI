@@ -67,7 +67,7 @@ TOOL_SPECS = [
         "name": "mortgage_calculator",
         "description": (
             "UAE mortgage maths: monthly payment, loan-to-value cap check, upfront fees and "
-            "optional debt-burden check. Uses the minimum down payment if none is given."
+            "optional affordability checks (debt burden, loan as a multiple of income). Uses the minimum down payment if none is given."
         ),
         "parameters": {
             "type": "object",

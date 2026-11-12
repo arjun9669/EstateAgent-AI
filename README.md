@@ -77,7 +77,7 @@ can correct its arguments, and each result carries a `source` so answers can cit
 | `search_listings` | "2BR in JVC under 90k a year, furnished" | SQLite listings table |
 | `compare_properties` | "Compare L0435 and L0503" | Price per sq ft against similar listings |
 | `area_price_stats` | "Are Dubai Marina prices rising?" | Median sale prices, this year vs. last, with a warning when sales are few |
-| `mortgage_calculator` | "Can I afford AED 1.6M on 12k a month?" | UAE Central Bank loan-to-value caps, DLD fees, 50% debt burden limit, checks stated as sentences |
+| `mortgage_calculator` | "Can I afford AED 1.6M on 12k a month?" | UAE Central Bank loan-to-value caps, DLD fees, 50% debt burden and 7x/8x income limits, checks stated as sentences |
 | `search_rules` | "How much can my landlord raise the rent?" | Hybrid search over Law 26/2007 (as amended) and Decree 43/2013 |
 
 ## Evaluation
