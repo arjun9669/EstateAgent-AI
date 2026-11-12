@@ -2,7 +2,8 @@
 
 Each case is scored on four dimensions; a case passes only if all four pass.
 
-  tool_choice   every required tool ran successfully; no forbidden tool was called
+  tool_choice   every required tool ran successfully (in the final turn, or for
+                tools_required_in_conversation in any turn); no forbidden tool was called
   correctness   every expected fact is in the answer; no forbidden phrasing is
   citations     required listing/law IDs are cited, every cited ID came from a tool,
                 and every quotation appears word for word in the tool results
@@ -97,12 +98,19 @@ def score_case(case: dict, record: dict, scorer: str = LATEST_SCORER) -> dict:
         raise ValueError(f"Unknown scorer version {scorer!r}")
     answer, steps = record["answer"], record["steps"]
     problems = {dimension: [] for dimension in DIMENSIONS}
+    turns = record.get("turns") or [record]
 
     succeeded = {s["tool"] for s in steps if s["ok"]}
     called = {s["tool"] for s in steps}
     for tool in case.get("tools_required", []):
         if tool not in succeeded:
             problems["tool_choice"].append(f"did not run {tool}")
+    # A tool that may have run in any turn of the conversation, so an answer that
+    # reuses an earlier result is judged on its content (cases-v5 onwards).
+    succeeded_in_conversation = {s["tool"] for turn in turns for s in turn["steps"] if s["ok"]}
+    for tool in case.get("tools_required_in_conversation", []):
+        if tool not in succeeded_in_conversation:
+            problems["tool_choice"].append(f"did not run {tool} in any turn")
     for tool in case.get("tools_forbidden", []):
         if tool in called:
             problems["tool_choice"].append(f"called {tool}")
@@ -123,7 +131,6 @@ def score_case(case: dict, record: dict, scorer: str = LATEST_SCORER) -> dict:
     for citation in record["grounding"].get("unknown_citations", []):
         problems["citations"].append(f"cites {citation}, which no tool returned")
     # In a multi-turn case, earlier questions and tool results are evidence too.
-    turns = record.get("turns") or [record]
     evidence = _norm(" ".join([record.get("question", case["question"]), *case.get("context", [])]
                               + [s for turn in turns for step in turn["steps"] if step["ok"]
                                  for s in _strings(step["result"], keys=scorer >= "1.2")]))

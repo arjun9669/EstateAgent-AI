@@ -39,7 +39,8 @@ def test_frozen_cases_are_unchanged(path):
 @pytest.mark.parametrize("path, expected_count", [(ROOT / "eval" / "cases-v1.json", 30),
                                                   (ROOT / "eval" / "cases-v2.json", 20),
                                                   (ROOT / "eval" / "cases-v3.json", 14),
-                                                  (ROOT / "eval" / "cases-v4.json", 12)])
+                                                  (ROOT / "eval" / "cases-v4.json", 12),
+                                                  (ROOT / "eval" / "cases-v5.json", 12)])
 def test_case_ids_are_unique_and_well_formed(path, expected_count):
     cases = load_cases(path)
     assert len({c["id"] for c in cases}) == len(cases) == expected_count
@@ -50,7 +51,7 @@ def test_case_ids_are_unique_and_well_formed(path, expected_count):
 
 def test_later_sets_ask_new_questions():
     seen = set()
-    for name in ("cases-v1.json", "cases-v2.json", "cases-v3.json", "cases-v4.json"):
+    for name in ("cases-v1.json", "cases-v2.json", "cases-v3.json", "cases-v4.json", "cases-v5.json"):
         questions = {c["question"] for c in load_cases(ROOT / "eval" / name)}
         assert not seen & questions, name
         seen |= questions
@@ -243,6 +244,20 @@ def test_multi_turn_cases_take_evidence_from_earlier_turns():
     assert not score_case(case, single)["citations"]  # without earlier turns it is not evidence
 
 
+def test_tools_required_in_conversation_accept_an_earlier_turn():
+    rules = {"tool": "search_rules", "ok": True, "arguments": {}, "result": {"passages": [{"id": "law-26-2007#art14"}]}}
+    case = {"id": "T6", "category": "follow-up", "context": ["Rent increase?"], "question": "And the notice?",
+            "tools_required_in_conversation": ["search_rules"], "facts": [{"number": 90}]}
+    first = {"question": "Rent increase?", "steps": [rules], "answer": "..."}
+    final = {"question": case["question"], "answer": "90 days, law-26-2007#art14.", "steps": [],
+             "grounding": OK, "turns": [first, {"steps": []}]}
+    assert score_case(case, final)["passed"]  # the article was found in the first turn
+    strict = {k: v for k, v in case.items() if k != "tools_required_in_conversation"} | {"tools_required": ["search_rules"]}
+    assert not score_case(strict, final)["tool_choice"]  # the v4 rule: must search again
+    unanswered = dict(final, turns=[dict(first, steps=[]), {"steps": []}])
+    assert "did not run search_rules in any turn" in score_case(case, unanswered)["problems"][0]
+
+
 def test_v4_expected_values_match_the_tools():
     conn = connect()
     jlt = search_listings(conn, purpose="rent", area="JLT", bedrooms=2, max_price=170000)
@@ -260,3 +275,35 @@ def test_v4_expected_values_match_the_tools():
     national = mortgage_calculator(property_price=2_500_000, annual_rate_pct=4.5, buyer="national")
     assert (national["minimum_down_payment"], national["monthly_payment"]) == (375_000, 11811)
     assert area_price_stats(conn, "Palm Jumeirah", property_type="villa")["price_per_sqft_change_pct"] == 11.0
+
+
+def test_v5_expected_values_match_the_tools():
+    conn = connect()
+    jvc = search_listings(conn, purpose="rent", area="JVC", bedrooms=2, max_price=150000)["results"]
+    assert [(r["listing_id"], r["furnished"]) for r in jvc] == [
+        ("L0333", False), ("L0024", False), ("L0001", True), ("L0265", True)]
+    assert [r["price_aed"] for r in jvc if r["furnished"]] == [121000, 142000]
+    flat = mortgage_calculator(property_price=1_200_000, annual_rate_pct=4.5)
+    assert (flat["monthly_payment"], flat["upfront_costs"]["dld_transfer_fee"]) == (5336, 48000)
+    assert mortgage_calculator(property_price=1_200_000, annual_rate_pct=4.5, years=15)["monthly_payment"] == 7344
+    hills = area_price_stats(conn, "Dubai Hills", property_type="apartment")
+    assert hills["current_period"]["transactions"] == 21
+    bay = search_listings(conn, purpose="rent", area="Business Bay", bedrooms=2, max_price=135000)["results"]
+    assert [(r["listing_id"], r["price_aed"]) for r in bay] == [("L0133", 129000), ("L0424", 134000)]
+    assert area_price_stats(conn, "Arabian Ranches", property_type="villa")["price_per_sqft_change_pct"] == 8.3
+
+
+def test_v5_law_facts_are_in_the_cited_articles():
+    """Each rules case's expected wording appears in the article it must cite."""
+    def article(passage_id):
+        document, number = passage_id.split("#art")
+        text = (ROOT / "data" / "rules" / f"{document}.md").read_text(encoding="utf-8")
+        section = text.split(f"## Article ({number})", 1)[1].split("\n## ", 1)[0]
+        return " ".join(section.lower().split())
+    for case in load_cases(ROOT / "eval" / "cases-v5.json"):
+        if case["category"] != "reuse-rules":
+            continue
+        text = article(case["citations_required"][0])
+        for fact in case["facts"]:
+            options = fact.get("any_of") or [fact.get("text") or fact.get("or_text")]
+            assert any(option.lower() in text for option in options if option != "0%"), (case["id"], fact)
