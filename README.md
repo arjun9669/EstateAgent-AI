@@ -100,9 +100,11 @@ The two remaining v4 failures are correct, cited answers that reused an article 
 in the first turn instead of searching again, which the frozen cases did not allow. A
 fifth held-out set ([v5](eval/cases-v5.json), 12 multi-turn cases) now judges that kind of
 answer on content, while still requiring a new tool call when a follow-up changes a
-parameter; it is frozen and its runs are still to come.
+parameter. Its gemma4 runs wait for the free cloud allowance; a first run on the free
+local `gpt-oss:20b` (laptop CPU, 2 hours) passed 4 of 12, with every failure read by hand
+in [docs/EVALUATION.md](docs/EVALUATION.md#first-run-gpt-oss20b-on-a-laptop-cpu-record).
 
-Scores use scorer 1.2. Tool choice and grounding are full marks in every run. The
+Scores use scorer 1.2. Tool choice and grounding are full marks in every gemma4 run. The
 sets are small and author-written on synthetic data, so they show which behaviours
 are stable, not real-world accuracy. Protocol, every failure and its reading, and
 the scorer fixes: [docs/EVALUATION.md](docs/EVALUATION.md).

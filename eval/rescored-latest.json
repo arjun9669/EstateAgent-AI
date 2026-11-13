@@ -521,6 +521,21 @@
     "citations": 10
    },
    "changed_cases": []
+  },
+  {
+   "run": "2026-11-13-gpt-oss-20b-d25f4b9-v5.json",
+   "cases_file": "cases-v5.json",
+   "cases": 12,
+   "original_scorer": "1.2",
+   "original": {
+    "passed": 4,
+    "citations": 7
+   },
+   "latest": {
+    "passed": 4,
+    "citations": 7
+   },
+   "changed_cases": []
   }
  ]
 }

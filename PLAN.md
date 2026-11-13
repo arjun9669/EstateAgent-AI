@@ -78,7 +78,8 @@ Each tool returns JSON with a `source` field so the agent can cite it.
 - **Reusing earlier results:** the scorer can accept a tool from any turn
   (`tools_required_in_conversation`), and a new held-out multi-turn set (cases-v5, 12
   cases) is frozen to judge answers that reuse an earlier result on content. Its runs
-  wait for Ollama cloud usage to reset ([docs/EVALUATION.md](docs/EVALUATION.md#reusing-earlier-tool-results-held-out-set-v5-frozen-not-yet-run)).
+  wait for Ollama cloud usage to reset; a first run on the free local gpt-oss:20b passed
+  4 of 12 ([docs/EVALUATION.md](docs/EVALUATION.md#reusing-earlier-tool-results-held-out-set-v5)).
 - **Rules checked against official sources (November 2026):** the four unchecked
   mortgage rules were all right; the CBUAE's 7x/8x income limit, which was missing, is
   now an affordability check ([docs/DATA_SOURCES.md](docs/DATA_SOURCES.md#4-mortgage-rules-hard-coded-in-mortgage_calculator)).

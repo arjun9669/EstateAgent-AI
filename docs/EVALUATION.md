@@ -396,7 +396,7 @@ code-style field name (0 / 152). Reports: [v4 before](../eval/variation-v4-befor
   first turn had already retrieved that article; the frozen cases require a new
   `search_rules` call in the final turn. Read by hand, all 12 follow-ups are right.
 
-## Reusing earlier tool results: held-out set v5 (frozen, not yet run)
+## Reusing earlier tool results: held-out set v5
 
 ### The scorer field (commit `6c43893`)
 
@@ -420,10 +420,42 @@ Written and committed, with its hash, before any run and with no change to the a
 The tests check every expected figure against the tools and every expected law
 phrase against the article the case must cite.
 
-**Status:** the runs are still to come. The first attempt (13 November 2026) got
-HTTP 402 from Ollama's cloud: the free plan's usage for the month was used up. To
-keep v5 comparable with v1–v4 it waits for the same model rather than switching.
-When usage is back:
+**Status:** the `gemma4:cloud` runs are still to come. The first attempt (13 November
+2026) got HTTP 402 from Ollama's cloud: the free plan's usage for the month was used up.
+To keep v5 comparable with v1–v4, its baseline waits for the same model.
+
+### First run: `gpt-oss:20b` on a laptop CPU ([record](../eval/runs/2026-11-13-gpt-oss-20b-d25f4b9-v5.json))
+
+While the cloud model was unavailable, v5 ran once on a free local model: `gpt-oss:20b`
+through Ollama, on an Intel i7-8550U with no usable GPU (32 GB RAM), code `d25f4b9`.
+It took 2 h 6 min, a median of 8 minutes per case (one case took 48 minutes).
+
+**4 / 12 passed** (tool choice 11, correctness 7, citations 7, grounding 11). Every
+failure read by hand:
+
+| Case | Score | Reading |
+|---|---|---|
+| R1, R2, C2, T1 | PASS | Correct |
+| R3 | FAIL (citations) | **Correct answer.** It quotes Article 11 word for word and cites it, but writes the ID with non-breaking hyphens (`law‑26‑2007#art11`, U+2011), which the ID pattern does not match |
+| R4 | FAIL (citations) | Correct content ("in advance", four instalments), but cites "Article 12 of Law No. 26 of 2007" in words, not the passage ID |
+| R5 | FAIL | **Wrong.** 5% below average is band (a), no increase; it quoted band (b) and said 5% (with non-breaking hyphens in the ID) |
+| D1 | FAIL | **Broken.** Raw tool-call syntax (`<\|constrain\|>json<\|message\|>`) leaked into the answer, which names the wrong listings |
+| D2 | FAIL | **Wrong.** Says no tool gives the DLD fee, though the first turn's mortgage result lists it |
+| D3, S1 | FAIL | **Wrong.** Adds a bedrooms filter nobody asked for (2-bedroom; 3-bedroom villas), so it reports 9 sales and 7.9% for a different set of sales |
+| C1 | FAIL | **Incomplete.** After a failed first call it lists one of the two listings (L0424, not L0133) |
+
+So by hand 5 of 12 are right (R3 too) and one more is right apart from the citation
+form (R4). The real errors are the model's: an invented filter (also seen on a
+single-turn test question), ignoring an earlier tool result, misreading a band, and
+leaking its tool-call format. This is a different model on new cases, so it is not
+compared with any gemma4 score. Like qwen3:4b, it suggests the agent needs a
+stronger model than a laptop can run at a usable speed.
+
+The scorer findings are noted for a later version rather than changed after seeing
+results: IDs with non-breaking hyphens are missed by both the scorer and the
+grounding check (which then cannot check those IDs at all).
+
+When `gemma4:cloud` usage is back:
 
 ```bash
 python scripts/run_eval.py --cases eval/cases-v5.json    # twice
@@ -442,6 +474,8 @@ python scripts/variation.py eval/runs/<run 1>.json eval/runs/<run 2>.json > eval
    comparison (`LLM_PROVIDER=groq`, then `scripts/compare_models.py`).
 3. For local models: a final-answer step that rewrites only checked facts, measured
    on qwen3:4b against its recorded run.
+4. Normalise look-alike hyphens (U+2010 to U+2015) before matching listing and passage
+   IDs, in the grounding check and in a scorer 1.3, re-scoring every run as before.
 
 ## Limits
 
