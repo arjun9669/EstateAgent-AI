@@ -488,8 +488,10 @@ python scripts/variation.py eval/runs/<run 1>.json eval/runs/<run 2>.json > eval
    changes what the model reads in every mortgage case with an income. And
    `search_rules` now also searches Decree 26 of 2013 (31 more passages), which can
    change which articles a law question retrieves.
-2. If the Groq account is unblocked, add `llama-3.3-70b-versatile` to the model
-   comparison (`LLM_PROVIDER=groq`, then `scripts/compare_models.py`).
+2. Run v5 on Groq's free plan (`LLM_PROVIDER=groq`, default model `openai/gpt-oss-120b`;
+   Llama 3.3 70B became enterprise-only). Its free limits (8K tokens a minute, 200K a
+   day) are expected to allow a few dozen questions a day (not yet measured), so the full
+   v1–v5 comparison would spread over several days.
 3. For local models: a final-answer step that rewrites only checked facts, measured
    on qwen3:4b against its recorded run.
 

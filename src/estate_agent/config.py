@@ -17,7 +17,8 @@ from pathlib import Path
 ENV_FILE = Path(__file__).resolve().parents[2] / ".env"
 PROVIDERS = ("ollama", "groq")
 DEFAULT_PROVIDER = "ollama"
-DEFAULT_MODELS = {"ollama": "qwen3:4b", "groq": "llama-3.3-70b-versatile"}
+# Groq moved Llama 3.3 70B to enterprise plans; gpt-oss-120b is on its free plan (Nov 2026).
+DEFAULT_MODELS = {"ollama": "qwen3:4b", "groq": "openai/gpt-oss-120b"}
 DEFAULT_OLLAMA_URL = "http://localhost:11434"
 # Ollama's default context window is too small for tool results plus the prompt.
 OLLAMA_CONTEXT_TOKENS = 8192

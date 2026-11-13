@@ -175,7 +175,7 @@ def test_groq_provider_needs_a_key(clean_env):
     with pytest.raises(RuntimeError, match="console.groq.com"):
         config.make_model()
     clean_env.setenv("GROQ_API_KEY", "test-key-not-real")
-    assert config.make_model().model_name == "llama-3.3-70b-versatile"
+    assert config.make_model().model_name == "openai/gpt-oss-120b"
 
 
 def test_unknown_provider_is_rejected(clean_env):

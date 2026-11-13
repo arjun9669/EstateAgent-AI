@@ -58,7 +58,7 @@ flowchart TB
         G -- "no: one revision" --> P
     end
 
-    P <-. "chat + tool schemas" .-> LLM[("gemma4 via Ollama, or Llama via Groq")]
+    P <-. "chat + tool schemas" .-> LLM[("gemma4 via Ollama, or gpt-oss via Groq")]
     G -- "answer, steps, warnings" --> UI
 
     T --> SL["search_listings · compare_properties · area_price_stats"]
@@ -122,7 +122,8 @@ Same agent, prompt, tools and 64 questions; only the model changes:
 
 qwen3:4b chose the right tools in 63 of 64 cases and had the right facts in 56, but
 wrote its reasoning and the grounding check's feedback into its answers, which broke
-citations. Groq's Llama 70B is planned; the account was restricted during testing.
+citations. Groq's free plan is the next model to compare (`openai/gpt-oss-120b`; its
+Llama 70B is now enterprise-only).
 [Details](docs/EVALUATION.md#model-comparison).
 
 ## Run it yourself
@@ -146,8 +147,10 @@ pytest      # offline; no model or key needed
   in the project.
 - **Local model, offline:** `ollama pull qwen3:4b` (about 2.5 GB). Fits an 8 GB Mac,
   but plans less well.
-- **Groq:** set `LLM_PROVIDER=groq` and `GROQ_API_KEY` from
-  [console.groq.com](https://console.groq.com).
+- **Groq, free cloud option:** create a key at [console.groq.com](https://console.groq.com)
+  (free plan, no card), then set `LLM_PROVIDER=groq` and `GROQ_API_KEY`. The default
+  model is `openai/gpt-oss-120b`; the free plan allows 8,000 tokens a minute and 200,000 a
+  day, so expect roughly one question a minute.
 
 **Then:**
 
