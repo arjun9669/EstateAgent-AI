@@ -155,7 +155,7 @@ def test_question_numbers_count_as_evidence(toolbox):
 @pytest.fixture
 def clean_env(monkeypatch, tmp_path):
     for name in ("LLM_PROVIDER", "GROQ_API_KEY", "GROQ_MODEL", "OLLAMA_MODEL", "OLLAMA_BASE_URL",
-                 "OLLAMA_API_KEY"):
+                 "OLLAMA_API_KEY", "GEMINI_API_KEY", "GEMINI_MODEL"):
         monkeypatch.delenv(name, raising=False)
     monkeypatch.setattr(config, "ENV_FILE", tmp_path / ".env")
     return monkeypatch
@@ -176,6 +176,24 @@ def test_groq_provider_needs_a_key(clean_env):
         config.make_model()
     clean_env.setenv("GROQ_API_KEY", "test-key-not-real")
     assert config.make_model().model_name == "openai/gpt-oss-120b"
+
+
+def test_gemini_provider_needs_a_key(clean_env):
+    clean_env.setenv("LLM_PROVIDER", "gemini")
+    with pytest.raises(RuntimeError, match="aistudio.google.com"):
+        config.make_model()
+    clean_env.setenv("GEMINI_API_KEY", "test-key-not-real")
+    model = config.make_model()
+    assert model.model.removeprefix("models/") == "gemini-3.6-flash" and model.temperature == 0
+
+
+def test_answers_given_as_content_blocks_are_read_as_text(toolbox):
+    """Gemini returns content as a list of blocks; the answer and the check must use its text."""
+    blocks = [{"type": "text", "text": "Nothing to look up. "},
+              {"type": "text", "text": "Information only, not legal or financial advice."}]
+    result = ask(build_agent(ScriptedModel([AIMessage(content=blocks)]), toolbox), "hello")
+    assert result.answer == "Nothing to look up. Information only, not legal or financial advice."
+    assert result.grounding["ok"]
 
 
 def test_unknown_provider_is_rejected(clean_env):

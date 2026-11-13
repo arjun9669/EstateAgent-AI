@@ -8,17 +8,21 @@ LLM_PROVIDER chooses the chat model:
           On a server without the Ollama app (e.g. Streamlit Community Cloud), set
           OLLAMA_BASE_URL=https://ollama.com, OLLAMA_API_KEY and a direct model
           name such as gemma4:31b.
-  groq    Groq's free cloud API (needs GROQ_API_KEY)
+  groq    Groq's cloud API, free plan without a card (needs GROQ_API_KEY)
+  gemini  Google's Gemini API, free tier without a card (needs GEMINI_API_KEY from
+          aistudio.google.com). On the free tier Google may use prompts to improve
+          its products.
 """
 
 import os
 from pathlib import Path
 
 ENV_FILE = Path(__file__).resolve().parents[2] / ".env"
-PROVIDERS = ("ollama", "groq")
+PROVIDERS = ("ollama", "groq", "gemini")
 DEFAULT_PROVIDER = "ollama"
 # Groq moved Llama 3.3 70B to enterprise plans; gpt-oss-120b is on its free plan (Nov 2026).
-DEFAULT_MODELS = {"ollama": "qwen3:4b", "groq": "openai/gpt-oss-120b"}
+# Gemini 3.6 Flash is on Google's free tier and was available when 3.8 Flash was overloaded (Nov 2026).
+DEFAULT_MODELS = {"ollama": "qwen3:4b", "groq": "openai/gpt-oss-120b", "gemini": "gemini-3.6-flash"}
 DEFAULT_OLLAMA_URL = "http://localhost:11434"
 # Ollama's default context window is too small for tool results plus the prompt.
 OLLAMA_CONTEXT_TOKENS = 8192
@@ -61,6 +65,18 @@ def make_model():
                 "or use LLM_PROVIDER=ollama for a local model with no key."
             )
         return ChatGroq(model=model_name(), temperature=0, max_retries=2)
+
+    if provider() == "gemini":
+        from langchain_google_genai import ChatGoogleGenerativeAI
+
+        api_key = os.environ.get("GEMINI_API_KEY")
+        if not api_key:
+            raise RuntimeError(
+                "GEMINI_API_KEY is not set. Create a free key at aistudio.google.com/apikey and "
+                "put GEMINI_API_KEY=... in the project's .env file (it is git-ignored), "
+                "or use LLM_PROVIDER=ollama for a local model with no key."
+            )
+        return ChatGoogleGenerativeAI(model=model_name(), google_api_key=api_key, temperature=0, max_retries=2)
 
     from langchain_ollama import ChatOllama
 

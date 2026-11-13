@@ -58,7 +58,7 @@ flowchart TB
         G -- "no: one revision" --> P
     end
 
-    P <-. "chat + tool schemas" .-> LLM[("gemma4 via Ollama, or gpt-oss via Groq")]
+    P <-. "chat + tool schemas" .-> LLM[("gemma4 via Ollama, Gemini, or gpt-oss via Groq")]
     G -- "answer, steps, warnings" --> UI
 
     T --> SL["search_listings · compare_properties · area_price_stats"]
@@ -147,6 +147,10 @@ pytest      # offline; no model or key needed
   in the project.
 - **Local model, offline:** `ollama pull qwen3:4b` (about 2.5 GB). Fits an 8 GB Mac,
   but plans less well.
+- **Gemini, free cloud option:** create a key at
+  [aistudio.google.com/apikey](https://aistudio.google.com/apikey) (free tier, no card),
+  then set `LLM_PROVIDER=gemini` and `GEMINI_API_KEY`. The default model is
+  `gemini-3.6-flash`. On the free tier Google may use your prompts to improve its products.
 - **Groq, free cloud option:** create a key at [console.groq.com](https://console.groq.com)
   (free plan, no card), then set `LLM_PROVIDER=groq` and `GROQ_API_KEY`. The default
   model is `openai/gpt-oss-120b`; the free plan allows 8,000 tokens a minute and 200,000 a
@@ -173,7 +177,7 @@ src/estate_agent/
   grounding.py      Checks every figure and ID in an answer against the evidence
   tools/            The five tools and their tool-calling schemas
   web.py, ui.py     Streamlit and Gradio interfaces; presentation.py is shared
-  config.py         Model settings: Ollama (local or cloud) or Groq
+  config.py         Model settings: Ollama (local or cloud), Gemini or Groq
   evaluation.py     Scores recorded answers on the four dimensions
   data.py, areas.py, dld.py   Data loading, Dubai areas, DLD transactions loader
 scripts/            ask, run_eval, compare_runs, compare_models, variation, rescore_runs, record_demo,
@@ -198,7 +202,7 @@ Sources and known gaps: [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md).
 
 ## Built with
 
-Python · LangGraph · LangChain · Ollama (gemma4) · Groq · ChromaDB · MiniLM (ONNX) ·
+Python · LangGraph · LangChain · Ollama (gemma4) · Gemini · Groq · ChromaDB · MiniLM (ONNX) ·
 BM25 · SQLite · Streamlit · Gradio · pytest · GitHub Actions · Streamlit Community Cloud
 
 ## Limitations

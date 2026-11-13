@@ -130,7 +130,7 @@ def build_agent(model, toolbox: Toolbox, max_tool_rounds: int = MAX_TOOL_ROUNDS,
         return {"messages": unanswered + [prompt, reply]}
 
     def check(state: AgentState) -> dict:
-        answer = state["messages"][-1].content
+        answer = state["messages"][-1].text  # plain text, also when a model returns content blocks (Gemini)
         report = grounding.check(answer, _evidence(state["messages"]) + state.get("prior_evidence", []))
         update = {"grounding": report.as_dict(), "checks": [{"draft": answer, **report.as_dict()}]}
         if not report.ok and state["revisions"] < max_revisions:
@@ -222,7 +222,7 @@ def ask(graph, question: str, history: list[AgentResult] | None = None) -> Agent
 def _result(question: str, state: dict) -> AgentResult:
     return AgentResult(
         question=question,
-        answer=state["messages"][-1].content,
+        answer=state["messages"][-1].text,
         steps=state["steps"],
         grounding=state["grounding"],
         revisions=state["revisions"],
