@@ -307,7 +307,7 @@ script: `scripts/compare_models.py`).
 
 | Model | Where it runs | v1 (30) | v2 (20) | v3 (14) | All 64 | Median time per question | Answers showing field names |
 |---|---|---|---|---|---:|---:|---:|
-| `gemma4:cloud` (31B) | Ollama cloud, free plan | 30, 30 | 20, 20 | 14, 14 | **100%** | **1.6 s** | 0 / 128 |
+| `gemma4:cloud` (31B) | Ollama cloud, free plan (Oct 2026) | 30, 30 | 20, 20 | 14, 14 | **100%** | **1.6 s** | 0 / 128 |
 | `qwen3:4b` | Locally, Apple M1, 8 GB | 8 | 4 | 3 | **23%** | **140 s** (max 619 s) | 52 / 64 |
 
 gemma4 has two runs per set; qwen3:4b one, which took 3 h 37 min. Groq's
@@ -421,8 +421,9 @@ The tests check every expected figure against the tools and every expected law
 phrase against the article the case must cite.
 
 **Status:** the `gemma4:cloud` runs are still to come. The first attempt (13 November
-2026) got HTTP 402 from Ollama's cloud: the free plan's usage for the month was used up.
-To keep v5 comparable with v1–v4, its baseline waits for the same model.
+2026) got HTTP 402 from Ollama's cloud, and its pricing page that day listed no free cloud
+usage, only pay per token or paid plans. To keep v5 comparable with v1–v4, its baseline
+waits for access to the same model.
 
 ### First run: `gpt-oss:20b` on a laptop CPU ([record](../eval/runs/2026-11-13-gpt-oss-20b-d25f4b9-v5.json))
 

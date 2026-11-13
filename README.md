@@ -11,8 +11,9 @@ sources. Every number in the answer is checked against what the tools returned.
 
 **[▶ Try the live demo](https://appapppy-hadkfldjgvu3gw24nfdysg.streamlit.app/)**: free
 hosting, so the first visit after a quiet period takes a moment to wake up; 10
-questions per visitor. The model runs on a free plan with a monthly allowance; if it is
-used up, the demo says so, and you can [run it yourself](#run-it-yourself).
+questions per visitor. **Currently the demo cannot answer:** it used Ollama's free cloud
+plan, which no longer includes free usage (November 2026). It says so, and you can
+[run it yourself](#run-it-yourself) with a free local model.
 
 ![The agent answering a two-part question: it searches listings, searches the tenancy law, passes the grounding check, answers with citations, and one step is opened to show the raw tool result](docs/demo.gif)
 
@@ -100,7 +101,7 @@ The two remaining v4 failures are correct, cited answers that reused an article 
 in the first turn instead of searching again, which the frozen cases did not allow. A
 fifth held-out set ([v5](eval/cases-v5.json), 12 multi-turn cases) now judges that kind of
 answer on content, while still requiring a new tool call when a follow-up changes a
-parameter. Its gemma4 runs wait for the free cloud allowance; a first run on the free
+parameter. Its gemma4 runs wait for access to that model again; a first run on the free
 local `gpt-oss:20b` (laptop CPU, 2 hours) passed 5 of 12, with every failure read by hand
 in [docs/EVALUATION.md](docs/EVALUATION.md#first-run-gpt-oss20b-on-a-laptop-cpu-record).
 
@@ -116,7 +117,7 @@ Same agent, prompt, tools and 64 questions; only the model changes:
 
 | Model | Runs on | Cases passing all four checks | Median time per question |
 |---|---|---:|---:|
-| `gemma4:cloud` (31B) | Ollama cloud, free plan | **64 / 64** (two runs) | **1.6 s** |
+| `gemma4:cloud` (31B) | Ollama cloud, free plan (Oct 2026) | **64 / 64** (two runs) | **1.6 s** |
 | `qwen3:4b` | Locally, M1 iMac, 8 GB | **15 / 64** (one run) | **140 s** |
 
 qwen3:4b chose the right tools in 63 of 64 cases and had the right facts in 56, but
@@ -138,10 +139,11 @@ pytest      # offline; no model or key needed
 
 **Pick a model** (`cp .env.example .env` to change settings; `.env` is git-ignored):
 
-- **Ollama cloud model, the default setup used here:** install
+- **Ollama cloud model, the setup the evaluations used:** install
   [Ollama](https://ollama.com/download), run `ollama signin`, and set
-  `OLLAMA_MODEL=gemma4:cloud`. Fast on any computer; the free plan includes a monthly
-  starter amount of usage. No key in the project.
+  `OLLAMA_MODEL=gemma4:cloud`. Fast on any computer, but since late 2026 Ollama's cloud
+  is paid per token (it had a free monthly amount when this project was built). No key
+  in the project.
 - **Local model, offline:** `ollama pull qwen3:4b` (about 2.5 GB). Fits an 8 GB Mac,
   but plans less well.
 - **Groq:** set `LLM_PROVIDER=groq` and `GROQ_API_KEY` from

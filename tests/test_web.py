@@ -159,8 +159,8 @@ class FailingModel:
 
 @pytest.mark.parametrize("error, shown", [
     (ProviderError("Add usage credits or subscribe and save up to 66%: https://ollama.com/plans", 402),
-     "used up its free model allowance"),
-    (ProviderError("Rate limit reached for model", 429), "used up its free model allowance"),
+     "provider has refused the request"),
+    (ProviderError("Rate limit reached for model", 429), "provider has refused the request"),
     (ProviderError("upstream connect error, internal ref 7f3a", 503), "try again in a few minutes"),
 ])
 def test_provider_errors_are_explained_without_their_raw_text(use_agent, toolbox, error, shown):

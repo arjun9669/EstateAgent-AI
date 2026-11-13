@@ -34,7 +34,7 @@ called over Ollama's hosted API with your key.
 
 | Limit | Effect |
 |---|---|
-| Ollama free plan: a monthly "starter amount" of cloud usage, 1 concurrent request ([pricing](https://ollama.com/pricing)) | Questions from all visitors run one at a time (a shared lock), and each browser session gets at most 10 questions (`MAX_QUESTIONS_PER_SESSION` in `web.py`) |
+| Ollama's cloud: built on the free plan's monthly "starter amount" (1 concurrent request). By 13 Nov 2026 the [pricing](https://ollama.com/pricing) had no free cloud usage, only pay per token or paid plans, so the hosted demo cannot answer without paying | Questions from all visitors run one at a time (a shared lock), and each browser session gets at most 10 questions (`MAX_QUESTIONS_PER_SESSION` in `web.py`) |
 | Streamlit apps sleep when unused | The first visitor after a quiet period waits for it to wake up |
 | No persistent disk | MiniLM (about 80 MB) downloads again after each restart, on the first question |
 | Direct API calls use model names like `gemma4:31b`, not `gemma4:cloud` ([Ollama API auth](https://docs.ollama.com/api/authentication.md)) | Set `OLLAMA_MODEL=gemma4:31b` in the app's secrets. Ollama's hosted model list includes `gemma4:31b` (checked 24 Oct 2026) |
@@ -81,6 +81,6 @@ only in Streamlit's secret store, never in the repository.
 
 ## Still open
 
-- How much of Ollama's monthly free usage a public demo consumes.
+- A free model provider for the hosted demo, now that Ollama's cloud is paid (see the README's Run it yourself for free local options).
 - Visitors' questions are sent to Ollama's cloud; the page says questions leave
   the app. Ollama states it does not train on cloud prompts.

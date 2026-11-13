@@ -101,7 +101,7 @@ QUOTA_PHRASES = ("usage credits", "rate limit", "quota", "too many requests")
 
 
 def is_quota_error(error: Exception) -> bool:
-    """The model provider refused because the free allowance or rate limit is used up."""
+    """The model provider refused: no usage left (402) or a rate limit (429)."""
     if getattr(error, "status_code", None) in QUOTA_STATUS_CODES:
         return True
     return any(phrase in str(error).lower() for phrase in QUOTA_PHRASES)
@@ -113,7 +113,8 @@ def model_error_message(error: Exception) -> str:
     if isinstance(error, SetupError):
         return f"The model is not set up: {error}"
     if is_quota_error(error):
-        return ("This demo has used up its free model allowance for now, so it can't answer "
-                "questions until the allowance resets. You can run EstateAgent AI on your own "
-                f"computer with a free local or cloud model: [instructions]({RUN_IT_YOURSELF}).")
+        return ("The demo's language model provider has refused the request (no usage left, or "
+                "too many requests), so it can't answer questions right now. You can run "
+                "EstateAgent AI on your own computer with a free local model: "
+                f"[instructions]({RUN_IT_YOURSELF}).")
     return "The model could not be reached just now. Please try again in a few minutes."

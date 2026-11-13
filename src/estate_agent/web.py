@@ -15,7 +15,7 @@ from estate_agent.agent import CheckEvent, StepEvent, stream
 
 log = logging.getLogger(__name__)
 
-# The free Ollama cloud plan serves one request at a time, so questions from all
+# One model request at a time (cloud plans limit concurrency), so questions from all
 # visitors run one after another, and each visitor gets a limited number.
 MAX_QUESTIONS_PER_SESSION = 10
 SETTING_NAMES = ("LLM_PROVIDER", "OLLAMA_BASE_URL", "OLLAMA_MODEL", "OLLAMA_API_KEY", "GROQ_API_KEY")
