@@ -36,7 +36,7 @@ result. Listings are synthetic.*
   The model gets one chance to fix anything unsupported; the rest is shown as a warning.
 - **Measured, not assumed.** Four frozen question sets (76 questions, one multi-turn), each change
   checked on a set written before it, every run recorded and re-scored in CI, and
-  every failure read by hand, including two bugs found in the scorer itself.
+  every failure read by hand, including four bugs found in the scorer itself.
 - **Free to run, model-agnostic.** Local or cloud models through Ollama with no key
   in the project, or Groq's free API; hosted on Streamlit Community Cloud. The same
   evaluation compares models (gemma4 31B in the cloud against qwen3 4B on an 8 GB desktop).
@@ -101,10 +101,11 @@ in the first turn instead of searching again, which the frozen cases did not all
 fifth held-out set ([v5](eval/cases-v5.json), 12 multi-turn cases) now judges that kind of
 answer on content, while still requiring a new tool call when a follow-up changes a
 parameter. Its gemma4 runs wait for the free cloud allowance; a first run on the free
-local `gpt-oss:20b` (laptop CPU, 2 hours) passed 4 of 12, with every failure read by hand
+local `gpt-oss:20b` (laptop CPU, 2 hours) passed 5 of 12, with every failure read by hand
 in [docs/EVALUATION.md](docs/EVALUATION.md#first-run-gpt-oss20b-on-a-laptop-cpu-record).
 
-Scores use scorer 1.2. Tool choice and grounding are full marks in every gemma4 run. The
+Scores use scorer 1.3 (1.3 changed no gemma4 score). Tool choice and grounding are full
+marks in every gemma4 run. The
 sets are small and author-written on synthetic data, so they show which behaviours
 are stable, not real-world accuracy. Protocol, every failure and its reading, and
 the scorer fixes: [docs/EVALUATION.md](docs/EVALUATION.md).

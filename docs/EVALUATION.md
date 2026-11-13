@@ -430,13 +430,14 @@ While the cloud model was unavailable, v5 ran once on a free local model: `gpt-o
 through Ollama, on an Intel i7-8550U with no usable GPU (32 GB RAM), code `d25f4b9`.
 It took 2 h 6 min, a median of 8 minutes per case (one case took 48 minutes).
 
-**4 / 12 passed** (tool choice 11, correctness 7, citations 7, grounding 11). Every
-failure read by hand:
+**4 / 12 passed** with scorer 1.2, the scorer it was recorded with (tool choice 11,
+correctness 7, citations 7, grounding 11); **5 / 12** with scorer 1.3 (below), which
+accepts R3's citation. Every failure read by hand:
 
 | Case | Score | Reading |
 |---|---|---|
 | R1, R2, C2, T1 | PASS | Correct |
-| R3 | FAIL (citations) | **Correct answer.** It quotes Article 11 word for word and cites it, but writes the ID with non-breaking hyphens (`law‑26‑2007#art11`, U+2011), which the ID pattern does not match |
+| R3 | FAIL (1.2), PASS (1.3) | **Correct answer.** It quotes Article 11 word for word and cites it, but writes the ID with non-breaking hyphens (`law‑26‑2007#art11`, U+2011), which the ID pattern does not match |
 | R4 | FAIL (citations) | Correct content ("in advance", four instalments), but cites "Article 12 of Law No. 26 of 2007" in words, not the passage ID |
 | R5 | FAIL | **Wrong.** 5% below average is band (a), no increase; it quoted band (b) and said 5% (with non-breaking hyphens in the ID) |
 | D1 | FAIL | **Broken.** Raw tool-call syntax (`<\|constrain\|>json<\|message\|>`) leaked into the answer, which names the wrong listings |
@@ -451,9 +452,25 @@ leaking its tool-call format. This is a different model on new cases, so it is n
 compared with any gemma4 score. Like qwen3:4b, it suggests the agent needs a
 stronger model than a laptop can run at a usable speed.
 
-The scorer findings are noted for a later version rather than changed after seeing
-results: IDs with non-breaking hyphens are missed by both the scorer and the
-grounding check (which then cannot check those IDs at all).
+### Scorer 1.3, and the same fix in the grounding check
+
+Reading this run by hand found two scorer problems. As with 1.1 and 1.2, every run keeps
+the score it was recorded with, and [rescored-latest.json](../eval/rescored-latest.json)
+shows the latest scorer alongside.
+
+- **IDs with hyphen look-alikes.** gpt-oss writes `law‑26‑2007#art11` with non-breaking
+  hyphens (U+2011). The ID pattern matched only `2007#art11`, so 1.2 failed R3's correct
+  citation. 1.3 reads U+2010 to U+2015 as `-`. The agent's grounding check had the same
+  blind spot (it reported the tail of such an ID, and checked the `26` as a figure); it
+  now maps them too, so those IDs are checked whole.
+- **A phrase starting with a digit matched inside a larger number.** R5 accepts "0%"
+  (the no-increase band), and in 1.2 that matched inside "(20%)" in the quoted law, so
+  R5's wrong answer passed on correctness (it failed only on the citation). In 1.3 such a
+  phrase must start a number, which also stops "7 sales" matching "17 sales". The frozen
+  case is unchanged; the lesson for later sets is to avoid bare fragments like "0%".
+
+Re-scoring all 33 recorded runs with 1.3 changes one result: this run's R3, FAIL to
+PASS. No gemma4 or qwen3 score changes.
 
 When `gemma4:cloud` usage is back:
 
@@ -474,8 +491,6 @@ python scripts/variation.py eval/runs/<run 1>.json eval/runs/<run 2>.json > eval
    comparison (`LLM_PROVIDER=groq`, then `scripts/compare_models.py`).
 3. For local models: a final-answer step that rewrites only checked facts, measured
    on qwen3:4b against its recorded run.
-4. Normalise look-alike hyphens (U+2010 to U+2015) before matching listing and passage
-   IDs, in the grounding check and in a scorer 1.3, re-scoring every run as before.
 
 ## Limits
 
@@ -488,5 +503,5 @@ python scripts/variation.py eval/runs/<run 1>.json eval/runs/<run 2>.json > eval
   stable, not precise rates.
 - The held-out sets were written by the same person who made the changes, so they
   are held out from each change, not independent of the author.
-- The scorer was corrected twice after seeing results (1.1, 1.2). Each time the
+- The scorer was corrected three times after seeing results (1.1, 1.2, 1.3). Each time the
   original scores were kept and the re-scored ones shown alongside.

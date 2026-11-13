@@ -40,6 +40,13 @@ def test_unknown_citations_are_flagged():
     assert report.ungrounded_numbers == []
 
 
+def test_ids_written_with_hyphen_lookalikes_are_checked():
+    # gpt-oss:20b writes non-breaking hyphens (U+2011) inside IDs; they must still be checked.
+    assert check("See decree‑43‑2013#art1.", EVIDENCE).ok
+    report = check("See law‑26‑2007#art99.", EVIDENCE)
+    assert report.unknown_citations == ["law-26-2007#art99"]
+
+
 def test_digits_inside_ids_are_not_checked_as_numbers():
     report = check("L0435 under law-26-2007#art14 costs 1,200", ["1,200 L0435 law-26-2007#art14"])
     assert report.ok

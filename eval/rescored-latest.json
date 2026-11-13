@@ -1,5 +1,5 @@
 {
- "scorer_version": "1.2",
+ "scorer_version": "1.3",
  "runs": [
   {
    "run": "2026-10-24-gemma4-cloud-06ba204.json",
@@ -532,10 +532,17 @@
     "citations": 7
    },
    "latest": {
-    "passed": 4,
-    "citations": 7
+    "passed": 5,
+    "citations": 9
    },
-   "changed_cases": []
+   "changed_cases": [
+    {
+     "id": "R3",
+     "was": "FAIL",
+     "now": "PASS",
+     "problems_now": []
+    }
+   ]
   }
  ]
 }

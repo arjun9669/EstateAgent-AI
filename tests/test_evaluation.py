@@ -222,6 +222,24 @@ def test_scorer_1_2_finds_quotes_in_field_names():
     assert score_case(case, record(answer, [step]), "1.2")["citations"]
 
 
+def test_scorer_1_3_reads_ids_with_hyphen_lookalikes():
+    rules = {"tool": "search_rules", "ok": True, "arguments": {},
+             "result": {"results": [{"passage_id": "law-26-2007#art11", "text": "unless otherwise agreed"}]}}
+    case = {"id": "T7", "category": "law", "question": "q", "facts": [{"text": "unless otherwise agreed"}],
+            "citations_required": ["law-26-2007#art11"]}
+    answer = "Yes, “unless otherwise agreed” (law‑26‑2007#art11)."  # U+2011, as gpt-oss:20b wrote it
+    assert not score_case(case, record(answer, [rules]), "1.2")["citations"]
+    assert score_case(case, record(answer, [rules]), "1.3")["passed"]
+
+
+def test_scorer_1_3_matches_a_leading_digit_only_at_a_number_start():
+    case = {"id": "T8", "category": "law", "question": "q", "facts": [{"any_of": ["no increase", "0%"]}]}
+    wrong = "Up to five percent (5%) where the Rent is up to twenty percent (20%) below average."
+    assert score_case(case, record(wrong), "1.2")["correctness"]  # "0%" inside "20%": the 1.2 false pass
+    assert not score_case(case, record(wrong), "1.3")["correctness"]
+    assert score_case(case, record("The increase is 0% here."), "1.3")["correctness"]
+
+
 def test_model_comparison_matches_the_recorded_runs():
     import sys
     sys.path.insert(0, str(ROOT / "scripts"))

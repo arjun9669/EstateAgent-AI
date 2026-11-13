@@ -23,6 +23,11 @@ stored results can always be reproduced; newer versions are reported alongside.
        their values. Once the mortgage tool used plain-English names, the model
        quoted them ("DLD transfer fee (4% of price)") and 1.1 failed those
        accurate quotes.
+  1.3  hyphen look-alikes (U+2010 to U+2015) count as "-" in the answer and the
+       evidence. gpt-oss:20b wrote IDs as "law‑26‑2007#art11" (non-breaking
+       hyphens), and 1.2 found only "2007#art11", failing a correct citation.
+       Also, an expected phrase that starts with a digit must start a number:
+       in 1.2 the phrase "0%" matched inside "(20%)", passing a wrong answer (v5 R5).
 """
 
 import json
@@ -30,11 +35,11 @@ import re
 from collections import Counter
 from pathlib import Path
 
-from estate_agent.grounding import LISTING_ID, PASSAGE_ID, _matches, numbers_in
+from estate_agent.grounding import LISTING_ID, PASSAGE_ID, _matches, numbers_in, plain_hyphens
 
 DIMENSIONS = ("tool_choice", "correctness", "citations", "grounding")
-SCORER_VERSIONS = ("1.0", "1.1", "1.2")
-LATEST_SCORER = "1.2"
+SCORER_VERSIONS = ("1.0", "1.1", "1.2", "1.3")
+LATEST_SCORER = "1.3"
 MIN_QUOTE_CHARS = 12
 _QUOTE_1_0 = re.compile(r"[\"“]([^\"”]{12,})[\"”]")
 _QUOTE_PAIR = re.compile(r"[\"“]([^\"”]*)[\"”]")
@@ -76,14 +81,22 @@ def _has_number(answer: str, expected: float) -> bool:
     return any(_matches(number, expected) for number in numbers_in(prose))
 
 
-def _fact_found(fact: dict, answer: str) -> bool:
+def _contains(text: str, phrase: str, scorer: str) -> bool:
+    phrase = _norm(phrase)
+    if scorer >= "1.3" and phrase[:1].isdigit():
+        # "0%" must not match inside "20%", nor "7 sales" inside "17 sales".
+        return re.search(r"(?<![\d.,])" + re.escape(phrase), text) is not None
+    return phrase in text
+
+
+def _fact_found(fact: dict, answer: str, scorer: str = LATEST_SCORER) -> bool:
     text = _norm(answer)
     if "number" in fact:
         return _has_number(answer, fact["number"]) or (
-            "or_text" in fact and _norm(fact["or_text"]) in text)
+            "or_text" in fact and _contains(text, fact["or_text"], scorer))
     if "text" in fact:
-        return _norm(fact["text"]) in text
-    return any(_norm(option) in text for option in fact["any_of"])
+        return _contains(text, fact["text"], scorer)
+    return any(_contains(text, option, scorer) for option in fact["any_of"])
 
 
 def _describe(fact: dict) -> str:
@@ -97,6 +110,8 @@ def score_case(case: dict, record: dict, scorer: str = LATEST_SCORER) -> dict:
     if scorer not in SCORER_VERSIONS:
         raise ValueError(f"Unknown scorer version {scorer!r}")
     answer, steps = record["answer"], record["steps"]
+    if scorer >= "1.3":
+        answer = plain_hyphens(answer)
     problems = {dimension: [] for dimension in DIMENSIONS}
     turns = record.get("turns") or [record]
 
@@ -116,7 +131,7 @@ def score_case(case: dict, record: dict, scorer: str = LATEST_SCORER) -> dict:
             problems["tool_choice"].append(f"called {tool}")
 
     for fact in case.get("facts", []):
-        if not _fact_found(fact, answer):
+        if not _fact_found(fact, answer, scorer):
             problems["correctness"].append(f"missing {_describe(fact)}")
     for phrase in case.get("must_not_contain", []):
         if _norm(phrase) in _norm(answer):
@@ -134,6 +149,8 @@ def score_case(case: dict, record: dict, scorer: str = LATEST_SCORER) -> dict:
     evidence = _norm(" ".join([record.get("question", case["question"]), *case.get("context", [])]
                               + [s for turn in turns for step in turn["steps"] if step["ok"]
                                  for s in _strings(step["result"], keys=scorer >= "1.2")]))
+    if scorer >= "1.3":
+        evidence = plain_hyphens(evidence)
     for quote in quotations(answer, scorer):
         if _norm(quote).strip(" .,;:") not in evidence:
             problems["citations"].append(f"quote not found word for word: \"{quote[:60]}\"")

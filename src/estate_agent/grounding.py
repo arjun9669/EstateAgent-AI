@@ -19,6 +19,14 @@ SCALES = {"k": 1e3, "m": 1e6, "million": 1e6, "bn": 1e9, "billion": 1e9}
 ALWAYS_ALLOWED_MAX = 10
 PASSAGE_ID = re.compile(r"\b[a-z0-9-]+#art\d+\b")
 LISTING_ID = re.compile(r"\bL\d{4}\b")
+# Hyphen look-alikes (U+2010 to U+2015, e.g. the non-breaking hyphen U+2011) that some
+# models write inside IDs ("law‑26‑2007#art11"). Unmapped, PASSAGE_ID matches only the
+# tail ("2007#art11") and the "26" is checked as a figure, so reports name the wrong thing.
+HYPHEN_LOOKALIKES = str.maketrans(dict.fromkeys("‐‑‒–—―", "-"))
+
+
+def plain_hyphens(text: str) -> str:
+    return text.translate(HYPHEN_LOOKALIKES)
 
 
 @dataclass(frozen=True)
@@ -64,6 +72,7 @@ class GroundingReport:
 
 
 def check(answer: str, evidence: list[str]) -> GroundingReport:
+    answer = plain_hyphens(answer)
     joined = "\n".join(evidence)
     values = {n.value for n in numbers_in(joined)}
     report = GroundingReport()
